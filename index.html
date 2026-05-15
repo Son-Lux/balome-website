@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Balomè – Tutti i bimbi sono bravi e i grandi lo devono sapere!</title>
+  <meta name="description" content="Balomè è un'associazione benefica che opera in Italia e India per il benessere dei bambini. Dona il tuo 5 per mille CF 95254690167">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-contacts">
+      <a href="mailto:info@balome.org">info@balome.org</a>
+      <a href="tel:+393930181276"> 393 018 1276</a>
+    </div>
+    <div class="topbar-social">
+      <a href="https://www.facebook.com/info.balome/" target="_blank" aria-label="Facebook">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+<header class="header" id="header">
+  <div class="nav-inner">
+    <a href="#home" class="logo">
+      <div class="logo-icon">
+        <img src="logo.png" alt="Balomè logo" style="width:48px;height:48px;object-fit:contain;">
+      </div>
+      <div class="logo-text">
+        <span class="logo-name">Balomè</span>
+        <span class="logo-tagline">Associazione benefica</span>
+      </div>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav" id="nav">
+      <a href="#chi-siamo" class="nav-link">Chi siamo</a>
+      <a href="#missione" class="nav-link">Missione</a>
+      <a href="#progetti" class="nav-link">Progetti</a>
+      <a href="#cinque-per-mille" class="nav-link">5 per mille</a>
+      <a href="#donazioni" class="nav-link">Donazioni</a>
+      <a href="#news" class="nav-link">News</a>
+      <a href="#contatti" class="nav-link">Contatti</a>
+      <a href="#donazioni" class="btn-nav">Dona ora ♥</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-bg">
+    <div class="hero-shape hero-shape-1"></div>
+    <div class="hero-shape hero-shape-2"></div>
+    <div class="hero-shape hero-shape-3"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge reveal">💛 Associazione di Volontariato</div>
+    <h1 class="hero-title reveal delay-1">Tutti i bimbi<br>sono <em>bravi</em><br>e i grandi lo<br>devono sapere!</h1>
+    <p class="hero-subtitle reveal delay-2">Sosteniamo bambini in Italia e in India attraverso educazione, salute e protezione. Insieme possiamo fare la differenza.</p>
+    <div class="hero-actions reveal delay-3">
+      <a href="#cinque-per-mille" class="btn-primary">Dona il 5×mille</a>
+      <a href="#donazioni" class="btn-secondary">Fai una donazione</a>
+    </div>
+    <div class="hero-cf reveal delay-4">
+      <span>C.F. per il 5×mille:</span>
+      <strong>95254690167</strong>
+    </div>
+  </div>
+
+  <div class="hero-gallery reveal delay-2">
+    <div class="hero-gallery-viewport">
+      <div class="hero-gallery-track" id="heroTrack">
+        <div class="hg-slide" onclick="openLightbox('hero',0)">
+          <img src="img/balome_5.jpg" alt="Balomè 1" onerror="this.style.display='none'">
+          <div class="hg-empty"></div>
+          <div class="hg-overlay">🔍</div>
+        </div>
+        <div class="hg-slide" onclick="openLightbox('hero',1)">
+          <img src="img/balome_7.jpg" alt="Balomè 2" onerror="this.style.display='none'">
+          <div class="hg-empty"></div>
+          <div class="hg-overlay">🔍</div>
+        </div>
+        <div class="hg-slide" onclick="openLightbox('hero',2)">
+          <img src="img/balome_6.jpg" alt="Balomè 3" onerror="this.style.display='none'">
+          <div class="hg-empty"></div>
+          <div class="hg-overlay">🔍</div>
+        </div>
+      </div>
+    </div>
+    <div class="hg-controls">
+      <button class="hg-btn hg-prev" id="heroPrev" aria-label="Precedente">‹</button>
+      <div class="hg-dots" id="heroDots"></div>
+      <button class="hg-btn hg-next" id="heroNext" aria-label="Successiva">›</button>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-dot"></div>
+    <span>Scorri per scoprire</span>
+  </div>
+</section>
+
+<section class="stats-band">
+  <div class="stats-inner">
+    <div class="stat-item reveal"><div class="stat-number" data-count="80">0</div><div class="stat-label">Bambini aiutati</div></div>
+    <div class="stat-item reveal delay-1"><div class="stat-number" data-count="2">0</div><div class="stat-label">Paesi d'intervento</div></div>
+    <div class="stat-item reveal delay-2"><div class="stat-number" data-count="4">0</div><div class="stat-label">Anni di attività</div></div>
+    <div class="stat-item reveal delay-3"><div class="stat-number" data-count="4">0</div><div class="stat-label">Volontari attivi</div></div>
+  </div>
+</section>
+
+<section class="section chi-siamo" id="chi-siamo">
+  <div class="container">
+    <div class="section-grid">
+        
+      <div class="hero-gallery reveal delay-2">
+    <div class="hero-gallery-viewport">
+      <div class="hero-gallery-track" id="heroTrack1">
+        <div class="hg-slide" onclick="openLightbox('chisiamo',0)">
+          <img src="img/nascita_associazione_balome.jpg" alt="Balomè 1" onerror="this.style.display='none'">
+          <div class="hg-empty"></div>
+          <div class="hg-overlay">🔍</div>
+        </div>
+        <div class="hg-slide" onclick="openLightbox('chisiamo',1)">
+          <img src="img/Famiglia-Di-Monte-cofondatori.jpg" alt="Balomè 2" onerror="this.style.display='none'">
+          <div class="hg-empty"></div>
+          <div class="hg-overlay">🔍</div>
+        </div>
+        <div class="hg-slide" onclick="openLightbox('chisiamo',2)">
+          <img src="img/balome_1.jpg" alt="Balomè 3" onerror="this.style.display='none'">
+          <div class="hg-empty"></div>
+          <div class="hg-overlay">🔍</div>
+        </div>
+      </div>
+    </div>
+    <div class="hg-controls">
+      <button class="hg-btn hg-prev" id="heroPrev" aria-label="Precedente">‹</button>
+      <div class="hg-dots" id="heroDots"></div>
+      <button class="hg-btn hg-next" id="heroNext" aria-label="Successiva">›</button>
+    </div>
+  </div>
+
+      <div class="section-text reveal delay-1">
+        <div class="section-label">Chi siamo</div>
+        <h2><strong>Balomè</strong> nasce da un incontro che ha cambiato per sempre la nostra vita.</h2>
+        <p>Tutto ha avuto inizio a Shishu Bhavan, uno degli orfanotrofi delle Missionarie della Carità di Madre Teresa a Calcutta, in India, dove abbiamo incontrato nostra figlia.<br>
+        La sua prima parola pronunciata "Bhalo mey" che significa "brava bambina" è diventata il nome della nostra associazione. Ma soprattutto è diventata una promessa: non dimenticare mai i bambini lasciati soli.
+        Da quel giorno abbiamo sentito il bisogno di trasformare la gratitudine e l'amore ricevuti in qualcosa di concreto per tanti altri bambini vulnerabili, affinché nessuno venga lasciato indietro.<br>
+        Il nostro motto è: <em>"Tutti i bimbi sono bravi e i grandi lo devono sapere!"</em></p>
+        <div class="values-list">
+          <div class="value-item"><span class="value-icon">💛</span><span>Trasparenza e onestà nella gestione dei fondi</span></div>
+          <div class="value-item"><span class="value-icon">🤝</span><span>Coinvolgimento diretto delle comunità locali</span></div>
+          <div class="value-item"><span class="value-icon">🌱</span><span>Interventi sostenibili e duraturi nel tempo</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section missione" id="missione">
+  <div class="mission-bg-pattern"></div>
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">La nostra missione</div>
+      <h2>Cosa facciamo ogni giorno</h2>
+      <p class="section-intro">Prenderci cura dei bambini più fragili, offrendo sostegno concreto e opportunità di futuro.<br>
+Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto d'amore possa lasciare un segno immenso.</p>
+    </div>
+    <div class="mission-cards">
+      <div class="mission-card reveal"><div class="mission-icon">📖</div><h3>Accoglienza e Sostegno all'Infanzia</h3><p>Sosteniamo bambini abbandonati accolti negli orfanotrofi e nelle missioni in India, contribuendo ai bisogni essenziali: cibo, cure mediche, istruzione e protezione.</p></div>
+      <div class="mission-card reveal delay-1"><div class="mission-icon">🏥</div><h3>Educazione e Crescita</h3><p>Crediamo che la scuola e l'educazione siano strumenti fondamentali per costruire libertà, dignità e futuro.</p></div>
+      <div class="mission-card reveal delay-2"><div class="mission-icon">🛡️</div><h3>Aiuto alle Missioni Locali</h3><p>Collaboriamo con le realtà che operano quotidianamente sul territorio indiano, sostenendo progetti concreti dedicati all'infanzia.</p></div>
+      <div class="mission-card reveal delay-3"><div class="mission-icon">🎨</div><h3>Diffondere Solidarietà</h3><p>Promuoviamo una cultura dell'accoglienza e della responsabilità verso i più piccoli, coinvolgendo famiglie, volontari e sostenitori.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section progetti" id="progetti">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">I nostri progetti</div>
+      <h2>Passati e futuri</h2>
+    </div>
+    <div class="progetti-grid">
+      <div class="progetto-card india reveal">
+        <div class="progetto-flag">🇮🇳</div>
+        <div class="progetto-content">
+          <h3>Progetto <strong>Deepashram</strong></h3>
+          
+          <p>Il Progetto "Deepashram" in Rajiv Nagar Gurgaon a pochi chilometri da Delhi, in una casa fondata da Madre Teresa di Calcutta oggi gestita dai Missionari della Carità che ospita ragazzi orfani, abbandonati perchè affetti da diverse patologie: ci sono bambini ciechi, muti, sordi, spastici, poliomielitici e disabili mentali. A Deepashram si sentono a casa, amati e accuditi con amore e tenerezza. Grazie al Vostro sostegno economico abbiamo garantito l'accesso alla fisioterapia, e all'istruzione per i 39 ragazzi accolti dai Missionari che quotidianamente se ne prendono cura.</p>
+          <ul class="progetto-points">
+            <li>ragazzi orfani</li>
+            <li>fisioterapia</li>
+            <li>istruzione</li>
+            <li>39 ragazzi</li>
+          </ul>
+            <div class="progetto-gallery" data-gallery="deepashram">
+            <div class="pg-main" onclick="openLightbox('deepashram',0)">
+              <img src="img/deepashram_1.jpg" alt="Deepashram" onerror="this.style.display='none'">
+              <div class="pg-empty"><span></span></div>
+             <div class="pg-overlay">🔍 Galleria</div>
+            </div>
+            <div class="pg-thumbs">
+              <div class="pg-thumb" onclick="openLightbox('deepashram',1)">
+                <img src="img/deepashram_2.jpg" alt="Deepashram 2" onerror="this.style.display='none'">
+                <div class="pg-empty"></div>
+              </div>
+              <div class="pg-thumb" onclick="openLightbox('deepashram',2)">
+                <img src="img/deepashram_3.jpg" alt="Deepashram 3" onerror="this.style.display='none'">
+                <div class="pg-empty"></div>
+              </div>
+              <div class="pg-thumb pg-thumb-more" onclick="openLightbox('deepashram',3)">
+                <img src="img/deepashram_4.jpg" alt="Deepashram 4" onerror="this.style.display='none'">
+                <div class="pg-empty"></div>
+                <div class="pg-more-label">+foto</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROGETTO KARUNANJALI -->
+      <!-- Immagini: /img/karunanjali-1.jpg … karunanjali-4.jpg -->
+      <div class="progetto-card india reveal delay-1">
+        <div class="progetto-flag">🇮🇳</div>
+        <div class="progetto-content">
+          <h3>Progetto <strong>Karunanjali School</strong></h3>
+          
+          <p>Il progetto "Karunanjali School" è gestito dalle Suore di Sant'Anna per i bambini con problemi mentali, che non dispongono di strutture di formazione, in Talagaon Dabhade, nelle zone rurali dello Stato del Maharashtra. Le suore, girando per i villaggi, si sono imbattute in un gran numero di bambini con problemi mentali, tenuti a casa senza alcuna istruzione o formazione. Grazie anche al nostro contributo, questi bambini oggi hanno una scuola dove possono essere ospitati in forma residenziale o solo nelle ore diurne. Attualmente sono 33 i bambini accolti e 13 quelli che frequentano il centro diurno.</p>
+          <ul class="progetto-points">
+            <li>bambini con problemi mentali</li>
+            <li>Scuola residenziale e diurna</li>
+            <li>33 + 13 bambini</li>
+            <li>donare speranza e felicità</li>
+          </ul>
+            <div class="progetto-gallery" data-gallery="karunanjali">
+            <div class="pg-main" onclick="openLightbox('karunanjali',0)">
+              <img src="img/karunanjali-1.jpg" alt="Karunanjali" onerror="this.style.display='none'">
+              <div class="pg-empty"></div>
+                 <div class="pg-overlay">🔍 Galleria</div>
+             
+            </div>
+            <div class="pg-thumbs">
+              <div class="pg-thumb" onclick="openLightbox('karunanjali',1)">
+                <img src="img/karunanjali-2.jpg" alt="Karunanjali 2" onerror="this.style.display='none'">
+               
+              </div>
+              <div class="pg-thumb" onclick="openLightbox('karunanjali',2)">
+                <img src="img/karunanjali-3.jpg" alt="Karunanjali 3" onerror="this.style.display='none'">
+             
+              </div>
+              <div class="pg-thumb pg-thumb-more" onclick="openLightbox('karunanjali',3)">
+                <img src="img/karunanjali-4.jpg" alt="Karunanjali 4" onerror="this.style.display='none'">
+            
+                <div class="pg-more-label">+foto</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROGETTO ANANDASHARAM -->
+      <!-- Immagini: /img/anandasharam-1.jpg … anandasharam-4.jpg -->
+      <div class="progetto-card india reveal delay-3">
+        <div class="progetto-flag">🇮🇳</div>
+        <div class="progetto-content">
+          <h3>Progetto <strong>Anandasharam</strong></h3>
+          
+          <p>In India lavoriamo in contesti di estrema povertà dove l'accesso alle cure mediche e all'istruzione è ancora un privilegio. I nostri volontari operano sul campo per garantire un futuro ai bambini più vulnerabili.</p>
+          <ul class="progetto-points">
+            <li>Costruzione e supporto di scuole rurali</li>
+            <li>Programmi nutrizionali e sanitari</li>
+            <li>Formazione per insegnanti locali</li>
+            <li>Sostegno a distanza per bambini</li>
+          </ul>
+            <div class="progetto-gallery" data-gallery="anandasharam">
+            <div class="pg-main" onclick="openLightbox('anandasharam',0)">
+              <img src="img/Anandashram_1.jpg" alt="Anandasharam" onerror="this.style.display='none'">
+              <div class="pg-empty"></div>
+              <div class="pg-overlay">🔍 Galleria</div>
+            </div>
+            <div class="pg-thumbs">
+              <div class="pg-thumb" onclick="openLightbox('anandasharam',1)">
+                <img src="img/Anandashram_2.jpg" alt="Anandasharam 2" onerror="this.style.display='none'">
+                <div class="pg-empty"></div>
+              </div>
+              <div class="pg-thumb" onclick="openLightbox('anandasharam',2)">
+                <img src="img/Anandashram_3.jpg" alt="Anandasharam 3" onerror="this.style.display='none'">
+                <div class="pg-empty"></div>
+              </div>
+              <div class="pg-thumb pg-thumb-more" onclick="openLightbox('anandasharam',3)">
+                <img src="img/Anandashram_4.jpg" alt="Anandasharam 4" onerror="this.style.display='none'">
+                <div class="pg-empty"></div>
+                <div class="pg-more-label">+foto</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROGETTO CALCUTTA -->
+      <!-- Immagini: /img/calcutta-1.jpg … calcutta-4.jpg -->
+      <div class="progetto-card india reveal delay-4">
+        <div class="progetto-flag">🇮🇳</div>
+        <div class="progetto-content">
+          <h3>Progetto <strong>Calcutta</strong></h3>
+          <div class="progetto-gallery" data-gallery="calcutta">
+            <div class="pg-main" onclick="openLightbox('calcutta',0)">
+              <img src="img/calcutta-1.jpg" alt="Calcutta" onerror="this.style.display='none'">
+              <div class="pg-overlay">🔍 Galleria</div>
+            </div>
+            <div class="pg-thumbs">
+              <div class="pg-thumb" onclick="openLightbox('calcutta',1)">
+                <img src="img/calcutta-2.jpg" alt="Calcutta 2" onerror="this.style.display='none'">
+               
+              </div>
+              <div class="pg-thumb" onclick="openLightbox('calcutta',2)">
+                <img src="img/calcutta-3.jpg" alt="Calcutta 3" onerror="this.style.display='none'">
+              
+              </div>
+              <div class="pg-thumb pg-thumb-more" onclick="openLightbox('calcutta',3)">
+                <img src="img/calcutta-4.jpg" alt="Calcutta 4" onerror="this.style.display='none'">
+                
+                <div class="pg-more-label">+foto</div>
+              </div>
+            </div>
+          </div>
+          <p>In India lavoriamo in contesti di estrema povertà dove l'accesso alle cure mediche e all'istruzione è ancora un privilegio. I nostri volontari operano sul campo per garantire un futuro ai bambini più vulnerabili.</p>
+          <ul class="progetto-points">
+            <li>Costruzione e supporto di scuole rurali</li>
+            <li>Programmi nutrizionali e sanitari</li>
+            <li>Formazione per insegnanti locali</li>
+            <li>Sostegno a distanza per bambini</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section cinque-per-mille" id="cinque-per-mille">
+  <div class="cinque-bg"><div class="cinque-shape"></div></div>
+  <div class="container">
+    <div class="cinque-inner">
+      <div class="cinque-left reveal">
+        <div class="section-label light">Costa zero, vale tanto</div>
+        <h2>Dona il tuo<br><span class="highlight-big">5 × mille</span></h2>
+        <p>Il 5 per mille è una parte dell'IRPEF che puoi destinare a noi <strong>senza alcun costo aggiuntivo</strong>. Non è una tassa in più: è una quota delle tasse che già paghi che puoi scegliere di indirizzare a chi fa del bene.</p>
+        <p>Basta una firma nella tua dichiarazione dei redditi (730, modello Redditi PF) e indicare il nostro codice fiscale.</p>
+        <div class="cf-box">
+          <div class="cf-label">Codice Fiscale Balomè</div>
+          <div class="cf-number">9 5 2 5 4 6 9 0 1 6 7</div>
+          <button class="cf-copy" onclick="copyCF()">📋 Copia CF</button>
+        </div>
+      </div>
+      <div class="cinque-steps reveal delay-1">
+        <h3>Come fare</h3>
+        <div class="step"><div class="step-n">1</div><div class="step-text"><strong>Compila la dichiarazione dei redditi</strong><span>730, Modello Redditi o tramite il tuo datore di lavoro (CU)</span></div></div>
+        <div class="step"><div class="step-n">2</div><div class="step-text"><strong>Trova la sezione "5 per mille"</strong><span>Nella casella "Sostegno del volontariato e delle altre organizzazioni"</span></div></div>
+        <div class="step"><div class="step-n">3</div><div class="step-text"><strong>Firma e inserisci il CF</strong><span>Firma nella casella e scrivi il nostro CF: <strong>95254690167</strong></span></div></div>
+        <div class="step"><div class="step-n">4</div><div class="step-text"><strong>Hai fatto la differenza!</strong><span>Gratis per te, prezioso per i bambini che aiutiamo ogni giorno</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section donazioni" id="donazioni">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Supportaci</div>
+      <h2>Fai una donazione</h2>
+      <p class="section-intro">Ogni contributo, piccolo o grande, si trasforma in istruzione, salute e sorrisi per un bambino che ne ha bisogno.</p>
+    </div>
+    <div class="donazioni-grid">
+      <div class="donazione-card paypal reveal">
+        <div class="donazione-icon">🅿️</div>
+        <h3>Dona con PayPal</h3>
+        <p>Veloce, sicuro e immediato. Puoi donare con carta di credito o conto PayPal.</p>
+        <div class="importi">
+          <button class="importo-btn" onclick="setAmount(10)">€10</button>
+          <button class="importo-btn" onclick="setAmount(25)">€25</button>
+          <button class="importo-btn active" onclick="setAmount(50)">€50</button>
+          <button class="importo-btn" onclick="setAmount(100)">€100</button>
+        </div>
+        <div class="custom-amount">
+          <span>€</span>
+          <input type="number" id="paypalAmount" value="50" min="1" placeholder="Altro importo">
+        </div>
+        <a id="paypalBtn" href="https://www.paypal.com/donate/?business=info.balome@gmail.com&currency_code=EUR&amount=50" target="_blank" class="btn-donate paypal-btn">💛 Dona con PayPal</a>
+        <p class="donation-note">Puoi donare anche senza avere un conto PayPal, tramite carta di credito.</p>
+      </div>
+      <div class="donazione-card bonifico reveal delay-1">
+        <div class="donazione-icon">🏦</div>
+        <h3>Bonifico Bancario</h3>
+        <p>Trasferisci direttamente sul nostro conto corrente. Detraibile fiscalmente.</p>
+        <div class="bonifico-details">
+          <div class="bonifico-row"><span class="bonifico-label">Intestato a</span><span class="bonifico-value">Associazione Balomè</span></div>
+          <div class="bonifico-row"><span class="bonifico-label">IBAN</span><span class="bonifico-value iban" id="ibanValue">IT45P0538711109000003727955</span></div>
+          <div class="bonifico-row"><span class="bonifico-label">Banca</span><span class="bonifico-value">BPER – Filiale di Bergamo Loreto</span></div>
+          <div class="bonifico-row"><span class="bonifico-label">Causale</span><span class="bonifico-value">Donazione libera Balomè</span></div>
+          <div class="bonifico-row"><span class="bonifico-label">C.F.</span><span class="bonifico-value">95254690167</span></div>
+        </div>
+        <div class="detraibile-badge">✅ Detraibile al 26% dall'IRPEF (persone fisiche)</div>
+        <button class="btn-donate bonifico-btn" onclick="copyIBAN()" style="border:none;cursor:pointer;">📋 Copia IBAN</button>
+        <p class="donation-note">Per ricevuta fiscale scrivici a <a href="mailto:info@balome.org">info@balome.org</a></p>
+      </div>
+      <div class="donazione-card impatto reveal delay-2">
+        <div class="donazione-icon">💡</div>
+        <h3>Con la tua donazione puoi...</h3>
+        <div class="impatto-list">
+          <div class="impatto-item"><span class="impatto-euro">€10</span><span>Materiale scolastico per un mese</span></div>
+          <div class="impatto-item"><span class="impatto-euro">€25</span><span>Pasti per una settimana</span></div>
+          <div class="impatto-item"><span class="impatto-euro">€50</span><span>Visita medica + farmaci</span></div>
+          <div class="impatto-item"><span class="impatto-euro">€100</span><span>Un mese di scuola per un bambino</span></div>
+          <div class="impatto-item"><span class="impatto-euro">€500</span><span>Borsa di studio semestrale</span></div>
+        </div>
+        <a href="mailto:info@balome.org" class="btn-secondary-sm">Hai domande? Scrivici</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section news-social" id="news">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Resta aggiornato</div>
+      <h2>Le nostre ultime notizie</h2>
+      <p class="section-intro">Seguici su Facebook per restare aggiornato su tutte le nostre attività, eventi e storie dei bambini che aiutiamo.</p>
+    </div>
+    <div class="news-layout">
+      <div class="fb-feed-container reveal">
+        <div class="fb-feed-header">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="#1877F2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          <span>Balomè su Facebook</span>
+          <a href="https://www.facebook.com/info.balome/" target="_blank" class="fb-follow-btn">Seguici →</a>
+        </div>
+        <div class="fb-page-wrapper">
+          <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Finfo.balome%2F&tabs=timeline&width=500&height=600&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="500" height="600" style="border:none;overflow:hidden;max-width:100%;" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" title="Facebook Balomè"></iframe>
+        </div>
+        <div class="fb-fallback"><p>Non riesci a vedere il feed? <a href="https://www.facebook.com/info.balome/" target="_blank">Visita la nostra pagina Facebook</a></p></div>
+      </div>
+      <div class="news-cards reveal delay-1" id="newsCardsContainer">
+        <div class="news-card"><div class="news-date">🗓 Dicembre 2024</div><h4>Il sito Balomè è online!</h4><p>Siamo felici di annunciare il nuovo sito dell'associazione Balomè. Un passo importante per avvicinarci a più persone e far conoscere il nostro lavoro quotidiano.</p><a href="https://www.facebook.com/info.balome/" target="_blank" class="read-more">Leggi su Facebook →</a></div>
+        <div class="news-card"><div class="news-date">🗓 Novembre 2024</div><h4>Campagna 5 per mille 2025</h4><p>Si avvicina la stagione delle dichiarazioni dei redditi! Ricordati di destinare il tuo 5 per mille a Balomè: CF 95254690167. Costa zero e vale tutto per i nostri bambini.</p><a href="#cinque-per-mille" class="read-more">Scopri come fare →</a></div>
+        <div class="news-card"><div class="news-date">🗓 Estate 2024</div><h4>Progetto India: aggiornamento estate</h4><p>I nostri volontari sono tornati dall'India con storie meravigliose. Tanti bambini hanno ricevuto cure mediche e materiale scolastico grazie alle donazioni ricevute quest'anno.</p><a href="https://www.facebook.com/info.balome/" target="_blank" class="read-more">Vedi le foto →</a></div>
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section contatti" id="contatti">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Parliamo</div>
+      <h2>Contattaci</h2>
+      <p class="section-intro">Vuoi saperne di più, diventare volontario o semplicemente mandarci un messaggio di supporto? Siamo qui per te!</p>
+    </div>
+    <div class="contatti-grid">
+      <div class="contatti-info reveal">
+        <div class="contact-block"><div class="contact-icon">📧</div><div><strong>Email</strong><a href="mailto:info@balome.org">info@balome.org</a></div></div>
+        <div class="contact-block"><div class="contact-icon">📱</div><div><strong>Cellulare / WhatsApp</strong><a href="tel:+393930181276">+39 393 018 1276</a></div></div>
+        <div class="contact-block"><div class="contact-icon">📍</div><div><strong>Sede</strong><span>P.le Risorgimento n. 14<br>24128 Bergamo (BG)</span></div></div>
+        <div class="contact-block"><div class="contact-icon">👍</div><div><strong>Seguici su Facebook</strong><a href="https://www.facebook.com/info.balome/" target="_blank">facebook.com/info.balome</a></div></div>
+        <div class="contact-block"><div class="contact-icon">🏛</div><div><strong>Codice Fiscale</strong><span>95254690167</span></div></div>
+        <div class="volunteer-box"><h4>Vuoi diventare volontario?</h4><p>Cerchiamo persone di buona volontà che vogliano donare il loro tempo per i bambini. Scrivici e ti raccontiamo come partecipare!</p><a href="mailto:info@balome.org?subject=Voglio diventare volontario Balomè" class="btn-volunteer">✋ Mi offro volontario</a></div>
+      </div>
+      <div class="contatti-form reveal delay-1">
+        <form class="contact-form" id="contactForm" onsubmit="handleFormSubmit(event)">
+          <div class="form-group"><label for="nome">Nome e Cognome *</label><input type="text" id="nome" name="nome" required placeholder="Mario Rossi"></div>
+          <div class="form-group"><label for="email">Email *</label><input type="email" id="email" name="email" required placeholder="mario@email.com"></div>
+          <div class="form-group"><label for="telefono">Telefono</label><input type="tel" id="telefono" name="telefono" placeholder="+39 333 123 4567"></div>
+          <div class="form-group"><label for="oggetto">Oggetto *</label><select id="oggetto" name="oggetto" required><option value="">Seleziona...</option><option value="info-5permille">Informazioni 5 per mille</option><option value="donazione">Voglio fare una donazione</option><option value="volontario">Voglio fare il volontario</option><option value="progetti">Informazioni sui progetti</option><option value="altro">Altro</option></select></div>
+          <div class="form-group"><label for="messaggio">Messaggio *</label><textarea id="messaggio" name="messaggio" required rows="5" placeholder="Scrivi il tuo messaggio..."></textarea></div>
+          <div class="form-privacy"><input type="checkbox" id="privacy" name="privacy" required><label for="privacy">Ho letto e accetto la <a href="mailto:info@balome.org">privacy policy</a></label></div>
+          <button type="submit" class="btn-submit"><span class="btn-text">Invia il messaggio ✉</span></button>
+          <div class="form-success" id="formSuccess" style="display:none">🎉 Grazie! Il tuo messaggio è stato inviato. Ti risponderemo presto!</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-main">
+    <div class="footer-brand">
+      <div class="footer-logo"><img src="logo.png" alt="Balomè" style="width:50px;height:50px;object-fit:contain;filter:brightness(0) invert(1);"><span>Balomè</span></div>
+      <p>Tutti i bimbi sono bravi e i grandi lo devono sapere!</p>
+      <div class="footer-social"><a href="https://www.facebook.com/info.balome/" target="_blank"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a></div>
+    </div>
+    <div class="footer-links"><h4>Navigazione</h4><a href="#chi-siamo">Chi siamo</a><a href="#missione">Missione</a><a href="#progetti">Progetti</a><a href="#cinque-per-mille">5 per mille</a><a href="#donazioni">Donazioni</a><a href="#news">News</a><a href="#contatti">Contatti</a></div>
+    <div class="footer-links"><h4>Come aiutare</h4><a href="#cinque-per-mille">Dona il 5 × mille</a><a href="#donazioni">Dona con PayPal</a><a href="#donazioni">Bonifico bancario</a><a href="mailto:info@balome.org?subject=Voglio diventare volontario">Diventa volontario</a></div>
+    <div class="footer-links"><h4>Trasparenza</h4><a href="docs/statuto.pdf" target="_blank"> Statuto</a><a href="docs/bilancio.pdf" target="_blank"> Bilancio</a></div>
+    <div class="footer-contacts"><h4>Contatti</h4><a href="mailto:info@balome.org">info@balome.org</a><a href="tel:+393930181276">+39 393 018 1276</a><p style="font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.6;margin-top:4px;">P.le Risorgimento n. 14<br>24128 Bergamo (BG)</p><p class="footer-cf">C.F. 95254690167</p><p class="footer-cf">IBAN: IT45P0538711109000003727955<br>BPER – Filiale di Bergamo Loreto</p></div>
+  </div>
+  <div class="footer-bottom">
+    <p>© <script>document.write(new Date().getFullYear())</script> Associazione Balomè · C.F. 95254690167 · P.le Risorgimento n. 14, 24128 Bergamo · <a href="mailto:info@balome.org">info@balome.org</a></p>
+    <p>Associazione di Volontariato senza scopo di lucro</p>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scrollTop" onclick="scrollToTop()" aria-label="Torna su">↑</button>
+<div class="toast" id="toast"></div>
+
+<!-- ===== LIGHTBOX GLOBALE ===== -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Visualizzatore immagini">
+  <div class="lb-backdrop" onclick="closeLightbox()"></div>
+  <button class="lb-close" onclick="closeLightbox()" aria-label="Chiudi">✕</button>
+  <button class="lb-arrow lb-prev" id="lbPrev" onclick="lbNavigate(-1)" aria-label="Precedente">‹</button>
+  <button class="lb-arrow lb-next" id="lbNext" onclick="lbNavigate(1)" aria-label="Successiva">›</button>
+  <div class="lb-content">
+    <div class="lb-img-wrap">
+      <img id="lbImg" src="" alt="" style="display:none">
+      <div class="lb-empty-state" id="lbEmpty">
+        <span class="lb-empty-icon">📷</span>
+        <strong id="lbFilename"></strong>
+        <span>Carica questa immagine nella cartella <code>/img/</code></span>
+      </div>
+    </div>
+    <div class="lb-footer">
+      <span class="lb-counter" id="lbCounter"></span>
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+    <script src="js/main.js"></script>
+<script src="js/articoli-loader.js"></script>
+</body>
+</html>
