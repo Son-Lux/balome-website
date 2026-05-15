@@ -192,6 +192,54 @@ window.addEventListener('scroll', () => {
 // ===================================================
 const GALLERIES = {};
 
+// ===================================================
+// CHI SIAMO GALLERY SLIDER
+// ===================================================
+(function initChiSiamoGallery() {
+  const track = document.getElementById('chiSiamoTrack');
+  const dotsContainer = document.getElementById('chiSiamoDots');
+  if (!track) return;
+
+  const slides = track.querySelectorAll('.hg-slide');
+  const total = slides.length;
+  let current = 0;
+  let autoTimer;
+
+  // Build dots
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'hg-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Foto ' + (i + 1));
+    dot.addEventListener('click', () => goTo(i));
+    dotsContainer.appendChild(dot);
+  });
+
+  function goTo(idx) {
+    current = (idx + total) % total;
+    track.style.transform = `translateX(-${current * 100}%)`;
+    dotsContainer.querySelectorAll('.hg-dot').forEach((d, i) =>
+      d.classList.toggle('active', i === current));
+  }
+
+  function startAuto() {
+    clearInterval(autoTimer);
+    autoTimer = setInterval(() => goTo(current + 1), 4000);
+  }
+
+  document.getElementById('chiSiamoPrev').addEventListener('click', () => { goTo(current - 1); startAuto(); });
+  document.getElementById('chiSiamoNext').addEventListener('click', () => { goTo(current + 1); startAuto(); });
+
+  // Touch/swipe
+  let touchStartX = 0;
+  track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  track.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 40) { goTo(current + (dx < 0 ? 1 : -1)); startAuto(); }
+  });
+
+  startAuto();
+})();
+
 function buildGalleryFromDOM() {
   // Hero gallery
   const heroSlides = document.querySelectorAll('#heroTrack .hg-slide img');
@@ -200,6 +248,22 @@ function buildGalleryFromDOM() {
     alt: img.alt,
     filename: img.getAttribute('src')
   }));
+    
+    // Chi siamo gallery
+  const csSlides = document.querySelectorAll('#chiSiamoTrack .hg-slide img');
+  if (csSlides.length) {
+    GALLERIES['chisiamo'] = Array.from(csSlides).map(img => ({
+      src: img.src, alt: img.alt, filename: img.getAttribute('src')
+    }));
+  }
+    // AUTOMATICO — trova tutti i track con data-gallery sulla pagina
+  document.querySelectorAll('[data-gallery]').forEach(track => {
+    const key = track.getAttribute('data-gallery');
+    const imgs = track.querySelectorAll('img');
+    GALLERIES[key] = Array.from(imgs).map(img => ({
+      src: img.src, alt: img.alt, filename: img.getAttribute('src')
+    }));
+  });
 
   // Project galleries — scan data-gallery attributes
   document.querySelectorAll('.progetto-gallery[data-gallery]').forEach(container => {
@@ -284,3 +348,67 @@ function lbKeyHandler(e) {
 
 // Build gallery index on load
 window.addEventListener('DOMContentLoaded', buildGalleryFromDOM);
+// ===================================================
+// INIT AUTOMATICO — tutti gli slider con data-gallery
+// ===================================================
+function initAllSliders() {
+  document.querySelectorAll('[data-gallery]').forEach(track => {
+    const key = track.getAttribute('data-gallery');
+    const slides = track.querySelectorAll('.hg-slide');
+    if (!slides.length) return;
+
+    const total = slides.length;
+    let current = 0;
+    let autoTimer;
+
+    // Cerca i controlli nel contenitore padre
+    const wrapper = track.closest('.hero-gallery, .cs-gallery, .articolo-gallery');
+    if (!wrapper) return;
+    const dotsContainer = wrapper.querySelector('.hg-dots');
+    const prevBtn = wrapper.querySelector('.hg-prev');
+    const nextBtn = wrapper.querySelector('.hg-next');
+
+    // Build dots
+    if (dotsContainer) {
+      slides.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'hg-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', 'Foto ' + (i + 1));
+        dot.addEventListener('click', () => goTo(i));
+        dotsContainer.appendChild(dot);
+      });
+    }
+
+    function goTo(idx) {
+      current = (idx + total) % total;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      if (dotsContainer) {
+        dotsContainer.querySelectorAll('.hg-dot').forEach((d, i) =>
+          d.classList.toggle('active', i === current));
+      }
+    }
+
+    function startAuto() {
+      clearInterval(autoTimer);
+      autoTimer = setInterval(() => goTo(current + 1), 4000);
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', () => { goTo(current - 1); startAuto(); });
+    if (nextBtn) nextBtn.addEventListener('click', () => { goTo(current + 1); startAuto(); });
+
+    // Touch/swipe
+    let touchStartX = 0;
+    track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 40) { goTo(current + (dx < 0 ? 1 : -1)); startAuto(); }
+    });
+
+    startAuto();
+  });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  buildGalleryFromDOM();
+  initAllSliders();
+});

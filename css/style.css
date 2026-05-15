@@ -15,8 +15,8 @@
   --shadow-lg: 0 12px 48px rgba(27,47,140,0.18);
   --radius: 18px;
   --radius-sm: 10px;
-  --font-display: 'Playfair Display', Georgia, serif;
-  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-display: 'Poppins', sans-serif;
+  --font-body: 'Poppins', sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;font-size:16px}
@@ -67,7 +67,7 @@ a{color:inherit}
 .btn-secondary:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-2px)}
 .hero-cf{background:var(--bg-warm);border:2px dashed var(--orange);border-radius:var(--radius-sm);padding:14px 20px;display:inline-flex;align-items:center;gap:12px;font-size:.9rem}
 .hero-cf span{color:var(--text-light)}
-.hero-cf strong{font-size:1.2rem;color:var(--orange);letter-spacing:.05em;font-family:monospace}
+.hero-cf strong{font-size:1.2rem;color:var(--orange);letter-spacing:.05em;font-family:'Poppins', sans-serif}
 .hero-illustration{position:relative;z-index:2;display:flex;justify-content:center;align-items:center}
 .hero-illustration svg{width:100%;max-width:500px;filter:drop-shadow(0 20px 40px rgba(245,146,30,.15));animation:hero-bob 6s ease-in-out infinite}
 @keyframes hero-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
@@ -134,7 +134,7 @@ a{color:inherit}
 .cinque-left p{color:rgba(255,255,255,.72);line-height:1.75;margin-bottom:16px;font-size:1rem}
 .cf-box{background:rgba(255,255,255,.06);border:2px dashed rgba(245,146,30,.5);border-radius:var(--radius);padding:24px 28px;margin-top:28px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
 .cf-label{font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:#F5921E;font-weight:600}
-.cf-number{font-family:monospace;font-size:1.8rem;font-weight:900;color:#fff;letter-spacing:.1em}
+.cf-number{font-family:'Poppins', sans-serif;font-size:1.8rem;font-weight:900;color:#fff;letter-spacing:.1em}
 .cf-copy{background:var(--orange);color:#fff;border:none;cursor:pointer;font-weight:700;font-size:.9rem;padding:10px 22px;border-radius:50px;transition:all .2s;font-family:var(--font-body)}
 .cf-copy:hover{background:#d97f10;transform:translateY(-1px)}
 .cinque-steps h3{font-family:var(--font-display);font-size:1.4rem;color:#F5921E;margin-bottom:28px}
@@ -627,4 +627,25 @@ a{color:inherit}
   .lb-prev { left: 8px; }
   .lb-next { right: 8px; }
   .lb-empty-state { padding: 32px 20px; min-width: auto; }
+}
+/* ===== CHI SIAMO GALLERY ===== */
+.cs-gallery {
+  width: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+.cs-gallery-viewport {
+  overflow: hidden;
+  border-radius: 24px;
+  aspect-ratio: 4/3;
+}
+.cs-gallery-track {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(.77,0,.175,1);
+  height: 100%;
+}
+.cs-gallery-track .hg-slide {
+  min-width: 100%;
+  height: 100%;
 }
