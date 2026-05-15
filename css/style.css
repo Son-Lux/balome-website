@@ -649,3 +649,141 @@ a{color:inherit}
   min-width: 100%;
   height: 100%;
 }
+
+/* ── MAP ── */
+.map-wrap { width: 100%; max-width: 740px; margin: 0 auto; padding: 0 .8rem 1rem; }
+#map-svg  { width: 100%; height: auto; display: block; }
+
+/* Countries */
+.india    { fill: #FFF3E0; stroke: #E0A040; stroke-width: .9px; }
+.neighbor { fill: #EAE4D6; stroke: #C8B888; stroke-width: .5px; }
+.land-bg  { fill: #D8D0B8; stroke: #B8AA90; stroke-width: .35px; }
+.sea-bg   { fill: #C8DFF0; }
+.graticule{ fill: none; stroke: #A0C0D8; stroke-width: .3px; opacity: .5; }
+.borders  { fill: none; stroke: #C0A860; stroke-width: .55px; }
+
+/* ── PULSE RINGS ──
+   Due anelli sfalsati per pin — animano il cerchio SVG r e opacity */
+@keyframes ring-out {
+  0%   { r: 7;  opacity: .8; stroke-width: 2.2; }
+  100% { r: 28; opacity: 0;  stroke-width: .4; }
+}
+.pulse-ring { animation: ring-out 2.2s ease-out infinite; }
+
+/* ── LEGEND ── */
+.legend {
+  max-width: 740px; width: 100%;
+  padding: 0 .8rem 1.8rem;
+  display: flex; flex-wrap: wrap; gap: .48rem; justify-content: center;
+}
+.leg-btn {
+  display: flex; align-items: center; gap: .44rem;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: 50px;
+  padding: .3rem .82rem .3rem .52rem;
+  cursor: pointer;
+  font-size: .77rem; font-weight: 600;
+  color: var(--text);
+  font-family: var(--font);
+  transition: all .2s;
+  box-shadow: var(--shadow);
+}
+.leg-btn:hover {
+  border-color: var(--orange);
+  background: var(--bg-warm);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(245,146,30,.2);
+}
+.leg-dot { width: 9px; height: 9px; background: var(--orange); border-radius: 50%; flex-shrink: 0; }
+
+/* ── POPUP ── */
+.overlay {
+  display: none; position: fixed; inset: 0; z-index: 300;
+  background: rgba(26,32,64,.52);
+  align-items: center; justify-content: center;
+  padding: 1rem;
+}
+.overlay.open { display: flex; animation: fB .22s ease; }
+@keyframes fB { from { opacity:0 } to { opacity:1 } }
+
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  max-width: 450px; width: 100%;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  animation: sU .28s cubic-bezier(.34,1.56,.64,1);
+  max-height: 92vh; overflow-y: auto;
+  border: 1px solid var(--border);
+}
+@keyframes sU { from { transform:translateY(24px); opacity:0 } to { transform:translateY(0); opacity:1 } }
+
+/* Header card = gradiente verde–arancione del sito (progetto India) */
+.card-top {
+  background: linear-gradient(90deg, #FF9933 0%, #138808 50%, #FF9933 100%);
+  background-size: 200% 100%;
+  animation: indiaFlag 6s linear infinite;
+  padding: 1.4rem 1.5rem 1rem; position: relative;
+}
+@keyframes indiaFlag {
+  0%   { background-position: 0% 0%; }
+  50%  { background-position: 100% 0%; }
+  100% { background-position: 0% 0%; }
+}
+.c-close {
+  position: absolute; top: .88rem; right: .88rem;
+  background: rgba(255,255,255,.22); border: none;
+  border-radius: 50%; width: 30px; height: 30px;
+  font-size: .88rem; color: #fff; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.c-close:hover { background: rgba(255,255,255,.4); }
+.c-flag  { font-size: 1.8rem; margin-bottom: .38rem; }
+.c-city  { font-size: .67rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.82); margin-bottom: .15rem; }
+.c-title { font-family: var(--font); font-size: 1.2rem; font-weight: 900; color: #fff; line-height: 1.2; text-shadow: 0 1px 4px rgba(0,0,0,.2); }
+
+.card-body { padding: 1.3rem 1.5rem 1.55rem; }
+
+.c-tags { display: flex; flex-wrap: wrap; gap: .33rem; margin-bottom: .9rem; }
+.c-tag  {
+  background: rgba(245,146,30,.1);
+  color: var(--orange-dark);
+  font-size: .63rem; font-weight: 700;
+  padding: .18rem .54rem; border-radius: 50px;
+  letter-spacing: .02em;
+}
+
+.c-text { font-size: .87rem; line-height: 1.75; color: var(--text-light); margin-bottom: 1rem; }
+
+.c-stats { display: flex; gap: .65rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
+.c-stat  {
+  background: var(--bg-warm);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: .5rem .75rem; flex: 1; min-width: 72px; text-align: center;
+}
+.s-num { font-family: var(--font); font-size: 1.3rem; font-weight: 900; color: var(--orange); display: block; }
+.s-lbl { font-size: .63rem; color: var(--text-light); font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
+
+.c-link {
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: var(--orange); color: #fff;
+  font-size: .85rem; font-weight: 700;
+  padding: .65rem 1.3rem; border-radius: 50px;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(245,146,30,.35);
+  transition: background .18s, transform .12s, box-shadow .18s;
+}
+.c-link:hover {
+  background: var(--orange-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(245,146,30,.4);
+}
+
+@media (max-width: 480px) {
+  .c-title { font-size: 1.05rem; }
+  .card-body { padding: 1rem 1.15rem 1.3rem; }
+  .card-top  { padding: 1.1rem 1.15rem .85rem; }
+}
