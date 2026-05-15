@@ -53,6 +53,7 @@
     </nav>
   </div>
 </header>
+
 <section class="hero" id="home">
   <div class="hero-bg">
     <div class="hero-shape hero-shape-1"></div>
@@ -72,54 +73,57 @@
       <strong>95254690167</strong>
     </div>
   </div>
-  <div class="hero-illustration">
-    <svg viewBox="0 0 400 350" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="200" cy="320" rx="180" ry="20" fill="#FFECD2" opacity="0.5"/>
-      <circle cx="100" cy="130" r="35" fill="#FFBA49"/>
-      <rect x="72" y="162" width="56" height="70" rx="28" fill="#F4845F"/>
-      <rect x="60" y="175" width="20" height="55" rx="10" fill="#F4845F"/>
-      <rect x="128" y="175" width="20" height="55" rx="10" fill="#F4845F"/>
-      <rect x="78" y="225" width="20" height="60" rx="10" fill="#2D3047"/>
-      <rect x="108" y="225" width="20" height="60" rx="10" fill="#2D3047"/>
-      <circle cx="88" cy="123" r="5" fill="#2D3047"/>
-      <circle cx="112" cy="123" r="5" fill="#2D3047"/>
-      <path d="M88 145 Q100 155 112 145" stroke="#2D3047" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <path d="M65 115 Q100 85 135 115" fill="#2D3047"/>
-      <circle cx="200" cy="110" r="40" fill="#A8D8A8"/>
-      <rect x="168" y="148" width="64" height="75" rx="32" fill="#6BAB6B"/>
-      <rect x="153" y="160" width="22" height="60" rx="11" fill="#6BAB6B"/>
-      <rect x="233" y="160" width="22" height="60" rx="11" fill="#6BAB6B"/>
-      <rect x="176" y="215" width="22" height="65" rx="11" fill="#3D405B"/>
-      <rect x="210" y="215" width="22" height="65" rx="11" fill="#3D405B"/>
-      <circle cx="188" cy="103" r="6" fill="#2D3047"/>
-      <circle cx="212" cy="103" r="6" fill="#2D3047"/>
-      <path d="M188 128 Q200 140 212 128" stroke="#2D3047" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <path d="M160 95 Q200 60 240 95" fill="#2D3047"/>
-      <path d="M200 55 C200 55 185 42 185 52 C185 58 200 70 200 70 C200 70 215 58 215 52 C215 42 200 55 200 55Z" fill="#F4845F"/>
-      <circle cx="310" cy="135" r="35" fill="#E8A598"/>
-      <rect x="282" y="167" width="56" height="70" rx="28" fill="#C67B6B"/>
-      <rect x="270" y="180" width="20" height="55" rx="10" fill="#C67B6B"/>
-      <rect x="338" y="180" width="20" height="55" rx="10" fill="#C67B6B"/>
-      <rect x="288" y="230" width="20" height="60" rx="10" fill="#2D3047"/>
-      <rect x="318" y="230" width="20" height="60" rx="10" fill="#2D3047"/>
-      <circle cx="298" cy="128" r="5" fill="#2D3047"/>
-      <circle cx="322" cy="128" r="5" fill="#2D3047"/>
-      <path d="M298 150 Q310 160 322 150" stroke="#2D3047" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <path d="M275 118 Q310 88 345 118" fill="#8B4513"/>
-      <ellipse cx="275" cy="140" rx="10" ry="20" fill="#8B4513"/>
-      <ellipse cx="345" cy="140" rx="10" ry="20" fill="#8B4513"/>
-      <text x="50" y="80" font-size="20" fill="#FFBA49">★</text>
-      <text x="340" y="70" font-size="16" fill="#F4845F">✦</text>
-      <text x="170" y="40" font-size="14" fill="#A8D8A8">✦</text>
-      <path d="M138 210 Q170 200 168 215" stroke="#FFBA49" stroke-width="8" fill="none" stroke-linecap="round"/>
-      <path d="M240 210 Q270 200 280 215" stroke="#FFBA49" stroke-width="8" fill="none" stroke-linecap="round"/>
-    </svg>
+
+  <!-- GALLERIA HERO — sostituisce l'illustrazione SVG -->
+  <!-- Le immagini vanno in /img/hero-1.jpg … hero-6.jpg -->
+  <div class="hero-gallery reveal delay-2">
+    <div class="hero-gallery-viewport">
+      <div class="hero-gallery-track" id="heroTrack">
+        <div class="hg-slide" onclick="openLightbox('hero',0)">
+          <img src="img/hero-1.jpg" alt="Balomè 1" onerror="this.style.display='none'">
+          <div class="hg-empty">📷<span>hero-1.jpg</span></div>
+          <div class="hg-overlay">🔍</div>
+        </div>
+        <div class="hg-slide" onclick="openLightbox('hero',1)">
+          <img src="img/hero-2.jpg" alt="Balomè 2" onerror="this.style.display='none'">
+          <div class="hg-empty">📷<span>hero-2.jpg</span></div>
+          <div class="hg-overlay">🔍</div>
+        </div>
+        <div class="hg-slide" onclick="openLightbox('hero',2)">
+          <img src="img/hero-3.jpg" alt="Balomè 3" onerror="this.style.display='none'">
+          <div class="hg-empty">📷<span>hero-3.jpg</span></div>
+          <div class="hg-overlay">🔍</div>
+        </div>
+        <div class="hg-slide" onclick="openLightbox('hero',3)">
+          <img src="img/hero-4.jpg" alt="Balomè 4" onerror="this.style.display='none'">
+          <div class="hg-empty">📷<span>hero-4.jpg</span></div>
+          <div class="hg-overlay">🔍</div>
+        </div>
+        <div class="hg-slide" onclick="openLightbox('hero',4)">
+          <img src="img/hero-5.jpg" alt="Balomè 5" onerror="this.style.display='none'">
+          <div class="hg-empty">📷<span>hero-5.jpg</span></div>
+          <div class="hg-overlay">🔍</div>
+        </div>
+        <div class="hg-slide" onclick="openLightbox('hero',5)">
+          <img src="img/hero-6.jpg" alt="Balomè 6" onerror="this.style.display='none'">
+          <div class="hg-empty">📷<span>hero-6.jpg</span></div>
+          <div class="hg-overlay">🔍</div>
+        </div>
+      </div>
+    </div>
+    <div class="hg-controls">
+      <button class="hg-btn hg-prev" id="heroPrev" aria-label="Precedente">‹</button>
+      <div class="hg-dots" id="heroDots"></div>
+      <button class="hg-btn hg-next" id="heroNext" aria-label="Successiva">›</button>
+    </div>
   </div>
+
   <div class="scroll-indicator">
     <div class="scroll-dot"></div>
     <span>Scorri per scoprire</span>
   </div>
 </section>
+
 <section class="stats-band">
   <div class="stats-inner">
     <div class="stat-item reveal"><div class="stat-number" data-count="80">0</div><div class="stat-label">Bambini aiutati</div></div>
@@ -128,6 +132,7 @@
     <div class="stat-item reveal delay-3"><div class="stat-number" data-count="4">0</div><div class="stat-label">Volontari attivi</div></div>
   </div>
 </section>
+
 <section class="section chi-siamo" id="chi-siamo">
   <div class="container">
     <div class="section-grid">
@@ -138,12 +143,12 @@
         <div class="big-circle-bg"><svg viewBox="0 0 300 300" fill="none"><circle cx="150" cy="150" r="140" fill="#FFF5EC"/><circle cx="150" cy="150" r="100" fill="#FFECD2"/><text x="150" y="170" text-anchor="middle" font-size="80">👶</text></svg></div>
       </div>
       <div class="section-text reveal delay-1">
-        <div class="section-label">Chi siamo</div> 
-      <h2><strong>Balomè</strong> nasce da un incontro che ha cambiato per sempre la nostra vita. </h2>
-<p>Tutto ha avuto inizio a Shishu Bhavan, uno degli orfanotrofi delle Missionarie della Carità di Madre Teresa a Calcutta, in India, , dove abbiamo incontrato nostra figlia.<br>
-La sua prima parola pronunciata “Bhalo mey” che significa “brava bambina”  è diventata il nome della nostra associazione. Ma soprattutto è diventata una promessa: non dimenticare mai i bambini lasciati soli.
-Da quel giorno abbiamo sentito il bisogno di trasformare la gratitudine e l’amore ricevuti in qualcosa di concreto per tanti altri bambini vulnerabili, affinché nessuno venga lasciato indietro. <br>
-    Il nostro motto è: <em>"Tutti i bimbi sono buoni e i grandi lo devono sapere!"</em></p>
+        <div class="section-label">Chi siamo</div>
+        <h2><strong>Balomè</strong> nasce da un incontro che ha cambiato per sempre la nostra vita.</h2>
+        <p>Tutto ha avuto inizio a Shishu Bhavan, uno degli orfanotrofi delle Missionarie della Carità di Madre Teresa a Calcutta, in India, dove abbiamo incontrato nostra figlia.<br>
+        La sua prima parola pronunciata "Bhalo mey" che significa "brava bambina" è diventata il nome della nostra associazione. Ma soprattutto è diventata una promessa: non dimenticare mai i bambini lasciati soli.
+        Da quel giorno abbiamo sentito il bisogno di trasformare la gratitudine e l'amore ricevuti in qualcosa di concreto per tanti altri bambini vulnerabili, affinché nessuno venga lasciato indietro.<br>
+        Il nostro motto è: <em>"Tutti i bimbi sono buoni e i grandi lo devono sapere!"</em></p>
         <div class="values-list">
           <div class="value-item"><span class="value-icon">💛</span><span>Trasparenza e onestà nella gestione dei fondi</span></div>
           <div class="value-item"><span class="value-icon">🤝</span><span>Coinvolgimento diretto delle comunità locali</span></div>
@@ -153,6 +158,7 @@ Da quel giorno abbiamo sentito il bisogno di trasformare la gratitudine e l’am
     </div>
   </div>
 </section>
+
 <section class="section missione" id="missione">
   <div class="mission-bg-pattern"></div>
   <div class="container">
@@ -160,21 +166,17 @@ Da quel giorno abbiamo sentito il bisogno di trasformare la gratitudine e l’am
       <div class="section-label">La nostra missione</div>
       <h2>Cosa facciamo ogni giorno</h2>
       <p class="section-intro">Prenderci cura dei bambini più fragili, offrendo sostegno concreto e opportunità di futuro.<br>
-Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto d’amore possa lasciare un segno immenso.
-</p>
+Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto d'amore possa lasciare un segno immenso.</p>
     </div>
     <div class="mission-cards">
-      <div class="mission-card reveal"><div class="mission-icon">📖</div><h3>Accoglienza e Sostegno all’Infanzia</h3><p>Sosteniamo bambini abbandonati accolti negli orfanotrofi e nelle missioni in India, contribuendo ai bisogni essenziali: cibo, cure mediche, istruzione e protezione.
-</p></div>
-      <div class="mission-card reveal delay-1"><div class="mission-icon">🏥</div><h3>Educazione e Crescita</h3><p>Crediamo che la scuola e l’educazione siano strumenti fondamentali per costruire libertà, dignità e futuro.
-</p></div>
-      <div class="mission-card reveal delay-2"><div class="mission-icon">🛡️</div><h3>Aiuto alle Missioni Locali</h3><p>Collaboriamo con le realtà che operano quotidianamente sul territorio indiano, sostenendo progetti concreti dedicati all’infanzia.
-</p></div>
-      <div class="mission-card reveal delay-3"><div class="mission-icon">🎨</div><h3>Diffondere Solidarietà</h3><p>Promuoviamo una cultura dell’accoglienza e della responsabilità verso i più piccoli, coinvolgendo famiglie, volontari e sostenitori.
-</p></div>
+      <div class="mission-card reveal"><div class="mission-icon">📖</div><h3>Accoglienza e Sostegno all'Infanzia</h3><p>Sosteniamo bambini abbandonati accolti negli orfanotrofi e nelle missioni in India, contribuendo ai bisogni essenziali: cibo, cure mediche, istruzione e protezione.</p></div>
+      <div class="mission-card reveal delay-1"><div class="mission-icon">🏥</div><h3>Educazione e Crescita</h3><p>Crediamo che la scuola e l'educazione siano strumenti fondamentali per costruire libertà, dignità e futuro.</p></div>
+      <div class="mission-card reveal delay-2"><div class="mission-icon">🛡️</div><h3>Aiuto alle Missioni Locali</h3><p>Collaboriamo con le realtà che operano quotidianamente sul territorio indiano, sostenendo progetti concreti dedicati all'infanzia.</p></div>
+      <div class="mission-card reveal delay-3"><div class="mission-icon">🎨</div><h3>Diffondere Solidarietà</h3><p>Promuoviamo una cultura dell'accoglienza e della responsabilità verso i più piccoli, coinvolgendo famiglie, volontari e sostenitori.</p></div>
     </div>
   </div>
 </section>
+
 <section class="section progetti" id="progetti">
   <div class="container">
     <div class="section-header reveal">
@@ -182,13 +184,36 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
       <h2>Passati e futuri</h2>
     </div>
     <div class="progetti-grid">
-        
-        <div class="progetto-card india reveal">
+
+      <!-- PROGETTO DEEPASHRAM -->
+      <!-- Immagini: /img/deepashram-1.jpg … deepashram-4.jpg -->
+      <div class="progetto-card india reveal">
         <div class="progetto-flag">🇮🇳</div>
         <div class="progetto-content">
           <h3>Progetto <strong>Deepashram</strong></h3>
-          <p>Il Progetto “Deepashram” in Rajiv Nagar Gurgaon a pochi chilometri da Delhi, in una casa fondata da Madre Teresa di Calcutta oggi gestita dai Missionari della Carità che ospita ragazzi orfani, abbandonati perchè affetti da diverse patologie: ci sono bambini ciechi, muti, sordi, spastici, poliomielitici e disabili mentali. A Deepashram si sentono a casa, amati e accuditi con amore e tenerezza. Grazie al Vostro sostegno economico abbiamo garantito l’accesso alla fisioterapia, e all’istruzione per i 39 ragazzi accolti dai Missionari che quotidianamente se ne prendono cura.
-</p>
+          <div class="progetto-gallery" data-gallery="deepashram">
+            <div class="pg-main" onclick="openLightbox('deepashram',0)">
+              <img src="img/deepashram-1.jpg" alt="Deepashram" onerror="this.style.display='none'">
+              <div class="pg-empty">📷<span>deepashram-1.jpg</span></div>
+              <div class="pg-overlay">🔍 Galleria</div>
+            </div>
+            <div class="pg-thumbs">
+              <div class="pg-thumb" onclick="openLightbox('deepashram',1)">
+                <img src="img/deepashram-2.jpg" alt="Deepashram 2" onerror="this.style.display='none'">
+                <div class="pg-empty">📷</div>
+              </div>
+              <div class="pg-thumb" onclick="openLightbox('deepashram',2)">
+                <img src="img/deepashram-3.jpg" alt="Deepashram 3" onerror="this.style.display='none'">
+                <div class="pg-empty">📷</div>
+              </div>
+              <div class="pg-thumb pg-thumb-more" onclick="openLightbox('deepashram',3)">
+                <img src="img/deepashram-4.jpg" alt="Deepashram 4" onerror="this.style.display='none'">
+                <div class="pg-empty">📷</div>
+                <div class="pg-more-label">+foto</div>
+              </div>
+            </div>
+          </div>
+          <p>Il Progetto "Deepashram" in Rajiv Nagar Gurgaon a pochi chilometri da Delhi, in una casa fondata da Madre Teresa di Calcutta oggi gestita dai Missionari della Carità che ospita ragazzi orfani, abbandonati perchè affetti da diverse patologie: ci sono bambini ciechi, muti, sordi, spastici, poliomielitici e disabili mentali. A Deepashram si sentono a casa, amati e accuditi con amore e tenerezza. Grazie al Vostro sostegno economico abbiamo garantito l'accesso alla fisioterapia, e all'istruzione per i 39 ragazzi accolti dai Missionari che quotidianamente se ne prendono cura.</p>
           <ul class="progetto-points">
             <li>ragazzi orfani</li>
             <li>fisioterapia</li>
@@ -197,25 +222,73 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
           </ul>
         </div>
       </div>
-        <div class="progetto-card india reveal delay-1">
+
+      <!-- PROGETTO KARUNANJALI -->
+      <!-- Immagini: /img/karunanjali-1.jpg … karunanjali-4.jpg -->
+      <div class="progetto-card india reveal delay-1">
         <div class="progetto-flag">🇮🇳</div>
         <div class="progetto-content">
           <h3>Progetto <strong>Karunanjali School</strong></h3>
-          <p>Il progetto “Karunanjali School” è gestito dalle Suore di Sant'Anna per i bambini con problemi mentali, che non dispongono di strutture di formazione, in Talagaon Dabhade, nelle zone rurali dello Stato del Maharashtra . Le suore, girando per i villaggi, si sono imbattute in un gran numero di bambini con problemi mentali, tenuti a casa senza alcuna istruzione o formazione. Grazie anche al nostro contributo, questi bambini oggi hanno una scuola dove possono essere ospitati in forma residenziale o solo nelle ore diurne. Attualmente sono 33 i bambini accolti  e 13 quelli che frequentano il centro diurno. 
-Il Vostro contributo ha donato e continuerà a donare  speranza e felicità a questi bambini che avranno così l'opportunità di accedere ad un futuro migliore e più sereno. 
-</p>
+          <div class="progetto-gallery" data-gallery="karunanjali">
+            <div class="pg-main" onclick="openLightbox('karunanjali',0)">
+              <img src="img/karunanjali-1.jpg" alt="Karunanjali" onerror="this.style.display='none'">
+              <div class="pg-empty">📷<span>karunanjali-1.jpg</span></div>
+              <div class="pg-overlay">🔍 Galleria</div>
+            </div>
+            <div class="pg-thumbs">
+              <div class="pg-thumb" onclick="openLightbox('karunanjali',1)">
+                <img src="img/karunanjali-2.jpg" alt="Karunanjali 2" onerror="this.style.display='none'">
+                <div class="pg-empty">📷</div>
+              </div>
+              <div class="pg-thumb" onclick="openLightbox('karunanjali',2)">
+                <img src="img/karunanjali-3.jpg" alt="Karunanjali 3" onerror="this.style.display='none'">
+                <div class="pg-empty">📷</div>
+              </div>
+              <div class="pg-thumb pg-thumb-more" onclick="openLightbox('karunanjali',3)">
+                <img src="img/karunanjali-4.jpg" alt="Karunanjali 4" onerror="this.style.display='none'">
+                <div class="pg-empty">📷</div>
+                <div class="pg-more-label">+foto</div>
+              </div>
+            </div>
+          </div>
+          <p>Il progetto "Karunanjali School" è gestito dalle Suore di Sant'Anna per i bambini con problemi mentali, che non dispongono di strutture di formazione, in Talagaon Dabhade, nelle zone rurali dello Stato del Maharashtra. Le suore, girando per i villaggi, si sono imbattute in un gran numero di bambini con problemi mentali, tenuti a casa senza alcuna istruzione o formazione. Grazie anche al nostro contributo, questi bambini oggi hanno una scuola dove possono essere ospitati in forma residenziale o solo nelle ore diurne. Attualmente sono 33 i bambini accolti e 13 quelli che frequentano il centro diurno.</p>
           <ul class="progetto-points">
-            <li>bambini con problemi  mentali</li>
-            <li>Scuola dove possono essere ospitati</li>
+            <li>bambini con problemi mentali</li>
+            <li>Scuola residenziale e diurna</li>
             <li>33 + 13 bambini</li>
             <li>donare speranza e felicità</li>
           </ul>
         </div>
       </div>
-        <div class="progetto-card india reveal delay-3">
+
+      <!-- PROGETTO ANANDASHARAM -->
+      <!-- Immagini: /img/anandasharam-1.jpg … anandasharam-4.jpg -->
+      <div class="progetto-card india reveal delay-3">
         <div class="progetto-flag">🇮🇳</div>
         <div class="progetto-content">
           <h3>Progetto <strong>Anandasharam</strong></h3>
+          <div class="progetto-gallery" data-gallery="anandasharam">
+            <div class="pg-main" onclick="openLightbox('anandasharam',0)">
+              <img src="img/anandasharam-1.jpg" alt="Anandasharam" onerror="this.style.display='none'">
+              <div class="pg-empty">📷<span>anandasharam-1.jpg</span></div>
+              <div class="pg-overlay">🔍 Galleria</div>
+            </div>
+            <div class="pg-thumbs">
+              <div class="pg-thumb" onclick="openLightbox('anandasharam',1)">
+                <img src="img/anandasharam-2.jpg" alt="Anandasharam 2" onerror="this.style.display='none'">
+                <div class="pg-empty">📷</div>
+              </div>
+              <div class="pg-thumb" onclick="openLightbox('anandasharam',2)">
+                <img src="img/anandasharam-3.jpg" alt="Anandasharam 3" onerror="this.style.display='none'">
+                <div class="pg-empty">📷</div>
+              </div>
+              <div class="pg-thumb pg-thumb-more" onclick="openLightbox('anandasharam',3)">
+                <img src="img/anandasharam-4.jpg" alt="Anandasharam 4" onerror="this.style.display='none'">
+                <div class="pg-empty">📷</div>
+                <div class="pg-more-label">+foto</div>
+              </div>
+            </div>
+          </div>
           <p>In India lavoriamo in contesti di estrema povertà dove l'accesso alle cure mediche e all'istruzione è ancora un privilegio. I nostri volontari operano sul campo per garantire un futuro ai bambini più vulnerabili.</p>
           <ul class="progetto-points">
             <li>Costruzione e supporto di scuole rurali</li>
@@ -225,10 +298,35 @@ Il Vostro contributo ha donato e continuerà a donare  speranza e felicità a qu
           </ul>
         </div>
       </div>
-        <div class="progetto-card india reveal delay-4">
+
+      <!-- PROGETTO CALCUTTA -->
+      <!-- Immagini: /img/calcutta-1.jpg … calcutta-4.jpg -->
+      <div class="progetto-card india reveal delay-4">
         <div class="progetto-flag">🇮🇳</div>
         <div class="progetto-content">
           <h3>Progetto <strong>Calcutta</strong></h3>
+          <div class="progetto-gallery" data-gallery="calcutta">
+            <div class="pg-main" onclick="openLightbox('calcutta',0)">
+              <img src="img/calcutta-1.jpg" alt="Calcutta" onerror="this.style.display='none'">
+              <div class="pg-empty">📷<span>calcutta-1.jpg</span></div>
+              <div class="pg-overlay">🔍 Galleria</div>
+            </div>
+            <div class="pg-thumbs">
+              <div class="pg-thumb" onclick="openLightbox('calcutta',1)">
+                <img src="img/calcutta-2.jpg" alt="Calcutta 2" onerror="this.style.display='none'">
+                <div class="pg-empty">📷</div>
+              </div>
+              <div class="pg-thumb" onclick="openLightbox('calcutta',2)">
+                <img src="img/calcutta-3.jpg" alt="Calcutta 3" onerror="this.style.display='none'">
+                <div class="pg-empty">📷</div>
+              </div>
+              <div class="pg-thumb pg-thumb-more" onclick="openLightbox('calcutta',3)">
+                <img src="img/calcutta-4.jpg" alt="Calcutta 4" onerror="this.style.display='none'">
+                <div class="pg-empty">📷</div>
+                <div class="pg-more-label">+foto</div>
+              </div>
+            </div>
+          </div>
           <p>In India lavoriamo in contesti di estrema povertà dove l'accesso alle cure mediche e all'istruzione è ancora un privilegio. I nostri volontari operano sul campo per garantire un futuro ai bambini più vulnerabili.</p>
           <ul class="progetto-points">
             <li>Costruzione e supporto di scuole rurali</li>
@@ -238,10 +336,11 @@ Il Vostro contributo ha donato e continuerà a donare  speranza e felicità a qu
           </ul>
         </div>
       </div>
-        
+
     </div>
   </div>
 </section>
+
 <section class="section cinque-per-mille" id="cinque-per-mille">
   <div class="cinque-bg"><div class="cinque-shape"></div></div>
   <div class="container">
@@ -267,6 +366,7 @@ Il Vostro contributo ha donato e continuerà a donare  speranza e felicità a qu
     </div>
   </div>
 </section>
+
 <section class="section donazioni" id="donazioni">
   <div class="container">
     <div class="section-header reveal">
@@ -322,6 +422,7 @@ Il Vostro contributo ha donato e continuerà a donare  speranza e felicità a qu
     </div>
   </div>
 </section>
+
 <section class="section news-social" id="news">
   <div class="container">
     <div class="section-header reveal">
@@ -350,6 +451,7 @@ Il Vostro contributo ha donato e continuerà a donare  speranza e felicità a qu
     </div>
   </div>
 </section>
+
 <section class="section contatti" id="contatti">
   <div class="container">
     <div class="section-header reveal">
@@ -381,6 +483,7 @@ Il Vostro contributo ha donato e continuerà a donare  speranza e felicità a qu
     </div>
   </div>
 </section>
+
 <footer class="footer">
   <div class="footer-main">
     <div class="footer-brand">
@@ -398,8 +501,31 @@ Il Vostro contributo ha donato e continuerà a donare  speranza e felicità a qu
     <p>Associazione di Volontariato senza scopo di lucro</p>
   </div>
 </footer>
+
 <button class="scroll-top" id="scrollTop" onclick="scrollToTop()" aria-label="Torna su">↑</button>
 <div class="toast" id="toast"></div>
+
+<!-- ===== LIGHTBOX GLOBALE ===== -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Visualizzatore immagini">
+  <div class="lb-backdrop" onclick="closeLightbox()"></div>
+  <button class="lb-close" onclick="closeLightbox()" aria-label="Chiudi">✕</button>
+  <button class="lb-arrow lb-prev" id="lbPrev" onclick="lbNavigate(-1)" aria-label="Precedente">‹</button>
+  <button class="lb-arrow lb-next" id="lbNext" onclick="lbNavigate(1)" aria-label="Successiva">›</button>
+  <div class="lb-content">
+    <div class="lb-img-wrap">
+      <img id="lbImg" src="" alt="" style="display:none">
+      <div class="lb-empty-state" id="lbEmpty">
+        <span class="lb-empty-icon">📷</span>
+        <strong id="lbFilename"></strong>
+        <span>Carica questa immagine nella cartella <code>/img/</code></span>
+      </div>
+    </div>
+    <div class="lb-footer">
+      <span class="lb-counter" id="lbCounter"></span>
+    </div>
+  </div>
+</div>
+
 <script src="js/main.js"></script>
 </body>
 </html>
