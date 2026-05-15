@@ -3,7 +3,7 @@
   --yellow: #F5921E;
   --green: #1A7A2E;
   --green-light: #4CAF6A;
-  --dark: #1B2F8C;
+  --dark: #148708;
   --dark-mid: #2A3FA0;
   --text: #1a2040;
   --text-light: #4A5580;
@@ -20,7 +20,7 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;font-size:16px}
-body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.65;overflow-x:hidden}
+body{font-family:var(--font-body);background:rgba(20, 135, 8, 0.01);color:var(--text);line-height:1.65;overflow-x:hidden}
 img{max-width:100%;height:auto}
 a{color:inherit}
 .topbar{background:var(--dark);color:#fff;font-size:.82rem;padding:8px 0}
@@ -86,7 +86,7 @@ a{color:inherit}
 .section-label.light{color:#F5921E;background:rgba(245,146,30,.15)}
 .section-header h2{font-family:var(--font-display);font-size:clamp(2rem,4vw,3rem);font-weight:900;color:var(--dark);line-height:1.15;margin-bottom:16px}
 .section-intro{color:var(--text-light);font-size:1.05rem;line-height:1.7}
-.chi-siamo{background:var(--bg)}
+.chi-siamo{background:rgba(20, 135, 8, 0.02)}
 .section-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
 .section-visual{position:relative;min-height:420px}
 .big-circle-bg{position:absolute;width:380px;height:380px;top:50%;left:50%;transform:translate(-50%,-50%);z-index:0}
@@ -112,7 +112,7 @@ a{color:inherit}
 .mission-icon{font-size:2.8rem;margin-bottom:20px;display:block}
 .mission-card h3{font-family:var(--font-display);font-size:1.25rem;font-weight:700;color:var(--dark);margin-bottom:12px}
 .mission-card p{color:var(--text-light);font-size:.92rem;line-height:1.65}
-.progetti{background:var(--bg)}
+.progetti{background:rgba(20, 135, 8, 0.02)}
 .progetti-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
 .progetto-card{background:var(--bg-card);border-radius:var(--radius);padding:48px 40px;display:flex;gap:24px;align-items:flex-start;box-shadow:var(--shadow);border:1px solid var(--border);transition:all .3s;position:relative;overflow:hidden}
 .progetto-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
@@ -158,9 +158,9 @@ a{color:inherit}
 .custom-amount span{color:var(--text-light);font-weight:700}
 .custom-amount input{border:none;background:transparent;font-family:var(--font-body);font-size:1rem;font-weight:700;color:var(--dark);width:100%;padding:10px 0;outline:none}
 .btn-donate{display:block;text-align:center;text-decoration:none;font-weight:700;font-size:1rem;padding:15px 24px;border-radius:50px;transition:all .25s}
-.paypal-btn{background:#0070BA;color:#fff}
+.paypal-btn{background:#148708;color:#fff}
 .paypal-btn:hover{background:#005a96;transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,112,186,.35)}
-.bonifico-btn{background:var(--dark-mid);color:#fff}
+.bonifico-btn{background:#148708;color:#fff}
 .bonifico-btn:hover{background:#1e2040;transform:translateY(-2px)}
 .donation-note{font-size:.8rem;color:var(--text-light);line-height:1.5}
 .donation-note a{color:var(--orange)}
@@ -176,7 +176,7 @@ a{color:inherit}
 .impatto-item span:last-child{color:var(--text);font-size:.9rem}
 .btn-secondary-sm{display:inline-block;text-decoration:none;color:var(--orange);font-weight:600;font-size:.9rem;border:2px solid var(--orange);padding:10px 20px;border-radius:50px;transition:all .2s;text-align:center}
 .btn-secondary-sm:hover{background:var(--orange);color:#fff}
-.news-social{background:var(--bg)}
+.news-social{background:rgba(20, 135, 8, 0.02)}
 .news-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
 .fb-feed-container{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border)}
 .fb-feed-header{display:flex;align-items:center;gap:10px;padding:18px 24px;border-bottom:1px solid var(--border);font-weight:600;color:var(--dark)}
@@ -455,7 +455,7 @@ a{color:inherit}
 .pg-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(27,47,140,.5);
+  background: rgba(20,135,8,0.5);
   color: #fff;
   font-size: .9rem;
   font-weight: 700;
@@ -494,7 +494,7 @@ a{color:inherit}
 .pg-more-label {
   position: absolute;
   inset: 0;
-  background: rgba(27,47,140,.72);
+  background: rgba(20, 135, 8, 0.2);
   color: #fff;
   font-size: .85rem;
   font-weight: 700;
@@ -525,7 +525,7 @@ a{color:inherit}
 .lb-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(10,14,40,.92);
+  background: #ff9935;
   backdrop-filter: blur(6px);
 }
 .lb-close {

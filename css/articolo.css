@@ -232,7 +232,7 @@
 
 /* CTA donazione in fondo */
 .articolo-cta {
-  background: linear-gradient(135deg, var(--dark), var(--dark-mid));
+  background: linear-gradient(135deg, var(--dark), var(--dark));
   color: #fff;
   border-radius: var(--radius);
   padding: 48px 40px;

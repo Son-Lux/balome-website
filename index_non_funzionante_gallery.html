@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Balomè – Tutti i bimbi sono bravi e i grandi lo devono sapere!</title>
+  <title>Balomè – Tutti i bimbi sono buoni e i grandi lo devono sapere!</title>
   <meta name="description" content="Balomè è un'associazione benefica che opera in Italia e India per il benessere dei bambini. Dona il tuo 5 per mille CF 95254690167">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
@@ -14,45 +14,8 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div class="topbar">
-  <div class="topbar-inner">
-    <div class="topbar-contacts">
-      <a href="mailto:info@balome.org">info@balome.org</a>
-      <a href="tel:+393930181276"> 393 018 1276</a>
-    </div>
-    <div class="topbar-social">
-      <a href="https://www.facebook.com/info.balome/" target="_blank" aria-label="Facebook">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-      </a>
-    </div>
-  </div>
-</div>
-<header class="header" id="header">
-  <div class="nav-inner">
-    <a href="#home" class="logo">
-      <div class="logo-icon">
-        <img src="logo.png" alt="Balomè logo" style="width:48px;height:48px;object-fit:contain;">
-      </div>
-      <div class="logo-text">
-        <span class="logo-name">Balomè</span>
-        <span class="logo-tagline">Associazione benefica</span>
-      </div>
-    </a>
-    <button class="hamburger" id="hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-    <nav class="nav" id="nav">
-      <a href="#chi-siamo" class="nav-link">Chi siamo</a>
-      <a href="#missione" class="nav-link">Missione</a>
-      <a href="#progetti" class="nav-link">Progetti</a>
-      <a href="#cinque-per-mille" class="nav-link">5 per mille</a>
-      <a href="#donazioni" class="nav-link">Donazioni</a>
-      <a href="#news" class="nav-link">News</a>
-      <a href="#contatti" class="nav-link">Contatti</a>
-      <a href="#donazioni" class="btn-nav">Dona ora ♥</a>
-    </nav>
-  </div>
-</header>
+<!-- Header condiviso — iniettato da js/components.js -->
+<div id="site-header"></div>
 
 <section class="hero" id="home">
   <div class="hero-bg">
@@ -62,7 +25,7 @@
   </div>
   <div class="hero-content">
     <div class="hero-badge reveal">💛 Associazione di Volontariato</div>
-    <h1 class="hero-title reveal delay-1">Tutti i bimbi<br>sono <em>bravi</em><br>e i grandi lo<br>devono sapere!</h1>
+    <h1 class="hero-title reveal delay-1">Tutti i bimbi<br>sono <em>buoni</em><br>e i grandi lo<br>devono sapere!</h1>
     <p class="hero-subtitle reveal delay-2">Sosteniamo bambini in Italia e in India attraverso educazione, salute e protezione. Insieme possiamo fare la differenza.</p>
     <div class="hero-actions reveal delay-3">
       <a href="#cinque-per-mille" class="btn-primary">Dona il 5×mille</a>
@@ -74,22 +37,39 @@
     </div>
   </div>
 
+  <!-- GALLERIA HERO — sostituisce l'illustrazione SVG -->
+  <!-- Le immagini vanno in /img/hero-1.jpg … hero-6.jpg -->
   <div class="hero-gallery reveal delay-2">
     <div class="hero-gallery-viewport">
       <div class="hero-gallery-track" id="heroTrack">
         <div class="hg-slide" onclick="openLightbox('hero',0)">
-          <img src="img/balome_5.jpg" alt="Balomè 1" onerror="this.style.display='none'">
-          <div class="hg-empty"></div>
+          <img src="img/nascita_associazione_balome.jpg" alt="Balomè 1" onerror="this.style.display='none'">
+          <div class="hg-empty"><span>17/11/2022</span></div>
           <div class="hg-overlay">🔍</div>
         </div>
         <div class="hg-slide" onclick="openLightbox('hero',1)">
-          <img src="img/balome_7.jpg" alt="Balomè 2" onerror="this.style.display='none'">
-          <div class="hg-empty"></div>
+          <img src="img/hero-2.jpg" alt="Balomè 2" onerror="this.style.display='none'">
+          <div class="hg-empty">📷<span>hero-2.jpg</span></div>
           <div class="hg-overlay">🔍</div>
         </div>
         <div class="hg-slide" onclick="openLightbox('hero',2)">
-          <img src="img/balome_6.jpg" alt="Balomè 3" onerror="this.style.display='none'">
-          <div class="hg-empty"></div>
+          <img src="img/hero-3.jpg" alt="Balomè 3" onerror="this.style.display='none'">
+          <div class="hg-empty">📷<span>hero-3.jpg</span></div>
+          <div class="hg-overlay">🔍</div>
+        </div>
+        <div class="hg-slide" onclick="openLightbox('hero',3)">
+          <img src="img/hero-4.jpg" alt="Balomè 4" onerror="this.style.display='none'">
+          <div class="hg-empty">📷<span>hero-4.jpg</span></div>
+          <div class="hg-overlay">🔍</div>
+        </div>
+        <div class="hg-slide" onclick="openLightbox('hero',4)">
+          <img src="img/hero-5.jpg" alt="Balomè 5" onerror="this.style.display='none'">
+          <div class="hg-empty">📷<span>hero-5.jpg</span></div>
+          <div class="hg-overlay">🔍</div>
+        </div>
+        <div class="hg-slide" onclick="openLightbox('hero',5)">
+          <img src="img/hero-6.jpg" alt="Balomè 6" onerror="this.style.display='none'">
+          <div class="hg-empty">📷<span>hero-6.jpg</span></div>
           <div class="hg-overlay">🔍</div>
         </div>
       </div>
@@ -119,41 +99,19 @@
 <section class="section chi-siamo" id="chi-siamo">
   <div class="container">
     <div class="section-grid">
-        
-      <div class="hero-gallery reveal delay-2">
-    <div class="hero-gallery-viewport">
-      <div class="hero-gallery-track" id="heroTrack1">
-        <div class="hg-slide" onclick="openLightbox('chisiamo',0)">
-          <img src="img/nascita_associazione_balome.jpg" alt="Balomè 1" onerror="this.style.display='none'">
-          <div class="hg-empty"></div>
-          <div class="hg-overlay">🔍</div>
-        </div>
-        <div class="hg-slide" onclick="openLightbox('chisiamo',1)">
-          <img src="img/Famiglia-Di-Monte-cofondatori.jpg" alt="Balomè 2" onerror="this.style.display='none'">
-          <div class="hg-empty"></div>
-          <div class="hg-overlay">🔍</div>
-        </div>
-        <div class="hg-slide" onclick="openLightbox('chisiamo',2)">
-          <img src="img/balome_1.jpg" alt="Balomè 3" onerror="this.style.display='none'">
-          <div class="hg-empty"></div>
-          <div class="hg-overlay">🔍</div>
-        </div>
+      <div class="section-visual reveal">
+        <div class="visual-card visual-card-1"><div class="visual-emoji">🏠</div><strong>Italia</strong><span>Supporto locale</span></div>
+        <div class="visual-card visual-card-2"><div class="visual-emoji">🌏</div><strong>India</strong><span>Cooperazione internazionale</span></div>
+        <div class="visual-card visual-card-3"><div class="visual-emoji">📚</div><strong>Educazione</strong><span>Il futuro si costruisce</span></div>
+        <div class="big-circle-bg"><svg viewBox="0 0 300 300" fill="none"><circle cx="150" cy="150" r="140" fill="#FFF5EC"/><circle cx="150" cy="150" r="100" fill="#FFECD2"/><text x="150" y="170" text-anchor="middle" font-size="80">👶</text></svg></div>
       </div>
-    </div>
-    <div class="hg-controls">
-      <button class="hg-btn hg-prev" id="heroPrev" aria-label="Precedente">‹</button>
-      <div class="hg-dots" id="heroDots"></div>
-      <button class="hg-btn hg-next" id="heroNext" aria-label="Successiva">›</button>
-    </div>
-  </div>
-
       <div class="section-text reveal delay-1">
         <div class="section-label">Chi siamo</div>
         <h2><strong>Balomè</strong> nasce da un incontro che ha cambiato per sempre la nostra vita.</h2>
         <p>Tutto ha avuto inizio a Shishu Bhavan, uno degli orfanotrofi delle Missionarie della Carità di Madre Teresa a Calcutta, in India, dove abbiamo incontrato nostra figlia.<br>
         La sua prima parola pronunciata "Bhalo mey" che significa "brava bambina" è diventata il nome della nostra associazione. Ma soprattutto è diventata una promessa: non dimenticare mai i bambini lasciati soli.
         Da quel giorno abbiamo sentito il bisogno di trasformare la gratitudine e l'amore ricevuti in qualcosa di concreto per tanti altri bambini vulnerabili, affinché nessuno venga lasciato indietro.<br>
-        Il nostro motto è: <em>"Tutti i bimbi sono bravi e i grandi lo devono sapere!"</em></p>
+        Il nostro motto è: <em>"Tutti i bimbi sono buoni e i grandi lo devono sapere!"</em></p>
         <div class="values-list">
           <div class="value-item"><span class="value-icon">💛</span><span>Trasparenza e onestà nella gestione dei fondi</span></div>
           <div class="value-item"><span class="value-icon">🤝</span><span>Coinvolgimento diretto delle comunità locali</span></div>
@@ -189,6 +147,9 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
       <h2>Passati e futuri</h2>
     </div>
     <div class="progetti-grid">
+
+      <!-- PROGETTO DEEPASHRAM -->
+      <!-- Immagini: /img/deepashram-1.jpg … deepashram-4.jpg -->
       <div class="progetto-card india reveal">
         <div class="progetto-flag">🇮🇳</div>
         <div class="progetto-content">
@@ -203,22 +164,22 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
           </ul>
             <div class="progetto-gallery" data-gallery="deepashram">
             <div class="pg-main" onclick="openLightbox('deepashram',0)">
-              <img src="img/deepashram_1.jpg" alt="Deepashram" onerror="this.style.display='none'">
-              <div class="pg-empty"><span></span></div>
-             <div class="pg-overlay">🔍 Galleria</div>
+              <img src="img/deepashram-1.jpg" alt="Deepashram" onerror="this.style.display='none'">
+              <div class="pg-empty">📷<span>deepashram-1.jpg</span></div>
+              <div class="pg-overlay">🔍 Galleria</div>
             </div>
             <div class="pg-thumbs">
               <div class="pg-thumb" onclick="openLightbox('deepashram',1)">
-                <img src="img/deepashram_2.jpg" alt="Deepashram 2" onerror="this.style.display='none'">
-                <div class="pg-empty"></div>
+                <img src="img/deepashram-2.jpg" alt="Deepashram 2" onerror="this.style.display='none'">
+                <div class="pg-empty">📷</div>
               </div>
               <div class="pg-thumb" onclick="openLightbox('deepashram',2)">
-                <img src="img/deepashram_3.jpg" alt="Deepashram 3" onerror="this.style.display='none'">
-                <div class="pg-empty"></div>
+                <img src="img/deepashram-3.jpg" alt="Deepashram 3" onerror="this.style.display='none'">
+                <div class="pg-empty">📷</div>
               </div>
               <div class="pg-thumb pg-thumb-more" onclick="openLightbox('deepashram',3)">
-                <img src="img/deepashram_4.jpg" alt="Deepashram 4" onerror="this.style.display='none'">
-                <div class="pg-empty"></div>
+                <img src="img/deepashram-4.jpg" alt="Deepashram 4" onerror="this.style.display='none'">
+                <div class="pg-empty">📷</div>
                 <div class="pg-more-label">+foto</div>
               </div>
             </div>
@@ -243,22 +204,21 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
             <div class="progetto-gallery" data-gallery="karunanjali">
             <div class="pg-main" onclick="openLightbox('karunanjali',0)">
               <img src="img/karunanjali-1.jpg" alt="Karunanjali" onerror="this.style.display='none'">
-              <div class="pg-empty"></div>
-                 <div class="pg-overlay">🔍 Galleria</div>
-             
+              <div class="pg-empty">📷<span>karunanjali-1.jpg</span></div>
+              <div class="pg-overlay">🔍 Galleria</div>
             </div>
             <div class="pg-thumbs">
               <div class="pg-thumb" onclick="openLightbox('karunanjali',1)">
                 <img src="img/karunanjali-2.jpg" alt="Karunanjali 2" onerror="this.style.display='none'">
-               
+                <div class="pg-empty">📷</div>
               </div>
               <div class="pg-thumb" onclick="openLightbox('karunanjali',2)">
                 <img src="img/karunanjali-3.jpg" alt="Karunanjali 3" onerror="this.style.display='none'">
-             
+                <div class="pg-empty">📷</div>
               </div>
               <div class="pg-thumb pg-thumb-more" onclick="openLightbox('karunanjali',3)">
                 <img src="img/karunanjali-4.jpg" alt="Karunanjali 4" onerror="this.style.display='none'">
-            
+                <div class="pg-empty">📷</div>
                 <div class="pg-more-label">+foto</div>
               </div>
             </div>
@@ -282,22 +242,22 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
           </ul>
             <div class="progetto-gallery" data-gallery="anandasharam">
             <div class="pg-main" onclick="openLightbox('anandasharam',0)">
-              <img src="img/Anandashram_1.jpg" alt="Anandasharam" onerror="this.style.display='none'">
-              <div class="pg-empty"></div>
+              <img src="img/anandasharam-1.jpg" alt="Anandasharam" onerror="this.style.display='none'">
+              <div class="pg-empty">📷<span>anandasharam-1.jpg</span></div>
               <div class="pg-overlay">🔍 Galleria</div>
             </div>
             <div class="pg-thumbs">
               <div class="pg-thumb" onclick="openLightbox('anandasharam',1)">
-                <img src="img/Anandashram_2.jpg" alt="Anandasharam 2" onerror="this.style.display='none'">
-                <div class="pg-empty"></div>
+                <img src="img/anandasharam-2.jpg" alt="Anandasharam 2" onerror="this.style.display='none'">
+                <div class="pg-empty">📷</div>
               </div>
               <div class="pg-thumb" onclick="openLightbox('anandasharam',2)">
-                <img src="img/Anandashram_3.jpg" alt="Anandasharam 3" onerror="this.style.display='none'">
-                <div class="pg-empty"></div>
+                <img src="img/anandasharam-3.jpg" alt="Anandasharam 3" onerror="this.style.display='none'">
+                <div class="pg-empty">📷</div>
               </div>
               <div class="pg-thumb pg-thumb-more" onclick="openLightbox('anandasharam',3)">
-                <img src="img/Anandashram_4.jpg" alt="Anandasharam 4" onerror="this.style.display='none'">
-                <div class="pg-empty"></div>
+                <img src="img/anandasharam-4.jpg" alt="Anandasharam 4" onerror="this.style.display='none'">
+                <div class="pg-empty">📷</div>
                 <div class="pg-more-label">+foto</div>
               </div>
             </div>
@@ -311,27 +271,7 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
         <div class="progetto-flag">🇮🇳</div>
         <div class="progetto-content">
           <h3>Progetto <strong>Calcutta</strong></h3>
-          <div class="progetto-gallery" data-gallery="calcutta">
-            <div class="pg-main" onclick="openLightbox('calcutta',0)">
-              <img src="img/calcutta-1.jpg" alt="Calcutta" onerror="this.style.display='none'">
-              <div class="pg-overlay">🔍 Galleria</div>
-            </div>
-            <div class="pg-thumbs">
-              <div class="pg-thumb" onclick="openLightbox('calcutta',1)">
-                <img src="img/calcutta-2.jpg" alt="Calcutta 2" onerror="this.style.display='none'">
-               
-              </div>
-              <div class="pg-thumb" onclick="openLightbox('calcutta',2)">
-                <img src="img/calcutta-3.jpg" alt="Calcutta 3" onerror="this.style.display='none'">
-              
-              </div>
-              <div class="pg-thumb pg-thumb-more" onclick="openLightbox('calcutta',3)">
-                <img src="img/calcutta-4.jpg" alt="Calcutta 4" onerror="this.style.display='none'">
-                
-                <div class="pg-more-label">+foto</div>
-              </div>
-            </div>
-          </div>
+          
           <p>In India lavoriamo in contesti di estrema povertà dove l'accesso alle cure mediche e all'istruzione è ancora un privilegio. I nostri volontari operano sul campo per garantire un futuro ai bambini più vulnerabili.</p>
           <ul class="progetto-points">
             <li>Costruzione e supporto di scuole rurali</li>
@@ -339,6 +279,28 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
             <li>Formazione per insegnanti locali</li>
             <li>Sostegno a distanza per bambini</li>
           </ul>
+            <div class="progetto-gallery" data-gallery="calcutta">
+            <div class="pg-main" onclick="openLightbox('calcutta',0)">
+              <img src="img/calcutta-1.jpg" alt="Calcutta" onerror="this.style.display='none'">
+              <div class="pg-empty">📷<span>calcutta-1.jpg</span></div>
+              <div class="pg-overlay">🔍 Galleria</div>
+            </div>
+            <div class="pg-thumbs">
+              <div class="pg-thumb" onclick="openLightbox('calcutta',1)">
+                <img src="img/calcutta-2.jpg" alt="Calcutta 2" onerror="this.style.display='none'">
+                <div class="pg-empty">📷</div>
+              </div>
+              <div class="pg-thumb" onclick="openLightbox('calcutta',2)">
+                <img src="img/calcutta-3.jpg" alt="Calcutta 3" onerror="this.style.display='none'">
+                <div class="pg-empty">📷</div>
+              </div>
+              <div class="pg-thumb pg-thumb-more" onclick="openLightbox('calcutta',3)">
+                <img src="img/calcutta-4.jpg" alt="Calcutta 4" onerror="this.style.display='none'">
+                <div class="pg-empty">📷</div>
+                <div class="pg-more-label">+foto</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -448,11 +410,32 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
         <div class="fb-fallback"><p>Non riesci a vedere il feed? <a href="https://www.facebook.com/info.balome/" target="_blank">Visita la nostra pagina Facebook</a></p></div>
       </div>
       <div class="news-cards reveal delay-1" id="newsCardsContainer">
-        <div class="news-card"><div class="news-date">🗓 Dicembre 2024</div><h4>Il sito Balomè è online!</h4><p>Siamo felici di annunciare il nuovo sito dell'associazione Balomè. Un passo importante per avvicinarci a più persone e far conoscere il nostro lavoro quotidiano.</p><a href="https://www.facebook.com/info.balome/" target="_blank" class="read-more">Leggi su Facebook →</a></div>
-        <div class="news-card"><div class="news-date">🗓 Novembre 2024</div><h4>Campagna 5 per mille 2025</h4><p>Si avvicina la stagione delle dichiarazioni dei redditi! Ricordati di destinare il tuo 5 per mille a Balomè: CF 95254690167. Costa zero e vale tutto per i nostri bambini.</p><a href="#cinque-per-mille" class="read-more">Scopri come fare →</a></div>
-        <div class="news-card"><div class="news-date">🗓 Estate 2024</div><h4>Progetto India: aggiornamento estate</h4><p>I nostri volontari sono tornati dall'India con storie meravigliose. Tanti bambini hanno ricevuto cure mediche e materiale scolastico grazie alle donazioni ricevute quest'anno.</p><a href="https://www.facebook.com/info.balome/" target="_blank" class="read-more">Vedi le foto →</a></div>
-        
-      </div>
+
+  <!-- CONTENUTO DI FALLBACK (visibile solo se il JSON non si carica) -->
+  <!-- Il JavaScript sostituirà queste card con quelle da articoli.json -->
+
+  <div class="news-card">
+    <div class="news-date">🗓 Dicembre 2024</div>
+    <h4>Il sito Balomè è online!</h4>
+    <p>Siamo felici di annunciare il nuovo sito dell'associazione Balomè. Un passo importante per avvicinarci a più persone e far conoscere il nostro lavoro quotidiano.</p>
+    <a href="https://www.facebook.com/info.balome/" target="_blank" class="read-more">Leggi su Facebook →</a>
+  </div>
+
+  <div class="news-card">
+    <div class="news-date">🗓 Novembre 2024</div>
+    <h4>Campagna 5 per mille 2025</h4>
+    <p>Si avvicina la stagione delle dichiarazioni dei redditi! Ricordati di destinare il tuo 5 per mille a Balomè: CF 95254690167. Costa zero e vale tutto per i nostri bambini.</p>
+    <a href="#cinque-per-mille" class="read-more">Scopri come fare →</a>
+  </div>
+
+  <div class="news-card">
+    <div class="news-date">🗓 Estate 2024</div>
+    <h4>Progetto India: aggiornamento estate</h4>
+    <p>I nostri volontari sono tornati dall'India con storie meravigliose. Tanti bambini hanno ricevuto cure mediche e materiale scolastico grazie alle donazioni ricevute quest'anno.</p>
+    <a href="https://www.facebook.com/info.balome/" target="_blank" class="read-more">Vedi le foto →</a>
+  </div>
+
+</div>
     </div>
   </div>
 </section>
@@ -489,23 +472,8 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
   </div>
 </section>
 
-<footer class="footer">
-  <div class="footer-main">
-    <div class="footer-brand">
-      <div class="footer-logo"><img src="logo.png" alt="Balomè" style="width:50px;height:50px;object-fit:contain;filter:brightness(0) invert(1);"><span>Balomè</span></div>
-      <p>Tutti i bimbi sono bravi e i grandi lo devono sapere!</p>
-      <div class="footer-social"><a href="https://www.facebook.com/info.balome/" target="_blank"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a></div>
-    </div>
-    <div class="footer-links"><h4>Navigazione</h4><a href="#chi-siamo">Chi siamo</a><a href="#missione">Missione</a><a href="#progetti">Progetti</a><a href="#cinque-per-mille">5 per mille</a><a href="#donazioni">Donazioni</a><a href="#news">News</a><a href="#contatti">Contatti</a></div>
-    <div class="footer-links"><h4>Come aiutare</h4><a href="#cinque-per-mille">Dona il 5 × mille</a><a href="#donazioni">Dona con PayPal</a><a href="#donazioni">Bonifico bancario</a><a href="mailto:info@balome.org?subject=Voglio diventare volontario">Diventa volontario</a></div>
-    <div class="footer-links"><h4>Trasparenza</h4><a href="docs/statuto.pdf" target="_blank"> Statuto</a><a href="docs/bilancio.pdf" target="_blank"> Bilancio</a></div>
-    <div class="footer-contacts"><h4>Contatti</h4><a href="mailto:info@balome.org">info@balome.org</a><a href="tel:+393930181276">+39 393 018 1276</a><p style="font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.6;margin-top:4px;">P.le Risorgimento n. 14<br>24128 Bergamo (BG)</p><p class="footer-cf">C.F. 95254690167</p><p class="footer-cf">IBAN: IT45P0538711109000003727955<br>BPER – Filiale di Bergamo Loreto</p></div>
-  </div>
-  <div class="footer-bottom">
-    <p>© <script>document.write(new Date().getFullYear())</script> Associazione Balomè · C.F. 95254690167 · P.le Risorgimento n. 14, 24128 Bergamo · <a href="mailto:info@balome.org">info@balome.org</a></p>
-    <p>Associazione di Volontariato senza scopo di lucro</p>
-  </div>
-</footer>
+<!-- Footer condiviso — iniettato da js/components.js -->
+<div id="site-footer"></div>
 
 <button class="scroll-top" id="scrollTop" onclick="scrollToTop()" aria-label="Torna su">↑</button>
 <div class="toast" id="toast"></div>
@@ -531,8 +499,8 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
   </div>
 </div>
 
+<script src="js/components.js"></script>
 <script src="js/main.js"></script>
-    <script src="js/main.js"></script>
 <script src="js/articoli-loader.js"></script>
 </body>
 </html>

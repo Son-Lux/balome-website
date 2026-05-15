@@ -16,31 +16,37 @@
 </head>
 <body>
 
-<!-- Header iniettato da components.js — NON modificare -->
-<div id="site-header"></div>
-
-<!-- BREADCRUMB ————————————————————————————————————— -->
-<div class="breadcrumb">
-  <div class="breadcrumb-inner">
-    <a href="../index.html">Home</a>
-    <span class="breadcrumb-sep">›</span>
-    <a href="../index.html#news">News</a>
-    <span class="breadcrumb-sep">›</span>
-    <!-- ✏️ Titolo breve per il breadcrumb -->
-    <span class="breadcrumb-current">Titolo breve articolo</span>
+<header class="header" id="header">
+  <div class="nav-inner">
+    <a href="#home" class="logo">
+      <div class="logo-icon">
+        <img src="..\logo.png" alt="Balomè logo" style="width:48px;height:48px;object-fit:contain;">
+      </div>
+      <div class="logo-text">
+        <span class="logo-name">Balomè</span>
+        <span class="logo-tagline">Associazione benefica</span>
+      </div>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav" id="nav">
+      <a href="#chi-siamo" class="nav-link">Chi siamo</a>
+      <a href="#missione" class="nav-link">Missione</a>
+      <a href="#progetti" class="nav-link">Progetti</a>
+      <a href="#cinque-per-mille" class="nav-link">5 per mille</a>
+      <a href="#donazioni" class="nav-link">Donazioni</a>
+      <a href="#news" class="nav-link">News</a>
+      <a href="#contatti" class="nav-link">Contatti</a>
+      <a href="#donazioni" class="btn-nav">Dona ora ♥</a>
+    </nav>
   </div>
-</div>
+</header>
+
 
 <!-- CONTENUTO ————————————————————————————————————— -->
 <div class="articolo-wrap">
 
-  <!-- Meta -->
-  <div class="articolo-meta">
-    <!-- ✏️ Categoria: India / Italia / Evento / News -->
-    <span class="articolo-categoria">India</span>
-    <!-- ✏️ Data pubblicazione -->
-    <span class="articolo-data">🗓 Maggio 2025</span>
-  </div>
 
   <!-- Titolo -->
   <!-- ✏️ -->
@@ -223,9 +229,23 @@
     </div>
   </div>
 </div>
-
-<!-- Footer iniettato da components.js — NON modificare -->
-<div id="site-footer"></div>
+<footer class="footer">
+  <div class="footer-main">
+    <div class="footer-brand">
+      <div class="footer-logo"><img src="..\logo.png" alt="Balomè" style="width:50px;height:50px;object-fit:contain;filter:brightness(0) invert(1);"><span>Balomè</span></div>
+      <p>Tutti i bimbi sono bravi e i grandi lo devono sapere!</p>
+      <div class="footer-social"><a href="https://www.facebook.com/info.balome/" target="_blank"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a></div>
+    </div>
+    <div class="footer-links"><h4>Navigazione</h4><a href="#chi-siamo">Chi siamo</a><a href="#missione">Missione</a><a href="#progetti">Progetti</a><a href="#cinque-per-mille">5 per mille</a><a href="#donazioni">Donazioni</a><a href="#news">News</a><a href="#contatti">Contatti</a></div>
+    <div class="footer-links"><h4>Come aiutare</h4><a href="#cinque-per-mille">Dona il 5 × mille</a><a href="#donazioni">Dona con PayPal</a><a href="#donazioni">Bonifico bancario</a><a href="mailto:info@balome.org?subject=Voglio diventare volontario">Diventa volontario</a></div>
+    <div class="footer-links"><h4>Trasparenza</h4><a href="docs/statuto.pdf" target="_blank"> Statuto</a><a href="docs/bilancio.pdf" target="_blank"> Bilancio</a></div>
+    <div class="footer-contacts"><h4>Contatti</h4><a href="mailto:info@balome.org">info@balome.org</a><a href="tel:+393930181276">+39 393 018 1276</a><p style="font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.6;margin-top:4px;">P.le Risorgimento n. 14<br>24128 Bergamo (BG)</p><p class="footer-cf">C.F. 95254690167</p><p class="footer-cf">IBAN: IT45P0538711109000003727955<br>BPER – Filiale di Bergamo Loreto</p></div>
+  </div>
+  <div class="footer-bottom">
+    <p>© <script>document.write(new Date().getFullYear())</script> Associazione Balomè · C.F. 95254690167 · P.le Risorgimento n. 14, 24128 Bergamo · <a href="mailto:info@balome.org">info@balome.org</a></p>
+    <p>Associazione di Volontariato senza scopo di lucro</p>
+  </div>
+</footer>
 
 <!-- components.js PRIMA di main.js -->
 <script src="../js/components.js"></script>
