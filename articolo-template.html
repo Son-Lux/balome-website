@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ✏️ Cambia titolo e descrizione per ogni articolo -->
+  <title>Titolo articolo – Balomè</title>
+  <meta name="description" content="Breve descrizione dell'articolo per i motori di ricerca.">
+
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/articolo.css">
+</head>
+<body>
+
+<!-- Header iniettato da components.js — NON modificare -->
+<div id="site-header"></div>
+
+<!-- BREADCRUMB ————————————————————————————————————— -->
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="../index.html">Home</a>
+    <span class="breadcrumb-sep">›</span>
+    <a href="../index.html#news">News</a>
+    <span class="breadcrumb-sep">›</span>
+    <!-- ✏️ Titolo breve per il breadcrumb -->
+    <span class="breadcrumb-current">Titolo breve articolo</span>
+  </div>
+</div>
+
+<!-- CONTENUTO ————————————————————————————————————— -->
+<div class="articolo-wrap">
+
+  <!-- Meta -->
+  <div class="articolo-meta">
+    <!-- ✏️ Categoria: India / Italia / Evento / News -->
+    <span class="articolo-categoria">India</span>
+    <!-- ✏️ Data pubblicazione -->
+    <span class="articolo-data">🗓 Maggio 2025</span>
+  </div>
+
+  <!-- Titolo -->
+  <!-- ✏️ -->
+  <h1 class="articolo-titolo">
+    Il titolo completo dell'articolo va scritto qui
+  </h1>
+
+  <!-- Sommario -->
+  <!-- ✏️ 2-3 righe di introduzione -->
+  <p class="articolo-intro">
+    Un breve sommario che introduce l'articolo. Questo testo appare in evidenza
+    e aiuta il lettore a capire subito di cosa parla il contenuto.
+  </p>
+
+  <!-- ——————————————————————————————————————————————
+       IMMAGINE HERO
+       1. Metti la foto in /img/ (es. img/articolo-hero.jpg)
+       2. Togli il commento dal tag <img> qui sotto
+       3. Elimina il blocco .articolo-hero-placeholder
+       —————————————————————————————————————————————— -->
+  <!--
+  <img
+    class="articolo-hero-img"
+    src="../img/nome-foto-hero.jpg"
+    alt="Descrizione immagine"
+  >
+  -->
+
+  <!-- Placeholder visibile finché non carichi la foto -->
+  <div class="articolo-hero-placeholder">
+    📷
+    <span>img/nome-foto-hero.jpg</span>
+  </div>
+
+  <!-- ✏️ Didascalia (opzionale, elimina se non serve) -->
+  <p class="articolo-hero-caption">
+    Didascalia — luogo, data, contesto dell'immagine.
+  </p>
+
+  <!-- ——————————————————————————————————————————————
+       TESTO ARTICOLO
+       Usa <h2> per i titoli di sezione
+       Usa <p> per i paragrafi
+       Usa <blockquote> per le citazioni
+       Usa <ul><li> per le liste
+       —————————————————————————————————————————————— -->
+  <div class="articolo-body">
+
+    <p>
+      Scrivi qui il primo paragrafo. Racconta il contesto, presenta il progetto
+      o l'evento con uno stile diretto e coinvolgente.
+    </p>
+
+    <p>
+      Secondo paragrafo. Approfondisci con dettagli, numeri o storie concrete
+      che rendano il racconto vivido e reale.
+    </p>
+
+    <h2>Un titolo di sezione</h2>
+
+    <p>
+      Quando l'articolo è lungo, dividi il testo in sezioni con un &lt;h2&gt;.
+      Aiuta la lettura e migliora il posizionamento sui motori di ricerca.
+    </p>
+
+    <blockquote>
+      "Una citazione significativa — di un volontario, di una suora,
+      di un bambino — che colpisca il cuore del lettore."
+    </blockquote>
+
+    <ul>
+      <li>Primo punto rilevante</li>
+      <li>Secondo punto — cifre, persone coinvolte</li>
+      <li>Terzo punto — prossimi passi</li>
+    </ul>
+
+    <h2>Conclusione</h2>
+
+    <p>
+      Chiudi con un paragrafo che riassuma il significato di quanto raccontato
+      e inviti il lettore a donare, condividere o seguirvi sui social.
+    </p>
+
+  </div>
+
+  <hr class="articolo-divider">
+
+  <!-- ——————————————————————————————————————————————
+       GALLERIA FOTOGRAFICA
+       • Metti le foto in /img/ con i nomi indicati
+       • Cliccando si apre il lightbox con slideshow
+       • Per aggiungere foto: copia un blocco .art-photo
+       • Per togliere foto: elimina un blocco .art-photo
+       • La PRIMA foto appare grande (2 colonne)
+       —————————————————————————————————————————————— -->
+  <div class="articolo-gallery-section">
+    <h2>📷 Galleria fotografica</h2>
+
+    <div class="art-gallery-grid" id="artGallery">
+
+      <!-- Foto 1 — grande -->
+      <div class="art-photo" onclick="openLightbox('articolo', 0)">
+        <img src="../img/articolo-1.jpg" alt="Foto 1" onerror="this.style.display='none'">
+        <div class="art-photo-empty">📷<span>articolo-1.jpg</span></div>
+        <div class="art-photo-overlay">🔍</div>
+      </div>
+
+      <!-- Foto 2 -->
+      <div class="art-photo" onclick="openLightbox('articolo', 1)">
+        <img src="../img/articolo-2.jpg" alt="Foto 2" onerror="this.style.display='none'">
+        <div class="art-photo-empty">📷<span>articolo-2.jpg</span></div>
+        <div class="art-photo-overlay">🔍</div>
+      </div>
+
+      <!-- Foto 3 -->
+      <div class="art-photo" onclick="openLightbox('articolo', 2)">
+        <img src="../img/articolo-3.jpg" alt="Foto 3" onerror="this.style.display='none'">
+        <div class="art-photo-empty">📷<span>articolo-3.jpg</span></div>
+        <div class="art-photo-overlay">🔍</div>
+      </div>
+
+      <!-- Foto 4 -->
+      <div class="art-photo" onclick="openLightbox('articolo', 3)">
+        <img src="../img/articolo-4.jpg" alt="Foto 4" onerror="this.style.display='none'">
+        <div class="art-photo-empty">📷<span>articolo-4.jpg</span></div>
+        <div class="art-photo-overlay">🔍</div>
+      </div>
+
+      <!-- Foto 5 -->
+      <div class="art-photo" onclick="openLightbox('articolo', 4)">
+        <img src="../img/articolo-5.jpg" alt="Foto 5" onerror="this.style.display='none'">
+        <div class="art-photo-empty">📷<span>articolo-5.jpg</span></div>
+        <div class="art-photo-overlay">🔍</div>
+      </div>
+
+      <!-- Foto 6 -->
+      <div class="art-photo" onclick="openLightbox('articolo', 5)">
+        <img src="../img/articolo-6.jpg" alt="Foto 6" onerror="this.style.display='none'">
+        <div class="art-photo-empty">📷<span>articolo-6.jpg</span></div>
+        <div class="art-photo-overlay">🔍</div>
+      </div>
+
+      <!-- ✏️ Aggiungi altre foto copiando uno dei blocchi qui sopra -->
+
+    </div>
+  </div>
+
+  <!-- CTA donazione -->
+  <div class="articolo-cta">
+    <h3>Sostieni questo progetto</h3>
+    <p>Ogni donazione, piccola o grande, fa la differenza nella vita di questi bambini.</p>
+    <div class="articolo-cta-buttons">
+      <a href="../index.html#cinque-per-mille" class="btn-primary">Dona il 5×mille</a>
+      <a href="../index.html#donazioni" class="btn-secondary">Fai una donazione</a>
+    </div>
+  </div>
+
+</div><!-- fine .articolo-wrap -->
+
+<button class="scroll-top" id="scrollTop" onclick="scrollToTop()" aria-label="Torna su">↑</button>
+<div class="toast" id="toast"></div>
+
+<!-- LIGHTBOX — identico all'index -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Visualizzatore immagini">
+  <div class="lb-backdrop" onclick="closeLightbox()"></div>
+  <button class="lb-close" onclick="closeLightbox()" aria-label="Chiudi">✕</button>
+  <button class="lb-arrow lb-prev" id="lbPrev" onclick="lbNavigate(-1)" aria-label="Precedente">‹</button>
+  <button class="lb-arrow lb-next" id="lbNext" onclick="lbNavigate(1)" aria-label="Successiva">›</button>
+  <div class="lb-content">
+    <div class="lb-img-wrap">
+      <img id="lbImg" src="" alt="" style="display:none">
+      <div class="lb-empty-state" id="lbEmpty">
+        <span class="lb-empty-icon">📷</span>
+        <strong id="lbFilename"></strong>
+        <span>Carica questa immagine nella cartella <code>/img/</code></span>
+      </div>
+    </div>
+    <div class="lb-footer">
+      <span class="lb-counter" id="lbCounter"></span>
+    </div>
+  </div>
+</div>
+
+<!-- Footer iniettato da components.js — NON modificare -->
+<div id="site-footer"></div>
+
+<!-- components.js PRIMA di main.js -->
+<script src="../js/components.js"></script>
+<script src="../js/main.js"></script>
+
+<script>
+  // Registra le immagini dell'articolo nel sistema lightbox
+  window.addEventListener('DOMContentLoaded', function () {
+    var imgs = document.querySelectorAll('#artGallery .art-photo img');
+    GALLERIES['articolo'] = Array.from(imgs).map(function (img) {
+      return { src: img.src, alt: img.alt, filename: img.getAttribute('src') };
+    });
+  });
+</script>
+
+</body>
+</html>
