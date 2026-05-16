@@ -441,91 +441,7 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
     
     
 
-
-
-<!-- ═══════════════════════════════════════════════════════════
-     SEZIONE MAPPA — tra #progetti e #cinque-per-mille
-═══════════════════════════════════════════════════════════ -->
-<section class="section dove-operiamo" id="dove-operiamo">
-  <div class="mission-bg-pattern"></div>
-  <div class="container">
-
-    <div class="section-header reveal">
-      <div class="section-label">🇮🇳 Dove operiamo</div>
-      <h2>I nostri progetti in India</h2>
-      <p class="section-intro">Dalla pianura del Gange fino alle coste del Kerala.<br>
-      Clicca su un pin o su un progetto della lista per saperne di più.</p>
-    </div>
-
-    <div class="mappa-layout reveal delay-1">
-
-      <!-- Sidebar: pulsanti legenda -->
-      <div class="mappa-sidebar">
-        <button class="mappa-leg-btn" onclick="bmOp('deepashram')">
-          <div class="mappa-leg-dot"></div>
-          <div class="mappa-leg-info">
-            <span class="mappa-leg-name">🏠 Deepashram</span>
-            <span class="mappa-leg-city">Gurgaon – Delhi NCR</span>
-          </div>
-          <span class="mappa-leg-arrow">→</span>
-        </button>
-        <button class="mappa-leg-btn" onclick="bmOp('calcutta')">
-          <div class="mappa-leg-dot"></div>
-          <div class="mappa-leg-info">
-            <span class="mappa-leg-name">🌸 Calcutta</span>
-            <span class="mappa-leg-city">Bengala Occidentale</span>
-          </div>
-          <span class="mappa-leg-arrow">→</span>
-        </button>
-        <button class="mappa-leg-btn" onclick="bmOp('karunanjali')">
-          <div class="mappa-leg-dot"></div>
-          <div class="mappa-leg-info">
-            <span class="mappa-leg-name">📚 Karunanjali School</span>
-            <span class="mappa-leg-city">Maharashtra</span>
-          </div>
-          <span class="mappa-leg-arrow">→</span>
-        </button>
-        <button class="mappa-leg-btn" onclick="bmOp('anandasharam')">
-          <div class="mappa-leg-dot"></div>
-          <div class="mappa-leg-info">
-            <span class="mappa-leg-name">🌱 Anandasharam</span>
-            <span class="mappa-leg-city">India meridionale, Kerala</span>
-          </div>
-          <span class="mappa-leg-arrow">→</span>
-        </button>
-      </div>
-
-      <!-- SVG mappa -->
-      <div class="mappa-svg-container">
-        <svg id="bm-map-svg" aria-label="Mappa Asia meridionale con i progetti Balomè"></svg>
-      </div>
-
-    </div> 
-      
-      
-  </div>
-</section>
-
-<!-- POPUP MAPPA -->
-<div class="bm-overlay" id="bm-ov" role="dialog" aria-modal="true" aria-labelledby="bm-cTitle">
-  <div class="bm-card">
-    <div class="bm-card-top">
-      <button class="bm-close" onclick="bmCl()" aria-label="Chiudi">✕</button>
-      <div class="bm-c-flag"  id="bm-cFlag"></div>
-      <div class="bm-c-city"  id="bm-cCity"></div>
-      <div class="bm-c-title" id="bm-cTitle"></div>
-    </div>
-    <div class="bm-card-body">
-      <div class="bm-tags"  id="bm-cTags"></div>
-      <div class="bm-text"  id="bm-cText"></div>
-      <div class="bm-stats" id="bm-cStats"></div>
-      <a class="bm-popup-link" id="bm-cLink" href="#progetti">Vai al progetto ↑</a>
-    </div>
-  </div>
-</div>
-<!-- ═══════════════════════════════════════════════════════════ -->
-
-    <section class="section progetti" id="progetti">
+<section class="section progetti" id="progetti">
   <div class="container">
     <div class="section-header reveal">
       <div class="section-label">I nostri progetti</div>
@@ -672,7 +588,87 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
     </div>
   </div>
 </section>
-    
+
+<!-- ═══════════════════════════════════════════════════════════
+     SEZIONE MAPPA — tra #progetti e #cinque-per-mille
+═══════════════════════════════════════════════════════════ -->
+<section class="section dove-operiamo" id="dove-operiamo">
+  <div class="mission-bg-pattern"></div>
+  <div class="container">
+
+    <div class="section-header reveal">
+      <div class="section-label">🇮🇳 Dove operiamo</div>
+      <h2>I nostri progetti in India</h2>
+      <p class="section-intro">Dalla pianura del Gange fino alle coste del Kerala.<br>
+      Clicca su un pin o su un progetto della lista per saperne di più.</p>
+    </div>
+
+    <div class="mappa-layout reveal delay-1">
+
+      <!-- Sidebar: pulsanti legenda -->
+      <div class="mappa-sidebar">
+        <button class="mappa-leg-btn" onclick="bmOp('deepashram')">
+          <div class="mappa-leg-dot"></div>
+          <div class="mappa-leg-info">
+            <span class="mappa-leg-name">🏠 Deepashram</span>
+            <span class="mappa-leg-city">Gurgaon – Delhi NCR</span>
+          </div>
+          <span class="mappa-leg-arrow">→</span>
+        </button>
+        <button class="mappa-leg-btn" onclick="bmOp('calcutta')">
+          <div class="mappa-leg-dot"></div>
+          <div class="mappa-leg-info">
+            <span class="mappa-leg-name">🌸 Calcutta</span>
+            <span class="mappa-leg-city">Bengala Occidentale</span>
+          </div>
+          <span class="mappa-leg-arrow">→</span>
+        </button>
+        <button class="mappa-leg-btn" onclick="bmOp('karunanjali')">
+          <div class="mappa-leg-dot"></div>
+          <div class="mappa-leg-info">
+            <span class="mappa-leg-name">📚 Karunanjali School</span>
+            <span class="mappa-leg-city">Maharashtra</span>
+          </div>
+          <span class="mappa-leg-arrow">→</span>
+        </button>
+        <button class="mappa-leg-btn" onclick="bmOp('anandasharam')">
+          <div class="mappa-leg-dot"></div>
+          <div class="mappa-leg-info">
+            <span class="mappa-leg-name">🌱 Anandasharam</span>
+            <span class="mappa-leg-city">India meridionale, Kerala</span>
+          </div>
+          <span class="mappa-leg-arrow">→</span>
+        </button>
+      </div>
+
+      <!-- SVG mappa -->
+      <div class="mappa-svg-container">
+        <svg id="bm-map-svg" aria-label="Mappa Asia meridionale con i progetti Balomè"></svg>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- POPUP MAPPA -->
+<div class="bm-overlay" id="bm-ov" role="dialog" aria-modal="true" aria-labelledby="bm-cTitle">
+  <div class="bm-card">
+    <div class="bm-card-top">
+      <button class="bm-close" onclick="bmCl()" aria-label="Chiudi">✕</button>
+      <div class="bm-c-flag"  id="bm-cFlag"></div>
+      <div class="bm-c-city"  id="bm-cCity"></div>
+      <div class="bm-c-title" id="bm-cTitle"></div>
+    </div>
+    <div class="bm-card-body">
+      <div class="bm-tags"  id="bm-cTags"></div>
+      <div class="bm-text"  id="bm-cText"></div>
+      <div class="bm-stats" id="bm-cStats"></div>
+      <a class="bm-popup-link" id="bm-cLink" href="#progetti">Vai al progetto ↑</a>
+    </div>
+  </div>
+</div>
+<!-- ═══════════════════════════════════════════════════════════ -->
+
 <section class="section cinque-per-mille" id="cinque-per-mille">
   <div class="cinque-bg"><div class="cinque-shape"></div></div>
   <div class="container">
@@ -942,10 +938,10 @@ function bmInitMap() {
     .attr('dx', 0).attr('dy', 3).attr('stdDeviation', 2.5)
     .attr('flood-color', 'rgba(26,32,64,0.28)');
 
-  /* Proiezione: scala 900 = zoom su subcontinente indiano + soli paesi confinanti */
+  /* Proiezione: scala 380 = zoom ridotto, Asia + contesto regionale visibili */
   var projection = d3.geoMercator()
-    .center([82, 21])
-    .scale(900)
+    .center([82, 23])
+    .scale(380)
     .translate([W / 2, H / 2]);
 
   var path = d3.geoPath().projection(projection);
@@ -953,8 +949,8 @@ function bmInitMap() {
   /* Mare — usa colore coerente con la palette */
   svg.append('rect').attr('width', W).attr('height', H).attr('class', 'bm-sea');
 
-  /* Graticole 10° */
-  var grat = d3.geoGraticule().step([10, 10]);
+  /* Graticole 15° */
+  var grat = d3.geoGraticule().step([15, 15]);
   svg.append('path').datum(grat()).attr('class', 'bm-grat').attr('d', path);
 
   var INDIA = 356;
@@ -1078,27 +1074,17 @@ function bmInitMap() {
           .attr('class', 'bm-pin-inner')
           .attr('transform', 'scale(1)');
 
-        /* Animazione entry: bounce drop-in con SVG translate corretto.
-           translateY() non funziona in attr SVG — usiamo translate(0,Y).
-           Il pin parte da -55px sopra la punta e rimbalza fino a 0.
-           Delay progressivo: 400ms base + 350ms per ogni pin. */
-        (function(innerEl, pinDelay) {
-          innerEl.attr('transform', 'translate(0,-55) scale(1)').style('opacity', 0);
-          innerEl
-            .transition()
-              .delay(pinDelay)
-              .duration(0)
-              .style('opacity', 1)
-            .transition()
-              .duration(900)
-              .ease(d3.easeBounceOut)
-              .attrTween('transform', function() {
-                return function(t) {
-                  var y = (1 - t) * -55;
-                  return 'translate(0,' + y + ') scale(1)';
-                };
-              });
-        })(inner, 400 + i * 350);
+        /* Animazione entry: drop-in con bounceOut
+           delay ampio: 600ms base + 280ms per pin */
+        inner
+          .style('opacity', 0)
+          .attr('transform', 'scale(1) translateY(-40)')
+          .transition()
+            .delay(600 + i * 280)
+            .duration(820)
+            .ease(d3.easeBounceOut)
+            .style('opacity', 1)
+            .attr('transform', 'scale(1) translateY(0)');
 
         /* Ombra a terra */
         inner.append('ellipse')
@@ -1158,7 +1144,7 @@ function bmInitMap() {
             d3.select(this).select('.bm-pin-inner')
               .interrupt()
               .transition().duration(160).ease(d3.easeCubicOut)
-              .attr('transform', 'translate(0,0) scale(1.35)');
+              .attr('transform', 'scale(1.35)');
             d3.select(this).select('circle[r="12"]')
               .attr('fill', 'url(#bm-pgh)');
             bmHighlightLeg(id);
@@ -1168,7 +1154,7 @@ function bmInitMap() {
             d3.select(this).select('.bm-pin-inner')
               .interrupt()
               .transition().duration(360).ease(d3.easeBounceOut)
-              .attr('transform', 'translate(0,0) scale(1)');
+              .attr('transform', 'scale(1)');
             d3.select(this).select('circle[r="12"]')
               .attr('fill', 'url(#bm-pg)');
             if (bmActivePin === null) bmHighlightLeg(null);
@@ -1219,7 +1205,7 @@ function bmResetPin(id) {
   d3.select('#bm-pin-' + id).select('.bm-pin-inner')
     .interrupt()
     .transition().duration(420).ease(d3.easeBounceOut)
-    .attr('transform', 'translate(0,0) scale(1)');
+    .attr('transform', 'scale(1)');
   d3.select('#bm-pin-' + id).select('circle[r="12"]')
     .attr('fill', 'url(#bm-pg)');
 }
@@ -1251,7 +1237,7 @@ function bmOp(id) {
     d3.select('#bm-pin-' + id).select('.bm-pin-inner')
       .interrupt()
       .transition().duration(160)
-      .attr('transform', 'translate(0,0) scale(1.4)');
+      .attr('transform', 'scale(1.4)');
     d3.select('#bm-pin-' + id).select('circle[r="12"]')
       .attr('fill', 'url(#bm-pgh)');
   }
