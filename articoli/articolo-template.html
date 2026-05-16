@@ -12,18 +12,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <style>
-    /* ── ARTICOLO LAYOUT ───────────────────────────────────── */
+    /* ── ARTICOLO ─────────────────────────────────────────── */
     .articolo-hero {
       position: relative;
       width: 100%;
       aspect-ratio: 16/7;
       overflow: hidden;
       background: #1a1a2e;
+      margin-top: 70px; /* altezza header */
     }
     .articolo-hero img {
       width: 100%; height: 100%;
-      object-fit: cover;
-      opacity: .7;
+      object-fit: cover; opacity: .75;
     }
     .articolo-hero-overlay {
       position: absolute; inset: 0;
@@ -31,157 +31,90 @@
       display: flex; align-items: flex-end;
       padding: clamp(1.5rem, 5vw, 3.5rem);
     }
-    .articolo-hero-meta {
-      color: #fff;
-    }
+    .articolo-hero-meta { color: #fff; }
     .articolo-hero-meta .tag {
       display: inline-block;
-      background: var(--orange, #f59e0b);
-      color: #fff;
-      font-size: .75rem;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      padding: .3em .9em;
-      border-radius: 100px;
-      margin-bottom: 1rem;
+      background: var(--orange, #f59e0b); color: #fff;
+      font-size: .75rem; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; padding: .3em .9em;
+      border-radius: 100px; margin-bottom: 1rem;
     }
     .articolo-hero-meta h1 {
-      font-size: clamp(1.6rem, 4vw, 3rem);
-      font-weight: 800;
-      line-height: 1.15;
-      margin: 0 0 .75rem;
+      font-size: clamp(1.6rem, 4vw, 3rem); font-weight: 800;
+      line-height: 1.15; margin: 0 0 .75rem;
       text-shadow: 0 2px 12px rgba(0,0,0,.4);
     }
     .articolo-hero-meta .meta-row {
-      font-size: .9rem;
-      opacity: .85;
+      font-size: .9rem; opacity: .85;
       display: flex; gap: 1.5rem; flex-wrap: wrap;
     }
-
-    /* ── ARTICOLO BODY ─────────────────────────────────────── */
+    .articolo-breadcrumb {
+      max-width: 780px; margin: 0 auto;
+      padding: 1.5rem clamp(1rem, 5vw, 2rem) 0;
+      font-size: .88rem; color: #888;
+    }
+    .articolo-breadcrumb a {
+      color: var(--orange, #f59e0b); text-decoration: none; font-weight: 500;
+    }
+    .articolo-breadcrumb a:hover { text-decoration: underline; }
     .articolo-wrap {
-      max-width: 780px;
-      margin: 0 auto;
+      max-width: 780px; margin: 0 auto;
       padding: clamp(2rem, 6vw, 4rem) clamp(1rem, 5vw, 2rem);
     }
     .articolo-sommario {
-      font-size: 1.2rem;
-      font-weight: 500;
-      line-height: 1.7;
+      font-size: 1.2rem; font-weight: 500; line-height: 1.7;
       color: var(--orange, #f59e0b);
       border-left: 4px solid var(--orange, #f59e0b);
-      padding-left: 1.25rem;
-      margin-bottom: 2.5rem;
+      padding-left: 1.25rem; margin-bottom: 2.5rem;
     }
-    .articolo-body p {
-      font-size: 1.05rem;
-      line-height: 1.85;
-      margin-bottom: 1.5rem;
-      color: var(--text, #2d2d2d);
-    }
-    .articolo-body h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin: 2.5rem 0 1rem;
-      color: var(--dark, #1a1a2e);
-    }
+    .articolo-body p { font-size: 1.05rem; line-height: 1.85; margin-bottom: 1.5rem; color: #2d2d2d; }
+    .articolo-body h2 { font-size: 1.5rem; font-weight: 700; margin: 2.5rem 0 1rem; color: #1a1a2e; }
     .articolo-body blockquote {
-      background: #fff8ec;
-      border-left: 4px solid var(--orange, #f59e0b);
-      border-radius: 0 12px 12px 0;
-      padding: 1.25rem 1.5rem;
-      margin: 2rem 0;
-      font-style: italic;
-      font-size: 1.1rem;
-      color: #555;
+      background: #fff8ec; border-left: 4px solid var(--orange, #f59e0b);
+      border-radius: 0 12px 12px 0; padding: 1.25rem 1.5rem; margin: 2rem 0;
+      font-style: italic; font-size: 1.1rem; color: #555;
     }
-    .articolo-body ul {
-      padding-left: 1.4rem;
-      margin-bottom: 1.5rem;
-    }
-    .articolo-body ul li {
-      margin-bottom: .5rem;
-      line-height: 1.7;
-      font-size: 1rem;
-    }
-    .articolo-divider {
-      border: none;
-      border-top: 2px solid #f0f0f0;
-      margin: 3rem 0;
-    }
+    .articolo-body ul { padding-left: 1.4rem; margin-bottom: 1.5rem; }
+    .articolo-body ul li { margin-bottom: .5rem; line-height: 1.7; }
+    .articolo-divider { border: none; border-top: 2px solid #f0f0f0; margin: 3rem auto; max-width: 780px; }
 
     /* ── GALLERIA SLIDER ──────────────────────────────────── */
     .articolo-gallery-section {
-      max-width: 780px;
-      margin: 0 auto;
+      max-width: 780px; margin: 0 auto;
       padding: 0 clamp(1rem, 5vw, 2rem) clamp(2rem, 6vw, 4rem);
     }
-    .articolo-gallery-section h2 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      margin-bottom: 1.25rem;
-      color: var(--dark, #1a1a2e);
-    }
+    .articolo-gallery-section h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 1.25rem; color: #1a1a2e; }
     .art-gallery {
-      position: relative;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 16px 48px rgba(0,0,0,.14);
-      background: #111;
+      border-radius: 20px; overflow: hidden;
+      box-shadow: 0 16px 48px rgba(0,0,0,.14); background: #111;
     }
-    .art-gallery-viewport {
-      aspect-ratio: 16/10;
-      overflow: hidden;
-    }
+    .art-gallery-viewport { aspect-ratio: 16/10; overflow: hidden; }
     .art-gallery-track {
-      display: flex;
-      height: 100%;
+      display: flex; height: 100%;
       transition: transform .5s cubic-bezier(.77,0,.175,1);
     }
     .art-gallery-track .hg-slide {
-      min-width: 100%;
-      height: 100%;
-      position: relative;
-      cursor: zoom-in;
+      min-width: 100%; height: 100%;
+      position: relative; cursor: zoom-in; flex-shrink: 0;
     }
     .art-gallery-track .hg-slide img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
+      width: 100%; height: 100%; object-fit: cover; display: block;
     }
     .art-gallery-track .hg-slide .hg-empty {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      color: #666;
-      font-size: .9rem;
-      gap: .5rem;
+      display: none; flex-direction: column; align-items: center;
+      justify-content: center; height: 100%; color: #666;
+      font-size: .9rem; gap: .5rem; background: #222;
     }
-    .art-gallery-track .hg-slide .hg-empty span {
-      opacity: .6; font-size: .8rem;
-    }
-    /* show empty when img missing */
-    .art-gallery-track .hg-slide img[style*="display: none"] ~ .hg-empty,
-    .art-gallery-track .hg-slide img[style*="display:none"] ~ .hg-empty {
-      display: flex;
-    }
+    .art-gallery-track .hg-slide.img-missing .hg-empty { display: flex; }
     .art-gallery-track .hg-slide .hg-overlay {
-      position: absolute; inset: 0;
-      background: rgba(0,0,0,0);
+      position: absolute; inset: 0; background: rgba(0,0,0,0);
       display: flex; align-items: center; justify-content: center;
-      font-size: 2rem;
-      opacity: 0;
-      transition: opacity .2s;
+      font-size: 2rem; opacity: 0; transition: opacity .2s;
     }
     .art-gallery-track .hg-slide:hover .hg-overlay { opacity: 1; background: rgba(0,0,0,.25); }
     .art-gallery-controls {
       display: flex; align-items: center; justify-content: center;
-      gap: 1rem;
-      padding: .9rem 1rem;
-      background: #fff;
+      gap: 1rem; padding: .9rem 1rem; background: #fff;
     }
     .art-gallery-controls .hg-btn {
       background: none; border: 2px solid #e0e0e0;
@@ -189,82 +122,49 @@
       font-size: 1.3rem; cursor: pointer; line-height: 1;
       transition: all .2s; color: #333;
     }
-    .art-gallery-controls .hg-btn:hover {
-      border-color: var(--orange, #f59e0b);
-      color: var(--orange, #f59e0b);
-    }
+    .art-gallery-controls .hg-btn:hover { border-color: var(--orange,#f59e0b); color: var(--orange,#f59e0b); }
     .art-gallery-dots { display: flex; gap: .45rem; align-items: center; }
     .art-gallery-dots .hg-dot {
       width: 8px; height: 8px; border-radius: 50%;
       background: #ddd; border: none; cursor: pointer; padding: 0;
       transition: background .2s, transform .2s;
     }
-    .art-gallery-dots .hg-dot.active {
-      background: var(--orange, #f59e0b);
-      transform: scale(1.3);
-    }
+    .art-gallery-dots .hg-dot.active { background: var(--orange,#f59e0b); transform: scale(1.3); }
 
-    /* ── CTA DONAZIONE ────────────────────────────────────── */
-    .articolo-cta {
-      max-width: 780px;
-      margin: 0 auto 4rem;
-      padding: 0 clamp(1rem, 5vw, 2rem);
-    }
+    /* ── CTA ──────────────────────────────────────────────── */
+    .articolo-cta { max-width: 780px; margin: 0 auto 4rem; padding: 0 clamp(1rem,5vw,2rem); }
     .articolo-cta-box {
       background: linear-gradient(135deg, #fff8ec, #fff3e0);
-      border: 1px solid #fcd88a;
-      border-radius: 20px;
-      padding: 2.5rem;
-      text-align: center;
+      border: 1px solid #fcd88a; border-radius: 20px;
+      padding: 2.5rem; text-align: center;
     }
-    .articolo-cta-box h3 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      margin: 0 0 .75rem;
-    }
-    .articolo-cta-box p {
-      color: #555; margin: 0 0 1.5rem; font-size: 1rem;
-    }
-    .articolo-cta-box .cta-btns {
-      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
-    }
+    .articolo-cta-box h3 { font-size: 1.4rem; font-weight: 700; margin: 0 0 .75rem; }
+    .articolo-cta-box p { color: #555; margin: 0 0 1.5rem; }
+    .articolo-cta-box .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
     .articolo-cta-box a {
-      display: inline-block;
-      padding: .75rem 1.75rem;
-      border-radius: 100px;
-      font-weight: 600;
-      font-size: .95rem;
-      text-decoration: none;
+      display: inline-block; padding: .75rem 1.75rem; border-radius: 100px;
+      font-weight: 600; font-size: .95rem; text-decoration: none;
       transition: transform .2s, box-shadow .2s;
     }
     .articolo-cta-box a:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.15); }
-    .articolo-cta-box .btn-primary {
-      background: var(--orange, #f59e0b); color: #fff;
-    }
-    .articolo-cta-box .btn-secondary {
-      background: #fff; color: var(--dark, #1a1a2e);
-      border: 2px solid #e0e0e0;
-    }
-
-    /* ── NAV ARTICOLO ─────────────────────────────────────── */
-    .articolo-breadcrumb {
-      max-width: 780px;
-      margin: 0 auto;
-      padding: 1.5rem clamp(1rem, 5vw, 2rem) 0;
-      font-size: .88rem;
-      color: #888;
-    }
-    .articolo-breadcrumb a {
-      color: var(--orange, #f59e0b);
-      text-decoration: none;
-      font-weight: 500;
-    }
-    .articolo-breadcrumb a:hover { text-decoration: underline; }
+    .articolo-cta-box .btn-primary { background: var(--orange,#f59e0b); color: #fff; }
+    .articolo-cta-box .btn-secondary { background: #fff; color: #1a1a2e; border: 2px solid #e0e0e0; }
   </style>
 </head>
 <body>
 
-  <!-- HEADER (copiato dal sito) -->
+  <!-- ═══ TOPBAR (identica all'index) ═══════════════════════════ -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a href="mailto:info@balome.org">info@balome.org</a>
+      <a href="tel:+393930181276">393 018 1276</a>
+      <a href="https://www.facebook.com/info.balome/" target="_blank" aria-label="Facebook">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- ═══ HEADER (identico all'index) ══════════════════════════ -->
   <header class="header" id="header">
     <div class="header-inner">
       <a href="../index.html" class="logo">
@@ -277,7 +177,7 @@
         <a href="../index.html#progetti" class="nav-link">Progetti</a>
         <a href="../index.html#cinque-per-mille" class="nav-link">5 per mille</a>
         <a href="../index.html#donazioni" class="nav-link">Donazioni</a>
-        <a href="../index.html#news" class="nav-link">News</a>
+        <a href="../notizie.php" class="nav-link">News</a>
         <a href="../index.html#contatti" class="nav-link">Contatti</a>
         <a href="../index.html#donazioni" class="btn-nav">Dona ora ♥</a>
       </nav>
@@ -287,9 +187,9 @@
     </div>
   </header>
 
-  <!-- HERO IMMAGINE ARTICOLO -->
+  <!-- HERO -->
   <div class="articolo-hero">
-    <img src="../img/NOME-IMMAGINE-HERO.jpg" alt="Immagine articolo" onerror="this.style.display='none'">
+    <img src="../img/NOME-IMMAGINE-HERO.jpg" alt="Immagine articolo" onerror="this.style.opacity=0">
     <div class="articolo-hero-overlay">
       <div class="articolo-hero-meta">
         <span class="tag">📰 Notizie</span>
@@ -304,97 +204,86 @@
 
   <!-- BREADCRUMB -->
   <div class="articolo-breadcrumb">
-    <a href="../index.html">Home</a> › <a href="../notizie.html">Notizie</a> › Titolo articolo
+    <a href="../index.html">Home</a> ›
+    <a href="../notizie.php">Notizie</a> ›
+    Titolo articolo
   </div>
 
-  <!-- CORPO ARTICOLO -->
+  <!-- CORPO -->
   <article class="articolo-wrap">
-
     <p class="articolo-sommario">
       Un breve sommario che introduce l'articolo. Questo testo appare in evidenza
       e aiuta il lettore a capire subito di cosa parla il contenuto.
     </p>
-
     <div class="articolo-body">
-
       <p>Scrivi qui il primo paragrafo. Racconta il contesto, presenta il progetto
       o l'evento con uno stile diretto e coinvolgente.</p>
-
       <p>Secondo paragrafo. Approfondisci con dettagli, numeri o storie concrete
       che rendano il racconto vivido e reale.</p>
-
       <h2>Un titolo di sezione</h2>
-
-      <p>Quando l'articolo è lungo, dividi il testo in sezioni con un titolo h2.
-      Aiuta la lettura e migliora il posizionamento sui motori di ricerca.</p>
-
+      <p>Quando l'articolo è lungo, dividi il testo in sezioni con un h2.</p>
       <blockquote>
         "Una citazione significativa — di un volontario, di una suora,
         di un bambino — che colpisca il cuore del lettore."
       </blockquote>
-
       <ul>
         <li>Primo punto rilevante</li>
         <li>Secondo punto — cifre, persone coinvolte</li>
         <li>Terzo punto — prossimi passi</li>
       </ul>
-
       <h2>Conclusione</h2>
-
       <p>Chiudi con un paragrafo che riassuma il significato di quanto raccontato
       e inviti il lettore a donare, condividere o seguirvi sui social.</p>
-
     </div>
   </article>
 
-  <hr class="articolo-divider" style="max-width:780px;margin:0 auto 2rem;">
+  <hr class="articolo-divider">
 
-  <!-- ══ GALLERIA SLIDER ══════════════════════════════════════════ -->
-  <!--
-    ISTRUZIONI GALLERIA:
-    - Metti le immagini nella cartella /img/
-    - Cambia i src delle img qui sotto (usa percorso ../img/nome-file.jpg)
-    - Aggiungi o rimuovi blocchi <div class="hg-slide"> secondo le foto che hai
-    - Non serve toccare nessun altro file!
-  -->
+  <!-- ═══ GALLERIA SLIDER ════════════════════════════════════════
+       Istruzioni:
+       - Carica le foto in /img/ con i nomi che preferisci
+       - Cambia i src="../img/..." qui sotto
+       - Aggiungi o rimuovi blocchi .hg-slide liberamente
+       - Non toccare nient'altro!
+  ════════════════════════════════════════════════════════════════ -->
   <section class="articolo-gallery-section">
     <h2>📷 Galleria fotografica</h2>
     <div class="art-gallery">
       <div class="art-gallery-viewport">
-        <div class="art-gallery-track" data-gallery="articolo">
+        <div class="art-gallery-track" id="artTrack">
 
-          <div class="hg-slide" onclick="openLightbox('articolo', 0)">
-            <img src="../img/articolo-1.jpg" alt="Foto 1" onerror="this.style.display='none'">
+          <div class="hg-slide">
+            <img src="../img/articolo-1.jpg" alt="Foto 1">
             <div class="hg-empty">📷 <span>articolo-1.jpg</span></div>
             <div class="hg-overlay">🔍</div>
           </div>
 
-          <div class="hg-slide" onclick="openLightbox('articolo', 1)">
-            <img src="../img/articolo-2.jpg" alt="Foto 2" onerror="this.style.display='none'">
+          <div class="hg-slide">
+            <img src="../img/articolo-2.jpg" alt="Foto 2">
             <div class="hg-empty">📷 <span>articolo-2.jpg</span></div>
             <div class="hg-overlay">🔍</div>
           </div>
 
-          <div class="hg-slide" onclick="openLightbox('articolo', 2)">
-            <img src="../img/articolo-3.jpg" alt="Foto 3" onerror="this.style.display='none'">
+          <div class="hg-slide">
+            <img src="../img/articolo-3.jpg" alt="Foto 3">
             <div class="hg-empty">📷 <span>articolo-3.jpg</span></div>
             <div class="hg-overlay">🔍</div>
           </div>
 
-          <div class="hg-slide" onclick="openLightbox('articolo', 3)">
-            <img src="../img/articolo-4.jpg" alt="Foto 4" onerror="this.style.display='none'">
+          <div class="hg-slide">
+            <img src="../img/articolo-4.jpg" alt="Foto 4">
             <div class="hg-empty">📷 <span>articolo-4.jpg</span></div>
             <div class="hg-overlay">🔍</div>
           </div>
 
-          <div class="hg-slide" onclick="openLightbox('articolo', 4)">
-            <img src="../img/articolo-5.jpg" alt="Foto 5" onerror="this.style.display='none'">
+          <div class="hg-slide">
+            <img src="../img/articolo-5.jpg" alt="Foto 5">
             <div class="hg-empty">📷 <span>articolo-5.jpg</span></div>
             <div class="hg-overlay">🔍</div>
           </div>
 
-          <div class="hg-slide" onclick="openLightbox('articolo', 5)">
-            <img src="../img/articolo-6.jpg" alt="Foto 6" onerror="this.style.display='none'">
+          <div class="hg-slide">
+            <img src="../img/articolo-6.jpg" alt="Foto 6">
             <div class="hg-empty">📷 <span>articolo-6.jpg</span></div>
             <div class="hg-overlay">🔍</div>
           </div>
@@ -403,13 +292,13 @@
       </div>
       <div class="art-gallery-controls">
         <button class="hg-btn art-prev" aria-label="Precedente">‹</button>
-        <div class="art-gallery-dots"></div>
+        <div class="art-gallery-dots" id="artDots"></div>
         <button class="hg-btn art-next" aria-label="Successiva">›</button>
       </div>
     </div>
   </section>
 
-  <!-- CTA DONAZIONE -->
+  <!-- CTA -->
   <div class="articolo-cta">
     <div class="articolo-cta-box">
       <h3>💛 Sostieni questo progetto</h3>
@@ -421,7 +310,7 @@
     </div>
   </div>
 
-  <!-- LIGHTBOX (stesso dell'index) -->
+  <!-- ═══ LIGHTBOX (identico all'index) ═════════════════════════ -->
   <div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLightbox()">
     <button class="lb-close" onclick="closeLightbox()">✕</button>
     <button class="lb-nav lb-prev" id="lbPrev" onclick="lbNavigate(-1)">‹</button>
@@ -434,19 +323,18 @@
         <small id="lbFilename"></small>
       </div>
       <div class="lb-meta">
-        <span class="lb-filename" id="lbFilename"></span>
         <span class="lb-counter" id="lbCounter"></span>
       </div>
     </div>
   </div>
 
-  <!-- SCROLL TO TOP -->
+  <!-- SCROLL TOP -->
   <button class="scroll-top" id="scrollTop" onclick="scrollToTop()" aria-label="Torna su">↑</button>
 
   <!-- TOAST -->
   <div class="toast" id="toast"></div>
 
-  <!-- FOOTER -->
+  <!-- ═══ FOOTER (identico all'index) ═══════════════════════════ -->
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-brand">
@@ -464,7 +352,7 @@
         <a href="../index.html#progetti">Progetti</a>
         <a href="../index.html#cinque-per-mille">5 per mille</a>
         <a href="../index.html#donazioni">Donazioni</a>
-        <a href="../notizie.html">Notizie</a>
+        <a href="../notizie.php">Notizie</a>
         <a href="../index.html#contatti">Contatti</a>
       </div>
       <div class="footer-col">
@@ -475,11 +363,20 @@
         <a href="mailto:info@balome.org?subject=Voglio diventare volontario">Diventa volontario</a>
       </div>
       <div class="footer-col">
+        <h4>Trasparenza</h4>
+        <a href="../docs/statuto.pdf">Statuto</a>
+        <a href="../docs/bilancio.pdf">Bilancio</a>
+      </div>
+      <div class="footer-col">
         <h4>Contatti</h4>
         <a href="mailto:info@balome.org">info@balome.org</a>
         <a href="tel:+393930181276">+39 393 018 1276</a>
-        <p>P.le Risorgimento n. 14<br>24128 Bergamo (BG)</p>
-        <p>C.F. 95254690167</p>
+        <p style="margin:.5rem 0 0;font-size:.85rem;color:#aaa">
+          P.le Risorgimento n. 14<br>24128 Bergamo (BG)<br>
+          C.F. 95254690167<br>
+          IBAN: IT45P0538711109000003727955<br>
+          BPER – Filiale di Bergamo Loreto
+        </p>
       </div>
     </div>
     <div class="footer-bottom">
@@ -488,66 +385,81 @@
     </div>
   </footer>
 
+  <!-- ═══ SCRIPTS ════════════════════════════════════════════════ -->
   <script src="../js/main.js"></script>
   <script>
-    // ── SLIDER ARTICOLO (autonomo, non dipende da main.js) ──────────
-    (function () {
-      const track = document.querySelector('.art-gallery-track[data-gallery]');
-      if (!track) return;
+  // ── SLIDER + LIGHTBOX GALLERIA ARTICOLO ─────────────────────────
+  // Si inizializza DOPO main.js, registra la gallery in GALLERIES
+  // e aggancia i controlli. Zero dipendenze da nomi specifici.
+  (function () {
+    const track   = document.getElementById('artTrack');
+    const dotsEl  = document.getElementById('artDots');
+    const prevBtn = document.querySelector('.art-prev');
+    const nextBtn = document.querySelector('.art-next');
+    if (!track) return;
 
-      const key       = track.getAttribute('data-gallery');
-      const slides    = track.querySelectorAll('.hg-slide');
-      const total     = slides.length;
-      const dots      = document.querySelector('.art-gallery-dots');
-      const prevBtn   = document.querySelector('.art-prev');
-      const nextBtn   = document.querySelector('.art-next');
-      let current = 0, timer;
+    const slides = Array.from(track.querySelectorAll('.hg-slide'));
+    const total  = slides.length;
+    let current  = 0, timer;
 
-      // Registra in GALLERIES per il lightbox
-      window.GALLERIES = window.GALLERIES || {};
-      window.GALLERIES[key] = Array.from(slides).map((s, i) => {
-        const img = s.querySelector('img');
-        return {
-          src: img ? img.src : '',
-          alt: img ? img.alt : 'Foto ' + (i + 1),
-          filename: img ? img.getAttribute('src') : ''
-        };
-      });
+    // ── Gestisci immagini mancanti ─────────────────────────────
+    slides.forEach((slide, i) => {
+      const img = slide.querySelector('img');
+      if (!img) { slide.classList.add('img-missing'); return; }
+      img.addEventListener('error', () => slide.classList.add('img-missing'));
+    });
 
-      // Costruisci dots
-      slides.forEach((_, i) => {
-        const d = document.createElement('button');
-        d.className = 'hg-dot' + (i === 0 ? ' active' : '');
-        d.setAttribute('aria-label', 'Foto ' + (i + 1));
-        d.addEventListener('click', () => goTo(i));
-        dots.appendChild(d);
-      });
+    // ── Registra in GALLERIES per il lightbox di main.js ──────
+    window.GALLERIES = window.GALLERIES || {};
+    window.GALLERIES['articolo'] = slides.map((slide, i) => {
+      const img = slide.querySelector('img');
+      return {
+        src:      img ? img.src : '',
+        alt:      img ? (img.alt || 'Foto ' + (i + 1)) : 'Foto ' + (i + 1),
+        filename: img ? img.getAttribute('src') : ''
+      };
+    });
 
-      function goTo(idx) {
-        current = (idx + total) % total;
-        track.style.transform = `translateX(-${current * 100}%)`;
-        dots.querySelectorAll('.hg-dot').forEach((d, i) =>
-          d.classList.toggle('active', i === current));
-      }
+    // ── Click su slide apre lightbox ───────────────────────────
+    slides.forEach((slide, i) => {
+      slide.addEventListener('click', () => openLightbox('articolo', i));
+    });
 
-      function startAuto() {
-        clearInterval(timer);
-        timer = setInterval(() => goTo(current + 1), 4500);
-      }
+    // ── Dots ───────────────────────────────────────────────────
+    slides.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.className = 'hg-dot' + (i === 0 ? ' active' : '');
+      d.setAttribute('aria-label', 'Foto ' + (i + 1));
+      d.addEventListener('click', () => goTo(i));
+      dotsEl.appendChild(d);
+    });
 
-      prevBtn.addEventListener('click', () => { goTo(current - 1); startAuto(); });
-      nextBtn.addEventListener('click', () => { goTo(current + 1); startAuto(); });
+    function goTo(idx) {
+      current = (idx + total) % total;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      dotsEl.querySelectorAll('.hg-dot').forEach((d, i) =>
+        d.classList.toggle('active', i === current));
+    }
 
-      // Swipe
-      let tx = 0;
-      track.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
-      track.addEventListener('touchend', e => {
-        const dx = e.changedTouches[0].clientX - tx;
-        if (Math.abs(dx) > 40) { goTo(current + (dx < 0 ? 1 : -1)); startAuto(); }
-      });
+    function startAuto() {
+      clearInterval(timer);
+      timer = setInterval(() => goTo(current + 1), 4500);
+    }
 
-      startAuto();
-    })();
+    prevBtn.addEventListener('click', () => { goTo(current - 1); startAuto(); });
+    nextBtn.addEventListener('click', () => { goTo(current + 1); startAuto(); });
+
+    // ── Swipe ──────────────────────────────────────────────────
+    let tx = 0;
+    track.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend',   e => {
+      const dx = e.changedTouches[0].clientX - tx;
+      if (Math.abs(dx) > 40) { goTo(current + (dx < 0 ? 1 : -1)); startAuto(); }
+    });
+
+    startAuto();
+  })();
   </script>
+
 </body>
 </html>
