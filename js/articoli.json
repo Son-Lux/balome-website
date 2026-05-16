@@ -1,0 +1,32 @@
+[
+  {
+    "titolo": "Il sito Balomè è online!",
+    "data": "2024-12-01",
+    "categoria": "Notizie",
+    "estratto": "Siamo felici di annunciare il nuovo sito dell'associazione Balomè. Un passo importante per avvicinarci a più persone e far conoscere il nostro lavoro quotidiano.",
+    "immagine": "img/balome_5.jpg",
+    "link": "articoli/articolo-template.html",
+    "linkTesto": "Leggi l'articolo",
+    "esterno": false
+  },
+  {
+    "titolo": "Campagna 5 per mille 2025",
+    "data": "2024-11-15",
+    "categoria": "5 per mille",
+    "estratto": "Si avvicina la stagione delle dichiarazioni dei redditi! Ricordati di destinare il tuo 5 per mille a Balomè: CF 95254690167. Costa zero e vale tutto per i nostri bambini.",
+    "immagine": "",
+    "link": "index.html#cinque-per-mille",
+    "linkTesto": "Scopri come fare",
+    "esterno": false
+  },
+  {
+    "titolo": "Progetto India: aggiornamento estate",
+    "data": "2024-08-20",
+    "categoria": "Progetti",
+    "estratto": "I nostri volontari sono tornati dall'India con storie meravigliose. Tanti bambini hanno ricevuto cure mediche e materiale scolastico grazie alle donazioni ricevute quest'anno.",
+    "immagine": "img/deepashram_1.jpg",
+    "link": "https://www.facebook.com/info.balome/",
+    "linkTesto": "Vedi su Facebook",
+    "esterno": true
+  }
+]

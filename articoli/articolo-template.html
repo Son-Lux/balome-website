@@ -3,201 +3,551 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- ✏️ Cambia titolo e descrizione per ogni articolo -->
-  <title>Titolo articolo – Balomè</title>
-  <meta name="description" content="Breve descrizione dell'articolo per i motori di ricerca.">
-
+  <meta name="description" content="DESCRIZIONE_ARTICOLO">
+  <meta name="data-articolo" content="2025-01-01">
+  <meta name="categoria" content="Notizie">
+  <title>TITOLO_ARTICOLO – Balomè</title>
   <link rel="icon" type="image/x-icon" href="../favicon.ico">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/articolo.css">
+  <style>
+    /* ── ARTICOLO LAYOUT ───────────────────────────────────── */
+    .articolo-hero {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/7;
+      overflow: hidden;
+      background: #1a1a2e;
+    }
+    .articolo-hero img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: .7;
+    }
+    .articolo-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 30%, rgba(0,0,0,.65));
+      display: flex; align-items: flex-end;
+      padding: clamp(1.5rem, 5vw, 3.5rem);
+    }
+    .articolo-hero-meta {
+      color: #fff;
+    }
+    .articolo-hero-meta .tag {
+      display: inline-block;
+      background: var(--orange, #f59e0b);
+      color: #fff;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .3em .9em;
+      border-radius: 100px;
+      margin-bottom: 1rem;
+    }
+    .articolo-hero-meta h1 {
+      font-size: clamp(1.6rem, 4vw, 3rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin: 0 0 .75rem;
+      text-shadow: 0 2px 12px rgba(0,0,0,.4);
+    }
+    .articolo-hero-meta .meta-row {
+      font-size: .9rem;
+      opacity: .85;
+      display: flex; gap: 1.5rem; flex-wrap: wrap;
+    }
+
+    /* ── ARTICOLO BODY ─────────────────────────────────────── */
+    .articolo-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: clamp(2rem, 6vw, 4rem) clamp(1rem, 5vw, 2rem);
+    }
+    .articolo-sommario {
+      font-size: 1.2rem;
+      font-weight: 500;
+      line-height: 1.7;
+      color: var(--orange, #f59e0b);
+      border-left: 4px solid var(--orange, #f59e0b);
+      padding-left: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+    .articolo-body p {
+      font-size: 1.05rem;
+      line-height: 1.85;
+      margin-bottom: 1.5rem;
+      color: var(--text, #2d2d2d);
+    }
+    .articolo-body h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 2.5rem 0 1rem;
+      color: var(--dark, #1a1a2e);
+    }
+    .articolo-body blockquote {
+      background: #fff8ec;
+      border-left: 4px solid var(--orange, #f59e0b);
+      border-radius: 0 12px 12px 0;
+      padding: 1.25rem 1.5rem;
+      margin: 2rem 0;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: #555;
+    }
+    .articolo-body ul {
+      padding-left: 1.4rem;
+      margin-bottom: 1.5rem;
+    }
+    .articolo-body ul li {
+      margin-bottom: .5rem;
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+    .articolo-divider {
+      border: none;
+      border-top: 2px solid #f0f0f0;
+      margin: 3rem 0;
+    }
+
+    /* ── GALLERIA SLIDER ──────────────────────────────────── */
+    .articolo-gallery-section {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 clamp(1rem, 5vw, 2rem) clamp(2rem, 6vw, 4rem);
+    }
+    .articolo-gallery-section h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      color: var(--dark, #1a1a2e);
+    }
+    .art-gallery {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 16px 48px rgba(0,0,0,.14);
+      background: #111;
+    }
+    .art-gallery-viewport {
+      aspect-ratio: 16/10;
+      overflow: hidden;
+    }
+    .art-gallery-track {
+      display: flex;
+      height: 100%;
+      transition: transform .5s cubic-bezier(.77,0,.175,1);
+    }
+    .art-gallery-track .hg-slide {
+      min-width: 100%;
+      height: 100%;
+      position: relative;
+      cursor: zoom-in;
+    }
+    .art-gallery-track .hg-slide img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .art-gallery-track .hg-slide .hg-empty {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #666;
+      font-size: .9rem;
+      gap: .5rem;
+    }
+    .art-gallery-track .hg-slide .hg-empty span {
+      opacity: .6; font-size: .8rem;
+    }
+    /* show empty when img missing */
+    .art-gallery-track .hg-slide img[style*="display: none"] ~ .hg-empty,
+    .art-gallery-track .hg-slide img[style*="display:none"] ~ .hg-empty {
+      display: flex;
+    }
+    .art-gallery-track .hg-slide .hg-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .art-gallery-track .hg-slide:hover .hg-overlay { opacity: 1; background: rgba(0,0,0,.25); }
+    .art-gallery-controls {
+      display: flex; align-items: center; justify-content: center;
+      gap: 1rem;
+      padding: .9rem 1rem;
+      background: #fff;
+    }
+    .art-gallery-controls .hg-btn {
+      background: none; border: 2px solid #e0e0e0;
+      border-radius: 50%; width: 38px; height: 38px;
+      font-size: 1.3rem; cursor: pointer; line-height: 1;
+      transition: all .2s; color: #333;
+    }
+    .art-gallery-controls .hg-btn:hover {
+      border-color: var(--orange, #f59e0b);
+      color: var(--orange, #f59e0b);
+    }
+    .art-gallery-dots { display: flex; gap: .45rem; align-items: center; }
+    .art-gallery-dots .hg-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #ddd; border: none; cursor: pointer; padding: 0;
+      transition: background .2s, transform .2s;
+    }
+    .art-gallery-dots .hg-dot.active {
+      background: var(--orange, #f59e0b);
+      transform: scale(1.3);
+    }
+
+    /* ── CTA DONAZIONE ────────────────────────────────────── */
+    .articolo-cta {
+      max-width: 780px;
+      margin: 0 auto 4rem;
+      padding: 0 clamp(1rem, 5vw, 2rem);
+    }
+    .articolo-cta-box {
+      background: linear-gradient(135deg, #fff8ec, #fff3e0);
+      border: 1px solid #fcd88a;
+      border-radius: 20px;
+      padding: 2.5rem;
+      text-align: center;
+    }
+    .articolo-cta-box h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin: 0 0 .75rem;
+    }
+    .articolo-cta-box p {
+      color: #555; margin: 0 0 1.5rem; font-size: 1rem;
+    }
+    .articolo-cta-box .cta-btns {
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    }
+    .articolo-cta-box a {
+      display: inline-block;
+      padding: .75rem 1.75rem;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: .95rem;
+      text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .articolo-cta-box a:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.15); }
+    .articolo-cta-box .btn-primary {
+      background: var(--orange, #f59e0b); color: #fff;
+    }
+    .articolo-cta-box .btn-secondary {
+      background: #fff; color: var(--dark, #1a1a2e);
+      border: 2px solid #e0e0e0;
+    }
+
+    /* ── NAV ARTICOLO ─────────────────────────────────────── */
+    .articolo-breadcrumb {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 1.5rem clamp(1rem, 5vw, 2rem) 0;
+      font-size: .88rem;
+      color: #888;
+    }
+    .articolo-breadcrumb a {
+      color: var(--orange, #f59e0b);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .articolo-breadcrumb a:hover { text-decoration: underline; }
+  </style>
 </head>
 <body>
 
-<header class="header" id="header">
-  <div class="nav-inner">
-    <a href="#home" class="logo">
-      <div class="logo-icon">
-        <img src="..\logo.png" alt="Balomè logo" style="width:48px;height:48px;object-fit:contain;">
+  <!-- HEADER (copiato dal sito) -->
+  <header class="header" id="header">
+    <div class="header-inner">
+      <a href="../index.html" class="logo">
+        <img src="../logo.png" alt="Balomè logo" width="38" height="38">
+        <span>Balomè</span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="../index.html#chi-siamo" class="nav-link">Chi siamo</a>
+        <a href="../index.html#missione" class="nav-link">Missione</a>
+        <a href="../index.html#progetti" class="nav-link">Progetti</a>
+        <a href="../index.html#cinque-per-mille" class="nav-link">5 per mille</a>
+        <a href="../index.html#donazioni" class="nav-link">Donazioni</a>
+        <a href="../index.html#news" class="nav-link">News</a>
+        <a href="../index.html#contatti" class="nav-link">Contatti</a>
+        <a href="../index.html#donazioni" class="btn-nav">Dona ora ♥</a>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO IMMAGINE ARTICOLO -->
+  <div class="articolo-hero">
+    <img src="../img/NOME-IMMAGINE-HERO.jpg" alt="Immagine articolo" onerror="this.style.display='none'">
+    <div class="articolo-hero-overlay">
+      <div class="articolo-hero-meta">
+        <span class="tag">📰 Notizie</span>
+        <h1>Il titolo completo dell'articolo va scritto qui</h1>
+        <div class="meta-row">
+          <span>🗓 1 Gennaio 2025</span>
+          <span>✍️ Associazione Balomè</span>
+        </div>
       </div>
-      <div class="logo-text">
-        <span class="logo-name">Balomè</span>
-        <span class="logo-tagline">Associazione benefica</span>
-      </div>
-    </a>
-    <button class="hamburger" id="hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-    <nav class="nav" id="nav">
-      <a href="#chi-siamo" class="nav-link">Chi siamo</a>
-      <a href="#missione" class="nav-link">Missione</a>
-      <a href="#progetti" class="nav-link">Progetti</a>
-      <a href="#cinque-per-mille" class="nav-link">5 per mille</a>
-      <a href="#donazioni" class="nav-link">Donazioni</a>
-      <a href="#news" class="nav-link">News</a>
-      <a href="#contatti" class="nav-link">Contatti</a>
-      <a href="#donazioni" class="btn-nav">Dona ora ♥</a>
-    </nav>
+    </div>
   </div>
-</header>
 
+  <!-- BREADCRUMB -->
+  <div class="articolo-breadcrumb">
+    <a href="../index.html">Home</a> › <a href="../notizie.html">Notizie</a> › Titolo articolo
+  </div>
 
-<!-- CONTENUTO ————————————————————————————————————— -->
-<div class="articolo-wrap">
+  <!-- CORPO ARTICOLO -->
+  <article class="articolo-wrap">
 
+    <p class="articolo-sommario">
+      Un breve sommario che introduce l'articolo. Questo testo appare in evidenza
+      e aiuta il lettore a capire subito di cosa parla il contenuto.
+    </p>
 
-  <!-- Titolo -->
-  <!-- ✏️ -->
-  <h1 class="articolo-titolo">
-    Il titolo completo dell'articolo va scritto qui
-  </h1>
+    <div class="articolo-body">
 
-  <!-- Sommario -->
-  <!-- ✏️ 2-3 righe di introduzione -->
-  <p class="articolo-intro">
-    Un breve sommario che introduce l'articolo. Questo testo appare in evidenza
-    e aiuta il lettore a capire subito di cosa parla il contenuto.
-  </p>
+      <p>Scrivi qui il primo paragrafo. Racconta il contesto, presenta il progetto
+      o l'evento con uno stile diretto e coinvolgente.</p>
 
-  <!-- ——————————————————————————————————————————————
-       IMMAGINE HERO
-       1. Metti la foto in /img/ (es. img/articolo-hero.jpg)
-       2. Togli il commento dal tag <img> qui sotto
-       3. Elimina il blocco .articolo-hero-placeholder
-       —————————————————————————————————————————————— -->
+      <p>Secondo paragrafo. Approfondisci con dettagli, numeri o storie concrete
+      che rendano il racconto vivido e reale.</p>
+
+      <h2>Un titolo di sezione</h2>
+
+      <p>Quando l'articolo è lungo, dividi il testo in sezioni con un titolo h2.
+      Aiuta la lettura e migliora il posizionamento sui motori di ricerca.</p>
+
+      <blockquote>
+        "Una citazione significativa — di un volontario, di una suora,
+        di un bambino — che colpisca il cuore del lettore."
+      </blockquote>
+
+      <ul>
+        <li>Primo punto rilevante</li>
+        <li>Secondo punto — cifre, persone coinvolte</li>
+        <li>Terzo punto — prossimi passi</li>
+      </ul>
+
+      <h2>Conclusione</h2>
+
+      <p>Chiudi con un paragrafo che riassuma il significato di quanto raccontato
+      e inviti il lettore a donare, condividere o seguirvi sui social.</p>
+
+    </div>
+  </article>
+
+  <hr class="articolo-divider" style="max-width:780px;margin:0 auto 2rem;">
+
+  <!-- ══ GALLERIA SLIDER ══════════════════════════════════════════ -->
   <!--
-  <img
-    class="articolo-hero-img"
-    src="../img/nome-foto-hero.jpg"
-    alt="Descrizione immagine"
-  >
+    ISTRUZIONI GALLERIA:
+    - Metti le immagini nella cartella /img/
+    - Cambia i src delle img qui sotto (usa percorso ../img/nome-file.jpg)
+    - Aggiungi o rimuovi blocchi <div class="hg-slide"> secondo le foto che hai
+    - Non serve toccare nessun altro file!
   -->
+  <section class="articolo-gallery-section">
+    <h2>📷 Galleria fotografica</h2>
+    <div class="art-gallery">
+      <div class="art-gallery-viewport">
+        <div class="art-gallery-track" data-gallery="articolo">
 
-  <!-- Placeholder visibile finché non carichi la foto -->
-  <div class="articolo-hero-placeholder">
-    📷
-    <span>img/nome-foto-hero.jpg</span>
-  </div>
+          <div class="hg-slide" onclick="openLightbox('articolo', 0)">
+            <img src="../img/articolo-1.jpg" alt="Foto 1" onerror="this.style.display='none'">
+            <div class="hg-empty">📷 <span>articolo-1.jpg</span></div>
+            <div class="hg-overlay">🔍</div>
+          </div>
 
-  <!-- ✏️ Didascalia (opzionale, elimina se non serve) -->
-  <p class="articolo-hero-caption">
-    Didascalia — luogo, data, contesto dell'immagine.
-  </p>
+          <div class="hg-slide" onclick="openLightbox('articolo', 1)">
+            <img src="../img/articolo-2.jpg" alt="Foto 2" onerror="this.style.display='none'">
+            <div class="hg-empty">📷 <span>articolo-2.jpg</span></div>
+            <div class="hg-overlay">🔍</div>
+          </div>
 
-  <!-- ——————————————————————————————————————————————
-       TESTO ARTICOLO
-       Usa <h2> per i titoli di sezione
-       Usa <p> per i paragrafi
-       Usa <blockquote> per le citazioni
-       Usa <ul><li> per le liste
-       —————————————————————————————————————————————— -->
-  <div class="articolo-body">
+          <div class="hg-slide" onclick="openLightbox('articolo', 2)">
+            <img src="../img/articolo-3.jpg" alt="Foto 3" onerror="this.style.display='none'">
+            <div class="hg-empty">📷 <span>articolo-3.jpg</span></div>
+            <div class="hg-overlay">🔍</div>
+          </div>
 
-    <p>
-      Scrivi qui il primo paragrafo. Racconta il contesto, presenta il progetto
-      o l'evento con uno stile diretto e coinvolgente.
-    </p>
+          <div class="hg-slide" onclick="openLightbox('articolo', 3)">
+            <img src="../img/articolo-4.jpg" alt="Foto 4" onerror="this.style.display='none'">
+            <div class="hg-empty">📷 <span>articolo-4.jpg</span></div>
+            <div class="hg-overlay">🔍</div>
+          </div>
 
-    <p>
-      Secondo paragrafo. Approfondisci con dettagli, numeri o storie concrete
-      che rendano il racconto vivido e reale.
-    </p>
+          <div class="hg-slide" onclick="openLightbox('articolo', 4)">
+            <img src="../img/articolo-5.jpg" alt="Foto 5" onerror="this.style.display='none'">
+            <div class="hg-empty">📷 <span>articolo-5.jpg</span></div>
+            <div class="hg-overlay">🔍</div>
+          </div>
 
-    <h2>Un titolo di sezione</h2>
+          <div class="hg-slide" onclick="openLightbox('articolo', 5)">
+            <img src="../img/articolo-6.jpg" alt="Foto 6" onerror="this.style.display='none'">
+            <div class="hg-empty">📷 <span>articolo-6.jpg</span></div>
+            <div class="hg-overlay">🔍</div>
+          </div>
 
-    <p>
-      Quando l'articolo è lungo, dividi il testo in sezioni con un &lt;h2&gt;.
-      Aiuta la lettura e migliora il posizionamento sui motori di ricerca.
-    </p>
+        </div>
+      </div>
+      <div class="art-gallery-controls">
+        <button class="hg-btn art-prev" aria-label="Precedente">‹</button>
+        <div class="art-gallery-dots"></div>
+        <button class="hg-btn art-next" aria-label="Successiva">›</button>
+      </div>
+    </div>
+  </section>
 
-    <blockquote>
-      "Una citazione significativa — di un volontario, di una suora,
-      di un bambino — che colpisca il cuore del lettore."
-    </blockquote>
-
-    <ul>
-      <li>Primo punto rilevante</li>
-      <li>Secondo punto — cifre, persone coinvolte</li>
-      <li>Terzo punto — prossimi passi</li>
-    </ul>
-
-    <h2>Conclusione</h2>
-
-    <p>
-      Chiudi con un paragrafo che riassuma il significato di quanto raccontato
-      e inviti il lettore a donare, condividere o seguirvi sui social.
-    </p>
-
-  </div>
-
-  <hr class="articolo-divider">
-
-  <!-- ——————————————————————————————————————————————
-       GALLERIA FOTOGRAFICA
-       • Metti le foto in /img/ con i nomi indicati
-       • Cliccando si apre il lightbox con slideshow
-       • Per aggiungere foto: copia un blocco .art-photo
-       • Per togliere foto: elimina un blocco .art-photo
-       • La PRIMA foto appare grande (2 colonne)
-       —————————————————————————————————————————————— -->
-  
-    
-
-  <!-- CTA donazione -->
+  <!-- CTA DONAZIONE -->
   <div class="articolo-cta">
-    <h3>Sostieni questo progetto</h3>
-    <p>Ogni donazione, piccola o grande, fa la differenza nella vita di questi bambini.</p>
-    <div class="articolo-cta-buttons">
-      <a href="../index.html#cinque-per-mille" class="btn-primary">Dona il 5×mille</a>
-      <a href="../index.html#donazioni" class="btn-secondary">Fai una donazione</a>
+    <div class="articolo-cta-box">
+      <h3>💛 Sostieni questo progetto</h3>
+      <p>Ogni donazione, piccola o grande, fa la differenza nella vita di questi bambini.</p>
+      <div class="cta-btns">
+        <a href="../index.html#cinque-per-mille" class="btn-primary">Dona il 5×mille</a>
+        <a href="../index.html#donazioni" class="btn-secondary">Fai una donazione</a>
+      </div>
     </div>
   </div>
 
-</div><!-- fine .articolo-wrap -->
-
-<button class="scroll-top" id="scrollTop" onclick="scrollToTop()" aria-label="Torna su">↑</button>
-<div class="toast" id="toast"></div>
-
-
-    
-    
-    
-    
-    
-    
-<footer class="footer">
-  <div class="footer-main">
-    <div class="footer-brand">
-      <div class="footer-logo"><img src="..\logo.png" alt="Balomè" style="width:50px;height:50px;object-fit:contain;filter:brightness(0) invert(1);"><span>Balomè</span></div>
-      <p>Tutti i bimbi sono bravi e i grandi lo devono sapere!</p>
-      <div class="footer-social"><a href="https://www.facebook.com/info.balome/" target="_blank"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a></div>
+  <!-- LIGHTBOX (stesso dell'index) -->
+  <div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLightbox()">
+    <button class="lb-close" onclick="closeLightbox()">✕</button>
+    <button class="lb-nav lb-prev" id="lbPrev" onclick="lbNavigate(-1)">‹</button>
+    <button class="lb-nav lb-next" id="lbNext" onclick="lbNavigate(1)">›</button>
+    <div class="lb-content">
+      <img id="lbImg" src="" alt="">
+      <div class="lb-empty" id="lbEmpty">
+        <span>📷</span>
+        <p>Carica questa immagine nella cartella <code>/img/</code></p>
+        <small id="lbFilename"></small>
+      </div>
+      <div class="lb-meta">
+        <span class="lb-filename" id="lbFilename"></span>
+        <span class="lb-counter" id="lbCounter"></span>
+      </div>
     </div>
-    <div class="footer-links"><h4>Navigazione</h4><a href="#chi-siamo">Chi siamo</a><a href="#missione">Missione</a><a href="#progetti">Progetti</a><a href="#cinque-per-mille">5 per mille</a><a href="#donazioni">Donazioni</a><a href="#news">News</a><a href="#contatti">Contatti</a></div>
-    <div class="footer-links"><h4>Come aiutare</h4><a href="#cinque-per-mille">Dona il 5 × mille</a><a href="#donazioni">Dona con PayPal</a><a href="#donazioni">Bonifico bancario</a><a href="mailto:info@balome.org?subject=Voglio diventare volontario">Diventa volontario</a></div>
-    <div class="footer-links"><h4>Trasparenza</h4><a href="docs/statuto.pdf" target="_blank"> Statuto</a><a href="docs/bilancio.pdf" target="_blank"> Bilancio</a></div>
-    <div class="footer-contacts"><h4>Contatti</h4><a href="mailto:info@balome.org">info@balome.org</a><a href="tel:+393930181276">+39 393 018 1276</a><p style="font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.6;margin-top:4px;">P.le Risorgimento n. 14<br>24128 Bergamo (BG)</p><p class="footer-cf">C.F. 95254690167</p><p class="footer-cf">IBAN: IT45P0538711109000003727955<br>BPER – Filiale di Bergamo Loreto</p></div>
   </div>
-  <div class="footer-bottom">
-    <p>© <script>document.write(new Date().getFullYear())</script> Associazione Balomè · C.F. 95254690167 · P.le Risorgimento n. 14, 24128 Bergamo · <a href="mailto:info@balome.org">info@balome.org</a></p>
-    <p>Associazione di Volontariato senza scopo di lucro</p>
-  </div>
-</footer>
 
-<!-- components.js PRIMA di main.js -->
-<script src="../js/components.js"></script>
-<script src="../js/main.js"></script>
+  <!-- SCROLL TO TOP -->
+  <button class="scroll-top" id="scrollTop" onclick="scrollToTop()" aria-label="Torna su">↑</button>
 
-<script>
-  // Registra le immagini dell'articolo nel sistema lightbox
-  window.addEventListener('DOMContentLoaded', function () {
-    var imgs = document.querySelectorAll('#artGallery .art-photo img');
-    GALLERIES['articolo'] = Array.from(imgs).map(function (img) {
-      return { src: img.src, alt: img.alt, filename: img.getAttribute('src') };
-    });
-  });
-</script>
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
 
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="../logo.png" alt="Balomè" width="42" height="42">
+        <span>Balomè</span>
+        <p>Tutti i bimbi sono bravi e i grandi lo devono sapere!</p>
+        <a href="https://www.facebook.com/info.balome/" target="_blank" class="footer-fb" aria-label="Facebook">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+      </div>
+      <div class="footer-col">
+        <h4>Navigazione</h4>
+        <a href="../index.html#chi-siamo">Chi siamo</a>
+        <a href="../index.html#missione">Missione</a>
+        <a href="../index.html#progetti">Progetti</a>
+        <a href="../index.html#cinque-per-mille">5 per mille</a>
+        <a href="../index.html#donazioni">Donazioni</a>
+        <a href="../notizie.html">Notizie</a>
+        <a href="../index.html#contatti">Contatti</a>
+      </div>
+      <div class="footer-col">
+        <h4>Come aiutare</h4>
+        <a href="../index.html#cinque-per-mille">Dona il 5 × mille</a>
+        <a href="../index.html#donazioni">Dona con PayPal</a>
+        <a href="../index.html#donazioni">Bonifico bancario</a>
+        <a href="mailto:info@balome.org?subject=Voglio diventare volontario">Diventa volontario</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contatti</h4>
+        <a href="mailto:info@balome.org">info@balome.org</a>
+        <a href="tel:+393930181276">+39 393 018 1276</a>
+        <p>P.le Risorgimento n. 14<br>24128 Bergamo (BG)</p>
+        <p>C.F. 95254690167</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © Associazione Balomè · C.F. 95254690167 · P.le Risorgimento n. 14, 24128 Bergamo · info@balome.org<br>
+      Associazione di Volontariato senza scopo di lucro
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script>
+    // ── SLIDER ARTICOLO (autonomo, non dipende da main.js) ──────────
+    (function () {
+      const track = document.querySelector('.art-gallery-track[data-gallery]');
+      if (!track) return;
+
+      const key       = track.getAttribute('data-gallery');
+      const slides    = track.querySelectorAll('.hg-slide');
+      const total     = slides.length;
+      const dots      = document.querySelector('.art-gallery-dots');
+      const prevBtn   = document.querySelector('.art-prev');
+      const nextBtn   = document.querySelector('.art-next');
+      let current = 0, timer;
+
+      // Registra in GALLERIES per il lightbox
+      window.GALLERIES = window.GALLERIES || {};
+      window.GALLERIES[key] = Array.from(slides).map((s, i) => {
+        const img = s.querySelector('img');
+        return {
+          src: img ? img.src : '',
+          alt: img ? img.alt : 'Foto ' + (i + 1),
+          filename: img ? img.getAttribute('src') : ''
+        };
+      });
+
+      // Costruisci dots
+      slides.forEach((_, i) => {
+        const d = document.createElement('button');
+        d.className = 'hg-dot' + (i === 0 ? ' active' : '');
+        d.setAttribute('aria-label', 'Foto ' + (i + 1));
+        d.addEventListener('click', () => goTo(i));
+        dots.appendChild(d);
+      });
+
+      function goTo(idx) {
+        current = (idx + total) % total;
+        track.style.transform = `translateX(-${current * 100}%)`;
+        dots.querySelectorAll('.hg-dot').forEach((d, i) =>
+          d.classList.toggle('active', i === current));
+      }
+
+      function startAuto() {
+        clearInterval(timer);
+        timer = setInterval(() => goTo(current + 1), 4500);
+      }
+
+      prevBtn.addEventListener('click', () => { goTo(current - 1); startAuto(); });
+      nextBtn.addEventListener('click', () => { goTo(current + 1); startAuto(); });
+
+      // Swipe
+      let tx = 0;
+      track.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+      track.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].clientX - tx;
+        if (Math.abs(dx) > 40) { goTo(current + (dx < 0 ? 1 : -1)); startAuto(); }
+      });
+
+      startAuto();
+    })();
+  </script>
 </body>
 </html>
