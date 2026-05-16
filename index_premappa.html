@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Balomè – Tutti i bimbi sono bravi e i grandi lo devono sapere!</title>
-  <meta name="description" content="Balomè è un'associazione benefica che opera in Italia e India per il benescere dei bambini. Dona il tuo 5 per mille CF 95254690167">
+  <meta name="description" content="Balomè è un'associazione benefica che opera in Italia e India per il benessere dei bambini. Dona il tuo 5 per mille CF 95254690167">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
@@ -12,252 +12,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-
-  <!-- D3 + TopoJSON per la mappa interattiva -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js" defer></script>
-
-  <style>
-  /* ═══════════════════════════════════════════════════════
-     SEZIONE MAPPA — prefisso bm- / mappa-
-     Usa esclusivamente variabili da style.css
-  ═══════════════════════════════════════════════════════ */
-
-  /* Sezione: sfondo bg-warm come .missione */
-  .dove-operiamo {
-    background: var(--bg-warm);
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* Layout due colonne: sidebar fissa + mappa */
-  .mappa-layout {
-    display: grid;
-    grid-template-columns: 260px 1fr;
-    gap: 48px;
-    align-items: center;
-    margin-top: 48px;
-  }
-
-  /* Sidebar pulsanti */
-  .mappa-sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .mappa-leg-btn {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: var(--bg-card);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius);
-    padding: 14px 16px;
-    cursor: pointer;
-    text-align: left;
-    font-family: var(--font-body);
-    transition: all .18s;
-    box-shadow: var(--shadow);
-    width: 100%;
-  }
-  .mappa-leg-btn:hover,
-  .mappa-leg-btn.active {
-    border-color: var(--orange);
-    background: rgba(245,146,30,.06);
-    transform: translateX(4px);
-    box-shadow: var(--shadow-lg);
-  }
-  .mappa-leg-dot {
-    width: 10px;
-    height: 10px;
-    background: var(--orange);
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .mappa-leg-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  .mappa-leg-name {
-    font-size: .88rem;
-    font-weight: 700;
-    color: var(--dark);
-  }
-  .mappa-leg-city {
-    font-size: .74rem;
-    color: var(--text-light);
-  }
-  .mappa-leg-arrow {
-    color: var(--orange);
-    font-weight: 700;
-    opacity: 0;
-    transition: opacity .18s;
-  }
-  .mappa-leg-btn:hover .mappa-leg-arrow,
-  .mappa-leg-btn.active .mappa-leg-arrow {
-    opacity: 1;
-  }
-
-  /* SVG container */
-  .mappa-svg-container {
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: var(--shadow-lg);
-    border: 1px solid var(--border);
-  }
-  #bm-map-svg {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-
-  /* Colori paesi — armoniosi con palette sito */
-  .bm-india    { fill: #FFF0D8; stroke: #F5921E; stroke-width: .8px; }
-  .bm-neighbor { fill: #EAE4D8; stroke: #C8B880; stroke-width: .45px; }
-  .bm-land-bg  { fill: #D8D0BC; stroke: #B4A888; stroke-width: .3px; }
-  .bm-sea      { fill: #D0E8F8; }
-  .bm-grat     { fill: none; stroke: #9EC4DC; stroke-width: .22px; opacity: .5; }
-  .bm-borders  { fill: none; stroke: #C0A040; stroke-width: .45px; }
-
-  /* Pulse ring — usa --orange */
-  @keyframes bm-ring {
-    0%   { r: 6px;  opacity: .85; stroke-width: 2px; }
-    100% { r: 26px; opacity: 0;   stroke-width: .3px; }
-  }
-  .bm-pulse { animation: bm-ring 2.2s ease-out infinite; }
-
-  /* Popup overlay */
-  .bm-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background: rgba(26,32,64,.5);
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-  }
-  .bm-overlay.open {
-    display: flex;
-    animation: bm-fB .22s ease;
-  }
-  @keyframes bm-fB { from { opacity:0 } to { opacity:1 } }
-
-  .bm-card {
-    background: var(--bg-card);
-    border-radius: var(--radius);
-    max-width: 440px;
-    width: 100%;
-    overflow: hidden;
-    box-shadow: var(--shadow-lg);
-    animation: bm-sU .28s cubic-bezier(.34,1.56,.64,1);
-    max-height: 92vh;
-    overflow-y: auto;
-    border: 1px solid var(--border);
-  }
-  @keyframes bm-sU {
-    from { transform: translateY(24px); opacity: 0; }
-    to   { transform: translateY(0);    opacity: 1; }
-  }
-
-  /* Header popup — gradiente tricolore indiano animato */
-  .bm-card-top {
-    background: linear-gradient(90deg, #FF9933 0%, #138808 50%, #FF9933 100%);
-    background-size: 200% 100%;
-    animation: bm-flag 6s linear infinite;
-    padding: 1.4rem 1.5rem 1rem;
-    position: relative;
-  }
-  @keyframes bm-flag {
-    0%   { background-position: 0% 0%; }
-    50%  { background-position: 100% 0%; }
-    100% { background-position: 0% 0%; }
-  }
-  .bm-close {
-    position: absolute;
-    top: .88rem; right: .88rem;
-    background: rgba(255,255,255,.22);
-    border: none; border-radius: 50%;
-    width: 30px; height: 30px;
-    font-size: .9rem; color: #fff;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: background .15s;
-    font-family: var(--font-body);
-  }
-  .bm-close:hover { background: rgba(255,255,255,.42); }
-
-  .bm-c-flag  { font-size: 1.8rem; margin-bottom: .38rem; }
-  .bm-c-city  {
-    font-size: .68rem; font-weight: 700;
-    letter-spacing: .1em; text-transform: uppercase;
-    color: rgba(255,255,255,.82); margin-bottom: .15rem;
-  }
-  .bm-c-title {
-    font-family: var(--font-display);
-    font-size: 1.22rem; font-weight: 900;
-    color: #fff; line-height: 1.2;
-    text-shadow: 0 1px 4px rgba(0,0,0,.2);
-  }
-
-  .bm-card-body { padding: 1.3rem 1.5rem 1.6rem; }
-
-  .bm-tags { display: flex; flex-wrap: wrap; gap: .33rem; margin-bottom: .9rem; }
-  .bm-tag  {
-    background: rgba(245,146,30,.1);
-    color: var(--orange);
-    font-size: .63rem; font-weight: 700;
-    padding: .18rem .54rem; border-radius: 50px;
-  }
-  .bm-text {
-    font-size: .87rem; line-height: 1.75;
-    color: var(--text-light); margin-bottom: 1rem;
-  }
-  .bm-stats { display: flex; gap: .65rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
-  .bm-stat  {
-    background: var(--bg-warm);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: .5rem .75rem;
-    flex: 1; min-width: 70px; text-align: center;
-  }
-  .bm-stat-n {
-    font-family: var(--font-display);
-    font-size: 1.28rem; font-weight: 900;
-    color: var(--orange); display: block;
-  }
-  .bm-stat-l {
-    font-size: .63rem; color: var(--text-light);
-    font-weight: 600; text-transform: uppercase; letter-spacing: .04em;
-  }
-  .bm-popup-link {
-    display: inline-flex; align-items: center; gap: .4rem;
-    background: var(--orange); color: #fff;
-    font-size: .85rem; font-weight: 700;
-    padding: .65rem 1.3rem; border-radius: 50px;
-    text-decoration: none;
-    box-shadow: 0 4px 16px rgba(245,146,30,.35);
-    transition: background .18s, transform .12s;
-    font-family: var(--font-body);
-  }
-  .bm-popup-link:hover {
-    background: #D97F10;
-    transform: translateY(-2px);
-  }
-
-  /* Responsive */
-  @media (max-width: 860px) {
-    .mappa-layout { grid-template-columns: 1fr; gap: 28px; }
-    .mappa-sidebar { flex-direction: row; flex-wrap: wrap; }
-    .mappa-leg-btn { width: calc(50% - 6px); }
-    .mappa-leg-arrow { display: none; }
-  }
-  @media (max-width: 520px) {
-    .mappa-leg-btn { width: 100%; }
-  }
-  </style>
 </head>
 <body>
 <div class="topbar">
@@ -385,6 +139,7 @@
         </div>
         <div class="hg-slide" onclick="openLightbox('chisiamo',3)">
           <img src="img/balome_2.jpg" alt="Chi siamo 4" onerror="this.style.display='none'">
+    
           <div class="hg-overlay">🔍</div>
         </div>
         <div class="hg-slide" onclick="openLightbox('chisiamo',4)">
@@ -452,6 +207,7 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
         <div class="progetto-flag">🇮🇳</div>
         <div class="progetto-content">
           <h3>Progetto <strong>Deepashram</strong></h3>
+          
           <p>Il Progetto "Deepashram" in Rajiv Nagar Gurgaon a pochi chilometri da Delhi, in una casa fondata da Madre Teresa di Calcutta oggi gestita dai Missionari della Carità che ospita ragazzi orfani, abbandonati perchè affetti da diverse patologie: ci sono bambini ciechi, muti, sordi, spastici, poliomielitici e disabili mentali. A Deepashram si sentono a casa, amati e accuditi con amore e tenerezza. Grazie al Vostro sostegno economico abbiamo garantito l'accesso alla fisioterapia, e all'istruzione per i 39 ragazzi accolti dai Missionari che quotidianamente se ne prendono cura.</p>
           <ul class="progetto-points">
             <li>ragazzi orfani</li>
@@ -459,11 +215,11 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
             <li>istruzione</li>
             <li>39 ragazzi</li>
           </ul>
-          <div class="progetto-gallery" data-gallery="deepashram">
+            <div class="progetto-gallery" data-gallery="deepashram">
             <div class="pg-main" onclick="openLightbox('deepashram',0)">
               <img src="img/deepashram_1.jpg" alt="Deepashram" onerror="this.style.display='none'">
               <div class="pg-empty"><span></span></div>
-              <div class="pg-overlay">🔍 Galleria</div>
+             <div class="pg-overlay">🔍 Galleria</div>
             </div>
             <div class="pg-thumbs">
               <div class="pg-thumb" onclick="openLightbox('deepashram',1)">
@@ -484,10 +240,13 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
         </div>
       </div>
 
+      <!-- PROGETTO KARUNANJALI -->
+      <!-- Immagini: /img/karunanjali-1.jpg … karunanjali-4.jpg -->
       <div class="progetto-card india reveal delay-1">
         <div class="progetto-flag">🇮🇳</div>
         <div class="progetto-content">
           <h3>Progetto <strong>Karunanjali School</strong></h3>
+          
           <p>Il progetto "Karunanjali School" è gestito dalle Suore di Sant'Anna per i bambini con problemi mentali, che non dispongono di strutture di formazione, in Talagaon Dabhade, nelle zone rurali dello Stato del Maharashtra. Le suore, girando per i villaggi, si sono imbattute in un gran numero di bambini con problemi mentali, tenuti a casa senza alcuna istruzione o formazione. Grazie anche al nostro contributo, questi bambini oggi hanno una scuola dove possono essere ospitati in forma residenziale o solo nelle ore diurne. Attualmente sono 33 i bambini accolti e 13 quelli che frequentano il centro diurno.</p>
           <ul class="progetto-points">
             <li>bambini con problemi mentali</li>
@@ -495,21 +254,25 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
             <li>33 + 13 bambini</li>
             <li>donare speranza e felicità</li>
           </ul>
-          <div class="progetto-gallery" data-gallery="karunanjali">
+            <div class="progetto-gallery" data-gallery="karunanjali">
             <div class="pg-main" onclick="openLightbox('karunanjali',0)">
               <img src="img/karunanjali-1.jpg" alt="Karunanjali" onerror="this.style.display='none'">
               <div class="pg-empty"></div>
-              <div class="pg-overlay">🔍 Galleria</div>
+                 <div class="pg-overlay">🔍 Galleria</div>
+             
             </div>
             <div class="pg-thumbs">
               <div class="pg-thumb" onclick="openLightbox('karunanjali',1)">
                 <img src="img/karunanjali-2.jpg" alt="Karunanjali 2" onerror="this.style.display='none'">
+               
               </div>
               <div class="pg-thumb" onclick="openLightbox('karunanjali',2)">
                 <img src="img/karunanjali-3.jpg" alt="Karunanjali 3" onerror="this.style.display='none'">
+             
               </div>
               <div class="pg-thumb pg-thumb-more" onclick="openLightbox('karunanjali',3)">
                 <img src="img/karunanjali-4.jpg" alt="Karunanjali 4" onerror="this.style.display='none'">
+            
                 <div class="pg-more-label">+foto</div>
               </div>
             </div>
@@ -517,10 +280,13 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
         </div>
       </div>
 
+      <!-- PROGETTO ANANDASHARAM -->
+      <!-- Immagini: /img/anandasharam-1.jpg … anandasharam-4.jpg -->
       <div class="progetto-card india reveal delay-3">
         <div class="progetto-flag">🇮🇳</div>
         <div class="progetto-content">
           <h3>Progetto <strong>Anandasharam</strong></h3>
+          
           <p>In India lavoriamo in contesti di estrema povertà dove l'accesso alle cure mediche e all'istruzione è ancora un privilegio. I nostri volontari operano sul campo per garantire un futuro ai bambini più vulnerabili.</p>
           <ul class="progetto-points">
             <li>Costruzione e supporto di scuole rurali</li>
@@ -528,7 +294,7 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
             <li>Formazione per insegnanti locali</li>
             <li>Sostegno a distanza per bambini</li>
           </ul>
-          <div class="progetto-gallery" data-gallery="anandasharam">
+            <div class="progetto-gallery" data-gallery="anandasharam">
             <div class="pg-main" onclick="openLightbox('anandasharam',0)">
               <img src="img/Anandashram_1.jpg" alt="Anandasharam" onerror="this.style.display='none'">
               <div class="pg-empty"></div>
@@ -553,6 +319,8 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
         </div>
       </div>
 
+      <!-- PROGETTO CALCUTTA -->
+      <!-- Immagini: /img/calcutta-1.jpg … calcutta-4.jpg -->
       <div class="progetto-card india reveal delay-4">
         <div class="progetto-flag">🇮🇳</div>
         <div class="progetto-content">
@@ -565,12 +333,15 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
             <div class="pg-thumbs">
               <div class="pg-thumb" onclick="openLightbox('calcutta',1)">
                 <img src="img/calcutta-2.jpg" alt="Calcutta 2" onerror="this.style.display='none'">
+               
               </div>
               <div class="pg-thumb" onclick="openLightbox('calcutta',2)">
                 <img src="img/calcutta-3.jpg" alt="Calcutta 3" onerror="this.style.display='none'">
+              
               </div>
               <div class="pg-thumb pg-thumb-more" onclick="openLightbox('calcutta',3)">
                 <img src="img/calcutta-4.jpg" alt="Calcutta 4" onerror="this.style.display='none'">
+                
                 <div class="pg-more-label">+foto</div>
               </div>
             </div>
@@ -588,86 +359,6 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
     </div>
   </div>
 </section>
-
-<!-- ═══════════════════════════════════════════════════════════
-     SEZIONE MAPPA — tra #progetti e #cinque-per-mille
-═══════════════════════════════════════════════════════════ -->
-<section class="section dove-operiamo" id="dove-operiamo">
-  <div class="mission-bg-pattern"></div>
-  <div class="container">
-
-    <div class="section-header reveal">
-      <div class="section-label">🇮🇳 Dove operiamo</div>
-      <h2>I nostri progetti in India</h2>
-      <p class="section-intro">Dalla pianura del Gange fino alle coste del Kerala.<br>
-      Clicca su un pin o su un progetto della lista per saperne di più.</p>
-    </div>
-
-    <div class="mappa-layout reveal delay-1">
-
-      <!-- Sidebar: pulsanti legenda -->
-      <div class="mappa-sidebar">
-        <button class="mappa-leg-btn" onclick="bmOp('deepashram')">
-          <div class="mappa-leg-dot"></div>
-          <div class="mappa-leg-info">
-            <span class="mappa-leg-name">🏠 Deepashram</span>
-            <span class="mappa-leg-city">Gurgaon – Delhi NCR</span>
-          </div>
-          <span class="mappa-leg-arrow">→</span>
-        </button>
-        <button class="mappa-leg-btn" onclick="bmOp('calcutta')">
-          <div class="mappa-leg-dot"></div>
-          <div class="mappa-leg-info">
-            <span class="mappa-leg-name">🌸 Calcutta</span>
-            <span class="mappa-leg-city">Bengala Occidentale</span>
-          </div>
-          <span class="mappa-leg-arrow">→</span>
-        </button>
-        <button class="mappa-leg-btn" onclick="bmOp('karunanjali')">
-          <div class="mappa-leg-dot"></div>
-          <div class="mappa-leg-info">
-            <span class="mappa-leg-name">📚 Karunanjali School</span>
-            <span class="mappa-leg-city">Maharashtra</span>
-          </div>
-          <span class="mappa-leg-arrow">→</span>
-        </button>
-        <button class="mappa-leg-btn" onclick="bmOp('anandasharam')">
-          <div class="mappa-leg-dot"></div>
-          <div class="mappa-leg-info">
-            <span class="mappa-leg-name">🌱 Anandasharam</span>
-            <span class="mappa-leg-city">India meridionale, Kerala</span>
-          </div>
-          <span class="mappa-leg-arrow">→</span>
-        </button>
-      </div>
-
-      <!-- SVG mappa -->
-      <div class="mappa-svg-container">
-        <svg id="bm-map-svg" aria-label="Mappa Asia meridionale con i progetti Balomè"></svg>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- POPUP MAPPA -->
-<div class="bm-overlay" id="bm-ov" role="dialog" aria-modal="true" aria-labelledby="bm-cTitle">
-  <div class="bm-card">
-    <div class="bm-card-top">
-      <button class="bm-close" onclick="bmCl()" aria-label="Chiudi">✕</button>
-      <div class="bm-c-flag"  id="bm-cFlag"></div>
-      <div class="bm-c-city"  id="bm-cCity"></div>
-      <div class="bm-c-title" id="bm-cTitle"></div>
-    </div>
-    <div class="bm-card-body">
-      <div class="bm-tags"  id="bm-cTags"></div>
-      <div class="bm-text"  id="bm-cText"></div>
-      <div class="bm-stats" id="bm-cStats"></div>
-      <a class="bm-popup-link" id="bm-cLink" href="#progetti">Vai al progetto ↑</a>
-    </div>
-  </div>
-</div>
-<!-- ═══════════════════════════════════════════════════════════ -->
 
 <section class="section cinque-per-mille" id="cinque-per-mille">
   <div class="cinque-bg"><div class="cinque-shape"></div></div>
@@ -774,6 +465,7 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
         <div class="news-card"><div class="news-date">🗓 Dicembre 2024</div><h4>Il sito Balomè è online!</h4><p>Siamo felici di annunciare il nuovo sito dell'associazione Balomè. Un passo importante per avvicinarci a più persone e far conoscere il nostro lavoro quotidiano.</p><a href="https://www.facebook.com/info.balome/" target="_blank" class="read-more">Leggi su Facebook →</a></div>
         <div class="news-card"><div class="news-date">🗓 Novembre 2024</div><h4>Campagna 5 per mille 2025</h4><p>Si avvicina la stagione delle dichiarazioni dei redditi! Ricordati di destinare il tuo 5 per mille a Balomè: CF 95254690167. Costa zero e vale tutto per i nostri bambini.</p><a href="#cinque-per-mille" class="read-more">Scopri come fare →</a></div>
         <div class="news-card"><div class="news-date">🗓 Estate 2024</div><h4>Progetto India: aggiornamento estate</h4><p>I nostri volontari sono tornati dall'India con storie meravigliose. Tanti bambini hanno ricevuto cure mediche e materiale scolastico grazie alle donazioni ricevute quest'anno.</p><a href="https://www.facebook.com/info.balome/" target="_blank" class="read-more">Vedi le foto →</a></div>
+        
       </div>
     </div>
   </div>
@@ -832,6 +524,7 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
 <button class="scroll-top" id="scrollTop" onclick="scrollToTop()" aria-label="Torna su">↑</button>
 <div class="toast" id="toast"></div>
 
+<!-- ===== LIGHTBOX GLOBALE ===== -->
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Visualizzatore immagini">
   <div class="lb-backdrop" onclick="closeLightbox()"></div>
   <button class="lb-close" onclick="closeLightbox()" aria-label="Chiudi">✕</button>
@@ -853,421 +546,7 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
 </div>
 
 <script src="js/main.js"></script>
+    <script src="js/main.js"></script>
 <script src="js/articoli-loader.js"></script>
-
-<!-- ═══════════════════════════════════════════════════════
-     MAPPA INDIA — script eseguito dopo main.js
-═══════════════════════════════════════════════════════ -->
-<script>
-/* Dati progetti — testo in variabili JS senza apostrofi problematici */
-var BM_DATA = {
-  deepashram: {
-    lat: 28.47, lng: 77.03, emoji: '🏠',
-    city: 'Gurgaon \u2013 Delhi NCR',
-    title: 'Progetto Deepashram',
-    tags: ['Ragazzi orfani', 'Disabilit\u00e0', 'Fisioterapia', 'Istruzione'],
-    text: 'A Rajiv Nagar Gurgaon, a pochi km da Delhi, nella casa dei Missionari della Carit\u00e0 fondata da Madre Teresa, vivono 39 ragazzi orfani con diverse patologie. Balom\u00e8 garantisce fisioterapia e istruzione quotidiana.',
-    stats: [{n:'39', l:'Ragazzi accolti'}, {n:'2', l:'Servizi garantiti'}],
-    anchor: 'progetti'
-  },
-  calcutta: {
-    lat: 22.57, lng: 88.36, emoji: '🌸',
-    city: 'Calcutta, Bengala Occidentale',
-    title: 'Progetto Calcutta',
-    tags: ['Orfanotrofio', 'Shishu Bhavan', 'Missionarie della Carit\u00e0'],
-    text: 'A Shishu Bhavan, orfanotrofio delle Missionarie della Carit\u00e0 di Madre Teresa a Calcutta, ha preso forma la storia di Balom\u00e8. Da l\u00ec nasce la promessa: non dimenticare mai i bambini lasciati soli.',
-    stats: [{n:'🙏', l:'Origine di Balom\u00e8'}, {n:'\u221e', l:'Bambini nel cuore'}],
-    anchor: 'progetti'
-  },
-  karunanjali: {
-    lat: 18.62, lng: 73.85, emoji: '📚',
-    city: 'Talagaon Dabhade, Maharashtra',
-    title: 'Karunanjali School',
-    tags: ['Scuola residenziale', 'Disabilit\u00e0 mentale', 'Suore di Sant\u2019Anna'],
-    text: 'Le Suore di Sant\u2019Anna portano istruzione ai bambini con disabilit\u00e0 mentale nei villaggi rurali del Maharashtra. Con Balom\u00e8: 33 residenziali + 13 al centro diurno.',
-    stats: [{n:'33', l:'Residenziali'}, {n:'13', l:'Centro diurno'}],
-    anchor: 'progetti'
-  },
-  anandasharam: {
-    lat: 10.85, lng: 76.27, emoji: '🌱',
-    city: 'India meridionale, Kerala',
-    title: 'Progetto Anandasharam',
-    tags: ['Scuole rurali', 'Salute', 'Nutrizione', 'Formazione'],
-    text: 'I volontari Balom\u00e8 costruiscono scuole rurali, gestiscono programmi nutrizionali e sanitari, e formano insegnanti locali per garantire un futuro ai bambini pi\u00f9 vulnerabili.',
-    stats: [{n:'4', l:'Aree di intervento'}, {n:'\u2665', l:'Bambini sostenuti'}],
-    anchor: 'progetti'
-  }
-};
-
-var bmActivePin = null;
-
-function bmInitMap() {
-  if (typeof d3 === 'undefined' || typeof topojson === 'undefined') {
-    setTimeout(bmInitMap, 100);
-    return;
-  }
-
-  var W = 820, H = 560;
-
-  var svg = d3.select('#bm-map-svg')
-    .attr('viewBox', '0 0 ' + W + ' ' + H)
-    .attr('preserveAspectRatio', 'xMidYMid meet');
-
-  var defs = svg.append('defs');
-
-  /* Gradiente pin — usa #F5921E (--orange del sito) */
-  var rg = defs.append('radialGradient')
-    .attr('id', 'bm-pg').attr('cx', '35%').attr('cy', '30%').attr('r', '68%');
-  rg.append('stop').attr('offset', '0%').attr('stop-color', '#FFD080');
-  rg.append('stop').attr('offset', '55%').attr('stop-color', '#F5921E');
-  rg.append('stop').attr('offset', '100%').attr('stop-color', '#B06010');
-
-  /* Gradiente hover pin */
-  var rgh = defs.append('radialGradient')
-    .attr('id', 'bm-pgh').attr('cx', '35%').attr('cy', '30%').attr('r', '68%');
-  rgh.append('stop').attr('offset', '0%').attr('stop-color', '#FFE090');
-  rgh.append('stop').attr('offset', '55%').attr('stop-color', '#FF9F30');
-  rgh.append('stop').attr('offset', '100%').attr('stop-color', '#A85208');
-
-  /* Drop shadow filter */
-  var flt = defs.append('filter')
-    .attr('id', 'bm-ps')
-    .attr('x', '-50%').attr('y', '-50%')
-    .attr('width', '200%').attr('height', '200%');
-  flt.append('feDropShadow')
-    .attr('dx', 0).attr('dy', 3).attr('stdDeviation', 2.5)
-    .attr('flood-color', 'rgba(26,32,64,0.28)');
-
-  /* Proiezione: scala 380 = zoom ridotto, Asia + contesto regionale visibili */
-  var projection = d3.geoMercator()
-    .center([82, 23])
-    .scale(380)
-    .translate([W / 2, H / 2]);
-
-  var path = d3.geoPath().projection(projection);
-
-  /* Mare — usa colore coerente con la palette */
-  svg.append('rect').attr('width', W).attr('height', H).attr('class', 'bm-sea');
-
-  /* Graticole 15° */
-  var grat = d3.geoGraticule().step([15, 15]);
-  svg.append('path').datum(grat()).attr('class', 'bm-grat').attr('d', path);
-
-  var INDIA = 356;
-  var NBRS = {
-    586: 'Pakistan', 50: 'Bangladesh', 524: 'Nepal',
-    64: 'Bhutan', 144: 'Sri Lanka', 104: 'Myanmar',
-    156: 'Cina', 4: 'Afghanistan'
-  };
-
-  fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
-    .then(function(r) { return r.json(); })
-    .then(function(world) {
-      var countries = topojson.feature(world, world.objects.countries);
-
-      /* Tutti gli altri paesi */
-      svg.append('g').selectAll('path')
-        .data(countries.features.filter(function(d) {
-          return +d.id !== INDIA && !NBRS[+d.id];
-        }))
-        .join('path').attr('class', 'bm-land-bg').attr('d', path);
-
-      /* Paesi vicini */
-      var nbFeats = countries.features.filter(function(d) { return NBRS[+d.id]; });
-      svg.append('g').selectAll('path')
-        .data(nbFeats).join('path').attr('class', 'bm-neighbor').attr('d', path);
-
-      /* Etichette vicini */
-      svg.append('g').selectAll('text')
-        .data(nbFeats).join('text')
-        .attr('transform', function(d) {
-          var c = path.centroid(d);
-          return isFinite(c[0]) ? 'translate(' + c + ')' : 'translate(-999,-999)';
-        })
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'central')
-        .attr('fill', '#6A5830')
-        .attr('font-family', "'Poppins', sans-serif")
-        .attr('font-size', 7)
-        .attr('font-weight', 600)
-        .text(function(d) { return NBRS[+d.id]; });
-
-      /* India — evidenziata */
-      svg.append('g').selectAll('path')
-        .data(countries.features.filter(function(d) { return +d.id === INDIA; }))
-        .join('path').attr('class', 'bm-india').attr('d', path);
-
-      /* Confini internazionali */
-      svg.append('path')
-        .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
-        .attr('class', 'bm-borders').attr('d', path);
-
-      /* Label "India" centrata */
-      var indFeat = countries.features.find(function(d) { return +d.id === INDIA; });
-      if (indFeat) {
-        var c = path.centroid(indFeat);
-        svg.append('text')
-          .attr('x', c[0]).attr('y', c[1])
-          .attr('text-anchor', 'middle').attr('dominant-baseline', 'central')
-          .attr('fill', '#148708').attr('fill-opacity', 0.6)
-          .attr('font-family', "'Poppins', sans-serif")
-          .attr('font-size', 11).attr('font-weight', 900)
-          .text('India');
-      }
-
-      /* Etichette oceani — usa --text-light #4A5580 */
-      [
-        {t: 'Mar Arabico',       lon: 58, lat: 18},
-        {t: 'Golfo del Bengala', lon: 90, lat: 10},
-        {t: 'Oceano Indiano',    lon: 73, lat:  1}
-      ].forEach(function(s) {
-        var pos = projection([s.lon, s.lat]);
-        if (pos && isFinite(pos[0]) && pos[0] > 8 && pos[0] < W-8 && pos[1] > 8 && pos[1] < H-8) {
-          svg.append('text')
-            .attr('x', pos[0]).attr('y', pos[1])
-            .attr('text-anchor', 'middle')
-            .attr('fill', '#4A5580')
-            .attr('font-style', 'italic')
-            .attr('font-family', "'Poppins', sans-serif")
-            .attr('font-size', 8).attr('opacity', 0.72)
-            .text(s.t);
-        }
-      });
-
-      /* ═══ PIN ═══
-         Punta a (0,0) — testa centrata a (0,-18).
-         Il gruppo .bm-pin-inner scala intorno a (0,0) via
-         d3 transition su attr('transform') — nessun drift spaziale.   */
-      Object.entries(BM_DATA).forEach(function(entry, i) {
-        var id = entry[0];
-        var d  = entry[1];
-
-        var pos = projection([d.lng, d.lat]);
-        if (!pos || !isFinite(pos[0])) return;
-
-        var outer = svg.append('g')
-          .attr('id', 'bm-pin-' + id)
-          .attr('transform', 'translate(' + pos[0] + ',' + pos[1] + ')')
-          .attr('role', 'button')
-          .attr('tabindex', '0')
-          .attr('aria-label', d.title)
-          .style('cursor', 'pointer')
-          .on('click', function() { bmOp(id); })
-          .on('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); bmOp(id); }
-          });
-
-        /* Doppio anello pulsante sfalsato */
-        [0, 1.1].forEach(function(rd) {
-          outer.append('circle')
-            .attr('class', 'bm-pulse')
-            .attr('cx', 0).attr('cy', -18).attr('r', 5)
-            .attr('fill', 'none')
-            .attr('stroke', '#F5921E')
-            .attr('stroke-width', 1.8)
-            .attr('opacity', 0.8)
-            .style('animation-delay', (rd + i * 0.38) + 's');
-        });
-
-        /* Gruppo scalabile — pivot a punta (0,0) */
-        var inner = outer.append('g')
-          .attr('class', 'bm-pin-inner')
-          .attr('transform', 'scale(1)');
-
-        /* Animazione entry: drop-in con bounceOut
-           delay ampio: 600ms base + 280ms per pin */
-        inner
-          .style('opacity', 0)
-          .attr('transform', 'scale(1) translateY(-40)')
-          .transition()
-            .delay(600 + i * 280)
-            .duration(820)
-            .ease(d3.easeBounceOut)
-            .style('opacity', 1)
-            .attr('transform', 'scale(1) translateY(0)');
-
-        /* Ombra a terra */
-        inner.append('ellipse')
-          .attr('cx', 0).attr('cy', 1.5)
-          .attr('rx', 6).attr('ry', 2.5)
-          .attr('fill', 'rgba(26,32,64,0.16)');
-
-        /* Gambo: punta verso il basso a (0,0) */
-        inner.append('polygon')
-          .attr('points', '0,0 -6,-12 6,-12')
-          .attr('fill', '#A05808');
-
-        /* Testa: cerchio con gradiente --orange */
-        inner.append('circle')
-          .attr('cx', 0).attr('cy', -18).attr('r', 12)
-          .attr('fill', 'url(#bm-pg)')
-          .attr('stroke', '#ffffff')
-          .attr('stroke-width', 2)
-          .attr('filter', 'url(#bm-ps)');
-
-        /* Highlight interno */
-        inner.append('circle')
-          .attr('cx', -3.5).attr('cy', -22).attr('r', 3)
-          .attr('fill', 'rgba(255,255,255,0.28)');
-
-        /* Emoji */
-        inner.append('text')
-          .attr('x', 0).attr('y', -18)
-          .attr('text-anchor', 'middle')
-          .attr('dominant-baseline', 'central')
-          .attr('font-size', 10)
-          .attr('pointer-events', 'none')
-          .text(d.emoji);
-
-        /* Pill etichetta città */
-        var lbl = d.city.split(',')[0].split('\u2013')[0].trim();
-        var lW  = Math.max(44, lbl.length * 5.2 + 12);
-        var lg  = inner.append('g').attr('transform', 'translate(0,6)');
-        lg.append('rect')
-          .attr('x', -lW / 2).attr('y', 0)
-          .attr('width', lW).attr('height', 12).attr('rx', 4)
-          .attr('fill', 'rgba(26,32,64,0.82)');
-        lg.append('text')
-          .attr('x', 0).attr('y', 6)
-          .attr('text-anchor', 'middle')
-          .attr('dominant-baseline', 'central')
-          .attr('fill', '#ffffff')
-          .attr('font-family', "'Poppins', sans-serif")
-          .attr('font-size', 6.5).attr('font-weight', 700)
-          .attr('pointer-events', 'none')
-          .text(lbl);
-
-        /* Hover — d3 transition su attr (non style) → pivot corretto */
-        outer
-          .on('mouseenter', function() {
-            if (bmActivePin === id) return;
-            d3.select(this).select('.bm-pin-inner')
-              .interrupt()
-              .transition().duration(160).ease(d3.easeCubicOut)
-              .attr('transform', 'scale(1.35)');
-            d3.select(this).select('circle[r="12"]')
-              .attr('fill', 'url(#bm-pgh)');
-            bmHighlightLeg(id);
-          })
-          .on('mouseleave', function() {
-            if (bmActivePin === id) return;
-            d3.select(this).select('.bm-pin-inner')
-              .interrupt()
-              .transition().duration(360).ease(d3.easeBounceOut)
-              .attr('transform', 'scale(1)');
-            d3.select(this).select('circle[r="12"]')
-              .attr('fill', 'url(#bm-pg)');
-            if (bmActivePin === null) bmHighlightLeg(null);
-          });
-      });
-
-      /* Rosa dei venti — usa colori del sito */
-      var cr = svg.append('g')
-        .attr('transform', 'translate(' + (W - 42) + ',38)');
-      cr.append('circle').attr('r', 18)
-        .attr('fill', 'rgba(255,247,238,0.92)')
-        .attr('stroke', '#E0E8F0').attr('stroke-width', 0.8);
-      cr.append('polygon').attr('points', '0,-14 3.5,0 0,-5 -3.5,0').attr('fill', '#F5921E');
-      cr.append('polygon').attr('points', '0,14 3.5,0 0,5 -3.5,0').attr('fill', '#C8B880');
-      cr.append('polygon').attr('points', '-14,0 0,3.5 -5,0 0,-3.5').attr('fill', '#C8B880').attr('opacity', 0.65);
-      cr.append('polygon').attr('points', '14,0 0,3.5 5,0 0,-3.5').attr('fill', '#C8B880').attr('opacity', 0.65);
-      cr.append('text')
-        .attr('y', -20).attr('text-anchor', 'middle').attr('dominant-baseline', 'central')
-        .attr('font-family', "'Poppins', sans-serif")
-        .attr('font-size', 8).attr('font-weight', 700)
-        .attr('fill', '#148708').text('N');
-
-    })
-    .catch(function() {
-      svg.append('text')
-        .attr('x', W / 2).attr('y', H / 2)
-        .attr('text-anchor', 'middle')
-        .attr('font-family', "'Poppins', sans-serif")
-        .attr('font-size', 13).attr('fill', '#4A5580')
-        .text('Caricamento mappa\u2026');
-    });
-}
-
-/* Evidenzia pulsante legenda */
-function bmHighlightLeg(id) {
-  document.querySelectorAll('.mappa-leg-btn').forEach(function(b) {
-    b.classList.remove('active');
-  });
-  if (id) {
-    var btn = document.querySelector('.mappa-leg-btn[onclick*="' + id + '"]');
-    if (btn) btn.classList.add('active');
-  }
-}
-
-/* Resetta pin a scala 1 */
-function bmResetPin(id) {
-  if (typeof d3 === 'undefined') return;
-  d3.select('#bm-pin-' + id).select('.bm-pin-inner')
-    .interrupt()
-    .transition().duration(420).ease(d3.easeBounceOut)
-    .attr('transform', 'scale(1)');
-  d3.select('#bm-pin-' + id).select('circle[r="12"]')
-    .attr('fill', 'url(#bm-pg)');
-}
-
-/* Apre popup */
-function bmOp(id) {
-  var d = BM_DATA[id];
-  if (!d) return;
-
-  document.getElementById('bm-cFlag').textContent  = d.emoji;
-  document.getElementById('bm-cCity').textContent  = d.city;
-  document.getElementById('bm-cTitle').textContent = d.title;
-  document.getElementById('bm-cText').textContent  = d.text;
-  document.getElementById('bm-cLink').href         = '#' + d.anchor;
-  document.getElementById('bm-cTags').innerHTML    =
-    d.tags.map(function(t) { return '<span class="bm-tag">' + t + '</span>'; }).join('');
-  document.getElementById('bm-cStats').innerHTML   =
-    d.stats.map(function(s) {
-      return '<div class="bm-stat"><span class="bm-stat-n">' + s.n + '</span>' +
-             '<span class="bm-stat-l">' + s.l + '</span></div>';
-    }).join('');
-
-  /* Resetta pin precedente */
-  if (bmActivePin) bmResetPin(bmActivePin);
-  bmActivePin = id;
-
-  /* Pin attivo rimane scalato */
-  if (typeof d3 !== 'undefined') {
-    d3.select('#bm-pin-' + id).select('.bm-pin-inner')
-      .interrupt()
-      .transition().duration(160)
-      .attr('transform', 'scale(1.4)');
-    d3.select('#bm-pin-' + id).select('circle[r="12"]')
-      .attr('fill', 'url(#bm-pgh)');
-  }
-
-  bmHighlightLeg(id);
-  document.getElementById('bm-ov').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-/* Chiude popup */
-function bmCl() {
-  document.getElementById('bm-ov').classList.remove('open');
-  document.body.style.overflow = '';
-  if (bmActivePin) { bmResetPin(bmActivePin); bmActivePin = null; }
-  bmHighlightLeg(null);
-}
-
-/* Chiudi cliccando backdrop */
-document.getElementById('bm-ov').addEventListener('click', function(e) {
-  if (e.target === this) bmCl();
-});
-
-/* Chiudi con Escape */
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') bmCl();
-});
-
-/* Avvia la mappa quando tutti gli script sono pronti */
-window.addEventListener('load', bmInitMap);
-</script>
-
 </body>
 </html>

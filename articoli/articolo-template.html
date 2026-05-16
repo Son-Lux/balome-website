@@ -142,75 +142,8 @@
        • Per togliere foto: elimina un blocco .art-photo
        • La PRIMA foto appare grande (2 colonne)
        —————————————————————————————————————————————— -->
-  <div class="articolo-gallery-section">
-    <h2>📷 Galleria fotografica</h2>
-
-    <div class="art-gallery-grid" id="artGallery">
-
-      <!-- Foto 1 — grande -->
-      <div class="art-photo" onclick="openLightbox('articolo', 0)">
-        <img src="../img/articolo-1.jpg" alt="Foto 1" onerror="this.style.display='none'">
-        <div class="art-photo-empty">📷<span>articolo-1.jpg</span></div>
-        <div class="art-photo-overlay">🔍</div>
-      </div>
-
-      <!-- Foto 2 -->
-      <div class="art-photo" onclick="openLightbox('articolo', 1)">
-        <img src="../img/articolo-2.jpg" alt="Foto 2" onerror="this.style.display='none'">
-        <div class="art-photo-empty">📷<span>articolo-2.jpg</span></div>
-        <div class="art-photo-overlay">🔍</div>
-      </div>
-
-      <!-- Foto 3 -->
-      <div class="art-photo" onclick="openLightbox('articolo', 2)">
-        <img src="../img/articolo-3.jpg" alt="Foto 3" onerror="this.style.display='none'">
-        <div class="art-photo-empty">📷<span>articolo-3.jpg</span></div>
-        <div class="art-photo-overlay">🔍</div>
-      </div>
-
-      <!-- Foto 4 -->
-      <div class="art-photo" onclick="openLightbox('articolo', 3)">
-        <img src="../img/articolo-4.jpg" alt="Foto 4" onerror="this.style.display='none'">
-        <div class="art-photo-empty">📷<span>articolo-4.jpg</span></div>
-        <div class="art-photo-overlay">🔍</div>
-      </div>
-
-      <!-- Foto 5 -->
-      <div class="art-photo" onclick="openLightbox('articolo', 4)">
-        <img src="../img/articolo-5.jpg" alt="Foto 5" onerror="this.style.display='none'">
-        <div class="art-photo-empty">📷<span>articolo-5.jpg</span></div>
-        <div class="art-photo-overlay">🔍</div>
-      </div>
-
-      <!-- Foto 6 -->
-      <div class="art-photo" onclick="openLightbox('articolo', 5)">
-        <img src="../img/articolo-6.jpg" alt="Foto 6" onerror="this.style.display='none'">
-        <div class="art-photo-empty">📷<span>articolo-6.jpg</span></div>
-        <div class="art-photo-overlay">🔍</div>
-      </div>
-
-      <!-- ✏️ Aggiungi altre foto copiando uno dei blocchi qui sopra -->
-
-    </div>
-  </div>
+  
     
-    <div class="articolo-gallery">
-  <div class="hero-gallery-viewport">
-    <div class="hero-gallery-track" data-gallery="articolo">
-      <div class="hg-slide" onclick="openLightbox('articolo', 0)">
-        <img src="../img/articolo-1.jpg" alt="Foto 1" onerror="this.style.display='none'">
-        <div class="hg-empty">📷<span>articolo-1.jpg</span></div>
-        <div class="hg-overlay">🔍</div>
-      </div>
-      <!-- aggiungi altri hg-slide -->
-    </div>
-  </div>
-  <div class="hg-controls">
-    <button class="hg-btn hg-prev" aria-label="Precedente">‹</button>
-    <div class="hg-dots"></div>
-    <button class="hg-btn hg-next" aria-label="Successiva">›</button>
-  </div>
-</div>
 
   <!-- CTA donazione -->
   <div class="articolo-cta">
@@ -227,26 +160,13 @@
 <button class="scroll-top" id="scrollTop" onclick="scrollToTop()" aria-label="Torna su">↑</button>
 <div class="toast" id="toast"></div>
 
-<!-- LIGHTBOX — identico all'index -->
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Visualizzatore immagini">
-  <div class="lb-backdrop" onclick="closeLightbox()"></div>
-  <button class="lb-close" onclick="closeLightbox()" aria-label="Chiudi">✕</button>
-  <button class="lb-arrow lb-prev" id="lbPrev" onclick="lbNavigate(-1)" aria-label="Precedente">‹</button>
-  <button class="lb-arrow lb-next" id="lbNext" onclick="lbNavigate(1)" aria-label="Successiva">›</button>
-  <div class="lb-content">
-    <div class="lb-img-wrap">
-      <img id="lbImg" src="" alt="" style="display:none">
-      <div class="lb-empty-state" id="lbEmpty">
-        <span class="lb-empty-icon">📷</span>
-        <strong id="lbFilename"></strong>
-        <span>Carica questa immagine nella cartella <code>/img/</code></span>
-      </div>
-    </div>
-    <div class="lb-footer">
-      <span class="lb-counter" id="lbCounter"></span>
-    </div>
-  </div>
-</div>
+
+    
+    
+    
+    
+    
+    
 <footer class="footer">
   <div class="footer-main">
     <div class="footer-brand">
