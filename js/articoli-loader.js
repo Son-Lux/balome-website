@@ -12,7 +12,11 @@
   'use strict';
 
   const CONTAINER_ID  = 'newsCardsContainer';
-  const JSON_URL      = 'articoli/articoli.json';
+  const JSON_URL = (function() {
+    // Costruisce il percorso assoluto per evitare problemi con spazi nel nome cartella
+    const base = window.location.href.replace(/\/[^\/]*$/, '/');
+    return base + 'articoli/articoli.json';
+  })();
   const MAX_CARDS     = 3;
   const ESTRATTO_MAX  = 160; // caratteri estratto nelle card
 
@@ -90,6 +94,7 @@
         return res.json();
       })
       .then(articoli => {
+        console.log('[Balomè] Articoli caricati:', articoli.length);
         if (!Array.isArray(articoli) || articoli.length === 0) {
           container.innerHTML = buildEmpty();
           return;
@@ -120,7 +125,8 @@
           container.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
         }
       })
-      .catch(() => {
+      .catch(err => {
+        console.error('[Balomè] Errore caricamento articoli:', err);
         container.innerHTML = buildError();
       });
   }
