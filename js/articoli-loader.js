@@ -110,11 +110,14 @@
         }
 
         /* Ri-attiva le animazioni reveal per le nuove card */
-        if (typeof IntersectionObserver !== 'undefined') {
+        if (typeof IntersectionObserver !== 'undefined' && typeof revealObserver !== 'undefined') {
           container.querySelectorAll('.reveal').forEach(el => {
             el.classList.remove('visible');
             revealObserver.observe(el);
           });
+        } else {
+          // Fallback: rendi visibili le card direttamente
+          container.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
         }
       })
       .catch(() => {
