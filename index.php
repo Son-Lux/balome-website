@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Balomè – Tutti i bimbi sono bravi e i grandi lo devono sapere!</title>
+  <meta name="description" content="Balomè è un'associazione benefica che opera in Italia e India per il benescere dei bambini. Dona il tuo 5 per mille CF 95254690167">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- D3 + TopoJSON per la mappa interattiva -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js" defer></script>
+
+  <style>
+  /* ═══════════════════════════════════════════════════════
+     SEZIONE MAPPA — prefisso bm- / mappa-
+     Usa esclusivamente variabili da style.css
+  ═══════════════════════════════════════════════════════ */
+
+  /* Sezione: sfondo bg-warm come .missione */
+  .dove-operiamo {
+    background: var(--bg-warm);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Layout due colonne: sidebar fissa + mappa */
+  .mappa-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 48px;
+    align-items: center;
+    margin-top: 48px;
+  }
+
+  /* Sidebar pulsanti */
+  .mappa-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .mappa-leg-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--font-body);
+    transition: all .18s;
+    box-shadow: var(--shadow);
+    width: 100%;
+  }
+  .mappa-leg-btn:hover,
+  .mappa-leg-btn.active {
+    border-color: var(--orange);
+    background: rgba(245,146,30,.06);
+    transform: translateX(4px);
+    box-shadow: var(--shadow-lg);
+  }
+  .mappa-leg-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--orange);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .mappa-leg-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .mappa-leg-name {
+    font-size: .88rem;
+    font-weight: 700;
+    color: var(--dark);
+  }
+  .mappa-leg-city {
+    font-size: .74rem;
+    color: var(--text-light);
+  }
+  .mappa-leg-arrow {
+    color: var(--orange);
+    font-weight: 700;
+    opacity: 0;
+    transition: opacity .18s;
+  }
+  .mappa-leg-btn:hover .mappa-leg-arrow,
+  .mappa-leg-btn.active .mappa-leg-arrow {
+    opacity: 1;
+  }
+
+  /* SVG container */
+  .mappa-svg-container {
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border);
+  }
+  #bm-map-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Colori paesi — armoniosi con palette sito */
+  .bm-india    { fill: #FFF0D8; stroke: #F5921E; stroke-width: .8px; }
+  .bm-neighbor { fill: #EAE4D8; stroke: #C8B880; stroke-width: .45px; }
+  .bm-land-bg  { fill: #D8D0BC; stroke: #B4A888; stroke-width: .3px; }
+  .bm-sea      { fill: #D0E8F8; }
+  .bm-grat     { fill: none; stroke: #9EC4DC; stroke-width: .22px; opacity: .5; }
+  .bm-borders  { fill: none; stroke: #C0A040; stroke-width: .45px; }
+
+  /* Pulse ring — usa --orange */
+  @keyframes bm-ring {
+    0%   { r: 6px;  opacity: .85; stroke-width: 2px; }
+    100% { r: 26px; opacity: 0;   stroke-width: .3px; }
+  }
+  .bm-pulse { animation: bm-ring 2.2s ease-out infinite; }
+
+  /* Popup overlay */
+  .bm-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(26,32,64,.5);
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .bm-overlay.open {
+    display: flex;
+    animation: bm-fB .22s ease;
+  }
+  @keyframes bm-fB { from { opacity:0 } to { opacity:1 } }
+
+  .bm-card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    max-width: 440px;
+    width: 100%;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    animation: bm-sU .28s cubic-bezier(.34,1.56,.64,1);
+    max-height: 92vh;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+  }
+  @keyframes bm-sU {
+    from { transform: translateY(24px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+
+  /* Header popup — gradiente tricolore indiano animato */
+  .bm-card-top {
+    background: linear-gradient(90deg, #FF9933 0%, #138808 50%, #FF9933 100%);
+    background-size: 200% 100%;
+    animation: bm-flag 6s linear infinite;
+    padding: 1.4rem 1.5rem 1rem;
+    position: relative;
+  }
+  @keyframes bm-flag {
+    0%   { background-position: 0% 0%; }
+    50%  { background-position: 100% 0%; }
+    100% { background-position: 0% 0%; }
+  }
+  .bm-close {
+    position: absolute;
+    top: .88rem; right: .88rem;
+    background: rgba(255,255,255,.22);
+    border: none; border-radius: 50%;
+    width: 30px; height: 30px;
+    font-size: .9rem; color: #fff;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .15s;
+    font-family: var(--font-body);
+  }
+  .bm-close:hover { background: rgba(255,255,255,.42); }
+
+  .bm-c-flag  { font-size: 1.8rem; margin-bottom: .38rem; }
+  .bm-c-city  {
+    font-size: .68rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: rgba(255,255,255,.82); margin-bottom: .15rem;
+  }
+  .bm-c-title {
+    font-family: var(--font-display);
+    font-size: 1.22rem; font-weight: 900;
+    color: #fff; line-height: 1.2;
+    text-shadow: 0 1px 4px rgba(0,0,0,.2);
+  }
+
+  .bm-card-body { padding: 1.3rem 1.5rem 1.6rem; }
+
+  .bm-tags { display: flex; flex-wrap: wrap; gap: .33rem; margin-bottom: .9rem; }
+  .bm-tag  {
+    background: rgba(245,146,30,.1);
+    color: var(--orange);
+    font-size: .63rem; font-weight: 700;
+    padding: .18rem .54rem; border-radius: 50px;
+  }
+  .bm-text {
+    font-size: .87rem; line-height: 1.75;
+    color: var(--text-light); margin-bottom: 1rem;
+  }
+  .bm-stats { display: flex; gap: .65rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
+  .bm-stat  {
+    background: var(--bg-warm);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: .5rem .75rem;
+    flex: 1; min-width: 70px; text-align: center;
+  }
+  .bm-stat-n {
+    font-family: var(--font-display);
+    font-size: 1.28rem; font-weight: 900;
+    color: var(--orange); display: block;
+  }
+  .bm-stat-l {
+    font-size: .63rem; color: var(--text-light);
+    font-weight: 600; text-transform: uppercase; letter-spacing: .04em;
+  }
+  .bm-popup-link {
+    display: inline-flex; align-items: center; gap: .4rem;
+    background: var(--orange); color: #fff;
+    font-size: .85rem; font-weight: 700;
+    padding: .65rem 1.3rem; border-radius: 50px;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(245,146,30,.35);
+    transition: background .18s, transform .12s;
+    font-family: var(--font-body);
+  }
+  .bm-popup-link:hover {
+    background: #D97F10;
+    transform: translateY(-2px);
+  }
+
+  /* Responsive */
+  @media (max-width: 860px) {
+    .mappa-layout { grid-template-columns: 1fr; gap: 28px; }
+    .mappa-sidebar { flex-direction: row; flex-wrap: wrap; }
+    .mappa-leg-btn { width: calc(50% - 6px); }
+    .mappa-leg-arrow { display: none; }
+  }
+  @media (max-width: 520px) {
+    .mappa-leg-btn { width: 100%; }
+  }
+  </style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-contacts">
+      <a href="mailto:info@balome.org">info@balome.org</a>
+      <a href="tel:+393930181276"> 393 018 1276</a>
+    </div>
+    <div class="topbar-social">
+      <a href="https://www.facebook.com/info.balome/" target="_blank" aria-label="Facebook">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+<header class="header" id="header">
+  <div class="nav-inner">
+    <a href="#home" class="logo">
+      <div class="logo-icon">
+        <img src="logo.png" alt="Balomè logo" style="width:48px;height:48px;object-fit:contain;">
+      </div>
+      <div class="logo-text">
+        <span class="logo-name">Balomè</span>
+        <span class="logo-tagline">Associazione benefica</span>
+      </div>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav" id="nav">
+      <a href="#chi-siamo" class="nav-link">Chi siamo</a>
+      <a href="#missione" class="nav-link">Missione</a>
+      <a href="#progetti" class="nav-link">Progetti</a>
+      <a href="#cinque-per-mille" class="nav-link">5 per mille</a>
+      <a href="#donazioni" class="nav-link">Donazioni</a>
+      <a href="#news" class="nav-link">News</a>
+      <a href="#contatti" class="nav-link">Contatti</a>
+      <a href="#donazioni" class="btn-nav">Dona ora ♥</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-bg">
+    <div class="hero-shape hero-shape-1"></div>
+    <div class="hero-shape hero-shape-2"></div>
+    <div class="hero-shape hero-shape-3"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge reveal">💛 Associazione di Volontariato</div>
+    <h1 class="hero-title reveal delay-1">Tutti i bimbi<br>sono <em>bravi</em><br>e i grandi lo<br>devono sapere!</h1>
+    <p class="hero-subtitle reveal delay-2">Sosteniamo bambini in Italia e in India attraverso educazione, salute e protezione. Insieme possiamo fare la differenza.</p>
+    <div class="hero-actions reveal delay-3">
+      <a href="#cinque-per-mille" class="btn-primary">Dona il 5×mille</a>
+      <a href="#donazioni" class="btn-secondary">Fai una donazione</a>
+    </div>
+    <div class="hero-cf reveal delay-4">
+      <span>C.F. per il 5×mille:</span>
+      <strong>95254690167</strong>
+    </div>
+  </div>
+
+  <div class="hero-gallery reveal delay-2">
+    <div class="hero-gallery-viewport">
+      <div class="hero-gallery-track" id="heroTrack">
+        <div class="hg-slide" onclick="openLightbox('hero',0)">
+          <img src="img/balome_5.jpg" alt="Balomè 1" onerror="this.style.display='none'">
+          <div class="hg-empty"></div>
+          <div class="hg-overlay">🔍</div>
+        </div>
+        <div class="hg-slide" onclick="openLightbox('hero',1)">
+          <img src="img/balome_7.jpg" alt="Balomè 2" onerror="this.style.display='none'">
+          <div class="hg-empty"></div>
+          <div class="hg-overlay">🔍</div>
+        </div>
+        <div class="hg-slide" onclick="openLightbox('hero',2)">
+          <img src="img/balome_6.jpg" alt="Balomè 3" onerror="this.style.display='none'">
+          <div class="hg-empty"></div>
+          <div class="hg-overlay">🔍</div>
+        </div>
+      </div>
+    </div>
+    <div class="hg-controls">
+      <button class="hg-btn hg-prev" id="heroPrev" aria-label="Precedente">‹</button>
+      <div class="hg-dots" id="heroDots"></div>
+      <button class="hg-btn hg-next" id="heroNext" aria-label="Successiva">›</button>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-dot"></div>
+    <span>Scorri per scoprire</span>
+  </div>
+</section>
+
+<section class="stats-band">
+  <div class="stats-inner">
+    <div class="stat-item reveal"><div class="stat-number" data-count="80">0</div><div class="stat-label">Bambini aiutati</div></div>
+    <div class="stat-item reveal delay-1"><div class="stat-number" data-count="2">0</div><div class="stat-label">Paesi d'intervento</div></div>
+    <div class="stat-item reveal delay-2"><div class="stat-number" data-count="4">0</div><div class="stat-label">Anni di attività</div></div>
+    <div class="stat-item reveal delay-3"><div class="stat-number" data-count="4">0</div><div class="stat-label">Volontari attivi</div></div>
+  </div>
+</section>
+
+<section class="section chi-siamo" id="chi-siamo">
+  <div class="container">
+    <div class="section-grid">
+        
+      <div class="hero-gallery reveal delay-2">
+    <div class="section-visual reveal">
+  <div class="cs-gallery">
+    <div class="cs-gallery-viewport">
+      <div class="cs-gallery-track" id="chiSiamoTrack">
+        <div class="hg-slide" onclick="openLightbox('chisiamo',0)">
+          <img src="img/nascita_associazione_balome.jpg" alt="Chi siamo 1" onerror="this.style.display='none'">
+          <div class="hg-overlay">🔍</div>
+        </div>
+        <div class="hg-slide" onclick="openLightbox('chisiamo',1)">
+          <img src="img/Famiglia-Di-Monte-cofondatori.jpg" alt="Chi siamo 2" onerror="this.style.display='none'">
+          <div class="hg-overlay">🔍</div>
+        </div>
+        <div class="hg-slide" onclick="openLightbox('chisiamo',2)">
+          <img src="img/balome_1.jpg" alt="Chi siamo 3" onerror="this.style.display='none'">
+          <div class="hg-overlay">🔍</div>
+        </div>
+        <div class="hg-slide" onclick="openLightbox('chisiamo',3)">
+          <img src="img/balome_2.jpg" alt="Chi siamo 4" onerror="this.style.display='none'">
+          <div class="hg-overlay">🔍</div>
+        </div>
+        <div class="hg-slide" onclick="openLightbox('chisiamo',4)">
+          <img src="img/balome_4.jpg" alt="Chi siamo 5" onerror="this.style.display='none'">
+          <div class="hg-empty"><span></span></div>
+          <div class="hg-overlay">🔍</div>
+        </div>
+      </div>
+    </div>
+    <div class="hg-controls">
+      <button class="hg-btn hg-prev" id="chiSiamoPrev" aria-label="Precedente">‹</button>
+      <div class="hg-dots" id="chiSiamoDots"></div>
+      <button class="hg-btn hg-next" id="chiSiamoNext" aria-label="Successiva">›</button>
+    </div>
+  </div>
+</div>
+    
+  </div>
+
+      <div class="section-text reveal delay-1">
+        <div class="section-label">Chi siamo</div>
+        <h2><strong>Balomè</strong> nasce da un incontro che ha cambiato per sempre la nostra vita.</h2>
+        <p>Tutto ha avuto inizio a Shishu Bhavan, uno degli orfanotrofi delle Missionarie della Carità di Madre Teresa a Calcutta, in India, dove abbiamo incontrato nostra figlia.<br>
+        La sua prima parola pronunciata "Bhalo mey" che significa "brava bambina" è diventata il nome della nostra associazione. Ma soprattutto è diventata una promessa: non dimenticare mai i bambini lasciati soli.
+        Da quel giorno abbiamo sentito il bisogno di trasformare la gratitudine e l'amore ricevuti in qualcosa di concreto per tanti altri bambini vulnerabili, affinché nessuno venga lasciato indietro.<br>
+        Il nostro motto è: <em>"Tutti i bimbi sono bravi e i grandi lo devono sapere!"</em></p>
+        <div class="values-list">
+          <div class="value-item"><span class="value-icon">💛</span><span>Trasparenza e onestà nella gestione dei fondi</span></div>
+          <div class="value-item"><span class="value-icon">🤝</span><span>Coinvolgimento diretto delle comunità locali</span></div>
+          <div class="value-item"><span class="value-icon">🌱</span><span>Interventi sostenibili e duraturi nel tempo</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section missione" id="missione">
+  <div class="mission-bg-pattern"></div>
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">La nostra missione</div>
+      <h2>Cosa facciamo ogni giorno</h2>
+      <p class="section-intro">Prenderci cura dei bambini più fragili, offrendo sostegno concreto e opportunità di futuro.<br>
+Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto d'amore possa lasciare un segno immenso.</p>
+    </div>
+    <div class="mission-cards">
+      <div class="mission-card reveal"><div class="mission-icon">📖</div><h3>Accoglienza e Sostegno all'Infanzia</h3><p>Sosteniamo bambini abbandonati accolti negli orfanotrofi e nelle missioni in India, contribuendo ai bisogni essenziali: cibo, cure mediche, istruzione e protezione.</p></div>
+      <div class="mission-card reveal delay-1"><div class="mission-icon">🏥</div><h3>Educazione e Crescita</h3><p>Crediamo che la scuola e l'educazione siano strumenti fondamentali per costruire libertà, dignità e futuro.</p></div>
+      <div class="mission-card reveal delay-2"><div class="mission-icon">🛡️</div><h3>Aiuto alle Missioni Locali</h3><p>Collaboriamo con le realtà che operano quotidianamente sul territorio indiano, sostenendo progetti concreti dedicati all'infanzia.</p></div>
+      <div class="mission-card reveal delay-3"><div class="mission-icon">🎨</div><h3>Diffondere Solidarietà</h3><p>Promuoviamo una cultura dell'accoglienza e della responsabilità verso i più piccoli, coinvolgendo famiglie, volontari e sostenitori.</p></div>
+    </div>
+  </div>
+</section>
+    
+    
+
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SEZIONE MAPPA — tra #progetti e #cinque-per-mille
+═══════════════════════════════════════════════════════════ -->
+<section class="section dove-operiamo" id="dove-operiamo">
+  <div class="mission-bg-pattern"></div>
+  <div class="container">
+
+    <div class="section-header reveal">
+      <div class="section-label">🇮🇳 Dove operiamo</div>
+      <h2>I nostri progetti in India</h2>
+      <p class="section-intro">Dalla pianura del Gange fino alle coste del Kerala.<br>
+      Clicca su un pin o su un progetto della lista per saperne di più.</p>
+    </div>
+
+    <div class="mappa-layout reveal delay-1">
+
+      <!-- Sidebar: pulsanti legenda -->
+      <div class="mappa-sidebar">
+        <button class="mappa-leg-btn" onclick="bmOp('deepashram')">
+          <div class="mappa-leg-dot"></div>
+          <div class="mappa-leg-info">
+            <span class="mappa-leg-name">🏠 Deepashram</span>
+            <span class="mappa-leg-city">Gurgaon – Delhi NCR</span>
+          </div>
+          <span class="mappa-leg-arrow">→</span>
+        </button>
+        <button class="mappa-leg-btn" onclick="bmOp('calcutta')">
+          <div class="mappa-leg-dot"></div>
+          <div class="mappa-leg-info">
+            <span class="mappa-leg-name">🌸 Calcutta</span>
+            <span class="mappa-leg-city">Bengala Occidentale</span>
+          </div>
+          <span class="mappa-leg-arrow">→</span>
+        </button>
+        <button class="mappa-leg-btn" onclick="bmOp('karunanjali')">
+          <div class="mappa-leg-dot"></div>
+          <div class="mappa-leg-info">
+            <span class="mappa-leg-name">📚 Karunanjali School</span>
+            <span class="mappa-leg-city">Maharashtra</span>
+          </div>
+          <span class="mappa-leg-arrow">→</span>
+        </button>
+        <button class="mappa-leg-btn" onclick="bmOp('anandasharam')">
+          <div class="mappa-leg-dot"></div>
+          <div class="mappa-leg-info">
+            <span class="mappa-leg-name">🌱 Anandasharam</span>
+            <span class="mappa-leg-city">India meridionale, Kerala</span>
+          </div>
+          <span class="mappa-leg-arrow">→</span>
+        </button>
+      </div>
+
+      <!-- SVG mappa -->
+      <div class="mappa-svg-container">
+        <svg id="bm-map-svg" aria-label="Mappa Asia meridionale con i progetti Balomè"></svg>
+      </div>
+
+    </div> 
+      
+      
+  </div>
+</section>
+
+<!-- POPUP MAPPA -->
+<div class="bm-overlay" id="bm-ov" role="dialog" aria-modal="true" aria-labelledby="bm-cTitle">
+  <div class="bm-card">
+    <div class="bm-card-top">
+      <button class="bm-close" onclick="bmCl()" aria-label="Chiudi">✕</button>
+      <div class="bm-c-flag"  id="bm-cFlag"></div>
+      <div class="bm-c-city"  id="bm-cCity"></div>
+      <div class="bm-c-title" id="bm-cTitle"></div>
+    </div>
+    <div class="bm-card-body">
+      <div class="bm-tags"  id="bm-cTags"></div>
+      <div class="bm-text"  id="bm-cText"></div>
+      <div class="bm-stats" id="bm-cStats"></div>
+      <a class="bm-popup-link" id="bm-cLink" href="#progetti">Vai al progetto ↑</a>
+    </div>
+  </div>
+</div>
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+    <section class="section progetti" id="progetti">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">I nostri progetti</div>
+      <h2>Passati e futuri</h2>
+    </div>
+    <div class="progetti-grid">
+      <div class="progetto-card india reveal">
+        <div class="progetto-flag">🇮🇳</div>
+        <div class="progetto-content">
+          <h3>Progetto <strong>Deepashram</strong></h3>
+          <p>Il Progetto "Deepashram" in Rajiv Nagar Gurgaon a pochi chilometri da Delhi, in una casa fondata da Madre Teresa di Calcutta oggi gestita dai Missionari della Carità che ospita ragazzi orfani, abbandonati perchè affetti da diverse patologie: ci sono bambini ciechi, muti, sordi, spastici, poliomielitici e disabili mentali. A Deepashram si sentono a casa, amati e accuditi con amore e tenerezza. Grazie al Vostro sostegno economico abbiamo garantito l'accesso alla fisioterapia, e all'istruzione per i 39 ragazzi accolti dai Missionari che quotidianamente se ne prendono cura.</p>
+          <ul class="progetto-points">
+            <li>ragazzi orfani</li>
+            <li>fisioterapia</li>
+            <li>istruzione</li>
+            <li>39 ragazzi</li>
+          </ul>
+          <div class="progetto-gallery" data-gallery="deepashram">
+            <div class="pg-main" onclick="openLightbox('deepashram',0)">
+              <img src="img/deepashram_1.jpg" alt="Deepashram" onerror="this.style.display='none'">
+              <div class="pg-empty"><span></span></div>
+              <div class="pg-overlay">🔍 Galleria</div>
+            </div>
+            <div class="pg-thumbs">
+              <div class="pg-thumb" onclick="openLightbox('deepashram',1)">
+                <img src="img/deepashram_2.jpg" alt="Deepashram 2" onerror="this.style.display='none'">
+                <div class="pg-empty"></div>
+              </div>
+              <div class="pg-thumb" onclick="openLightbox('deepashram',2)">
+                <img src="img/deepashram_3.jpg" alt="Deepashram 3" onerror="this.style.display='none'">
+                <div class="pg-empty"></div>
+              </div>
+              <div class="pg-thumb pg-thumb-more" onclick="openLightbox('deepashram',3)">
+                <img src="img/deepashram_4.jpg" alt="Deepashram 4" onerror="this.style.display='none'">
+                <div class="pg-empty"></div>
+                <div class="pg-more-label">+foto</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="progetto-card india reveal delay-1">
+        <div class="progetto-flag">🇮🇳</div>
+        <div class="progetto-content">
+          <h3>Progetto <strong>Karunanjali School</strong></h3>
+          <p>Il progetto "Karunanjali School" è gestito dalle Suore di Sant'Anna per i bambini con problemi mentali, che non dispongono di strutture di formazione, in Talagaon Dabhade, nelle zone rurali dello Stato del Maharashtra. Le suore, girando per i villaggi, si sono imbattute in un gran numero di bambini con problemi mentali, tenuti a casa senza alcuna istruzione o formazione. Grazie anche al nostro contributo, questi bambini oggi hanno una scuola dove possono essere ospitati in forma residenziale o solo nelle ore diurne. Attualmente sono 33 i bambini accolti e 13 quelli che frequentano il centro diurno.</p>
+          <ul class="progetto-points">
+            <li>bambini con problemi mentali</li>
+            <li>Scuola residenziale e diurna</li>
+            <li>33 + 13 bambini</li>
+            <li>donare speranza e felicità</li>
+          </ul>
+          <div class="progetto-gallery" data-gallery="karunanjali">
+            <div class="pg-main" onclick="openLightbox('karunanjali',0)">
+              <img src="img/karunanjali-1.jpg" alt="Karunanjali" onerror="this.style.display='none'">
+              <div class="pg-empty"></div>
+              <div class="pg-overlay">🔍 Galleria</div>
+            </div>
+            <div class="pg-thumbs">
+              <div class="pg-thumb" onclick="openLightbox('karunanjali',1)">
+                <img src="img/karunanjali-2.jpg" alt="Karunanjali 2" onerror="this.style.display='none'">
+              </div>
+              <div class="pg-thumb" onclick="openLightbox('karunanjali',2)">
+                <img src="img/karunanjali-3.jpg" alt="Karunanjali 3" onerror="this.style.display='none'">
+              </div>
+              <div class="pg-thumb pg-thumb-more" onclick="openLightbox('karunanjali',3)">
+                <img src="img/karunanjali-4.jpg" alt="Karunanjali 4" onerror="this.style.display='none'">
+                <div class="pg-more-label">+foto</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="progetto-card india reveal delay-3">
+        <div class="progetto-flag">🇮🇳</div>
+        <div class="progetto-content">
+          <h3>Progetto <strong>Anandasharam</strong></h3>
+          <p>In India lavoriamo in contesti di estrema povertà dove l'accesso alle cure mediche e all'istruzione è ancora un privilegio. I nostri volontari operano sul campo per garantire un futuro ai bambini più vulnerabili.</p>
+          <ul class="progetto-points">
+            <li>Costruzione e supporto di scuole rurali</li>
+            <li>Programmi nutrizionali e sanitari</li>
+            <li>Formazione per insegnanti locali</li>
+            <li>Sostegno a distanza per bambini</li>
+          </ul>
+          <div class="progetto-gallery" data-gallery="anandasharam">
+            <div class="pg-main" onclick="openLightbox('anandasharam',0)">
+              <img src="img/Anandashram_1.jpg" alt="Anandasharam" onerror="this.style.display='none'">
+              <div class="pg-empty"></div>
+              <div class="pg-overlay">🔍 Galleria</div>
+            </div>
+            <div class="pg-thumbs">
+              <div class="pg-thumb" onclick="openLightbox('anandasharam',1)">
+                <img src="img/Anandashram_2.jpg" alt="Anandasharam 2" onerror="this.style.display='none'">
+                <div class="pg-empty"></div>
+              </div>
+              <div class="pg-thumb" onclick="openLightbox('anandasharam',2)">
+                <img src="img/Anandashram_3.jpg" alt="Anandasharam 3" onerror="this.style.display='none'">
+                <div class="pg-empty"></div>
+              </div>
+              <div class="pg-thumb pg-thumb-more" onclick="openLightbox('anandasharam',3)">
+                <img src="img/Anandashram_4.jpg" alt="Anandasharam 4" onerror="this.style.display='none'">
+                <div class="pg-empty"></div>
+                <div class="pg-more-label">+foto</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="progetto-card india reveal delay-4">
+        <div class="progetto-flag">🇮🇳</div>
+        <div class="progetto-content">
+          <h3>Progetto <strong>Calcutta</strong></h3>
+          <div class="progetto-gallery" data-gallery="calcutta">
+            <div class="pg-main" onclick="openLightbox('calcutta',0)">
+              <img src="img/calcutta-1.jpg" alt="Calcutta" onerror="this.style.display='none'">
+              <div class="pg-overlay">🔍 Galleria</div>
+            </div>
+            <div class="pg-thumbs">
+              <div class="pg-thumb" onclick="openLightbox('calcutta',1)">
+                <img src="img/calcutta-2.jpg" alt="Calcutta 2" onerror="this.style.display='none'">
+              </div>
+              <div class="pg-thumb" onclick="openLightbox('calcutta',2)">
+                <img src="img/calcutta-3.jpg" alt="Calcutta 3" onerror="this.style.display='none'">
+              </div>
+              <div class="pg-thumb pg-thumb-more" onclick="openLightbox('calcutta',3)">
+                <img src="img/calcutta-4.jpg" alt="Calcutta 4" onerror="this.style.display='none'">
+                <div class="pg-more-label">+foto</div>
+              </div>
+            </div>
+          </div>
+          <p>In India lavoriamo in contesti di estrema povertà dove l'accesso alle cure mediche e all'istruzione è ancora un privilegio. I nostri volontari operano sul campo per garantire un futuro ai bambini più vulnerabili.</p>
+          <ul class="progetto-points">
+            <li>Costruzione e supporto di scuole rurali</li>
+            <li>Programmi nutrizionali e sanitari</li>
+            <li>Formazione per insegnanti locali</li>
+            <li>Sostegno a distanza per bambini</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+    
+<section class="section cinque-per-mille" id="cinque-per-mille">
+  <div class="cinque-bg"><div class="cinque-shape"></div></div>
+  <div class="container">
+    <div class="cinque-inner">
+      <div class="cinque-left reveal">
+        <div class="section-label light">Costa zero, vale tanto</div>
+        <h2>Dona il tuo<br><span class="highlight-big">5 × mille</span></h2>
+        <p>Il 5 per mille è una parte dell'IRPEF che puoi destinare a noi <strong>senza alcun costo aggiuntivo</strong>. Non è una tassa in più: è una quota delle tasse che già paghi che puoi scegliere di indirizzare a chi fa del bene.</p>
+        <p>Basta una firma nella tua dichiarazione dei redditi (730, modello Redditi PF) e indicare il nostro codice fiscale.</p>
+        <div class="cf-box">
+          <div class="cf-label">Codice Fiscale Balomè</div>
+          <div class="cf-number">9 5 2 5 4 6 9 0 1 6 7</div>
+          <button class="cf-copy" onclick="copyCF()">📋 Copia CF</button>
+        </div>
+      </div>
+      <div class="cinque-steps reveal delay-1">
+        <h3>Come fare</h3>
+        <div class="step"><div class="step-n">1</div><div class="step-text"><strong>Compila la dichiarazione dei redditi</strong><span>730, Modello Redditi o tramite il tuo datore di lavoro (CU)</span></div></div>
+        <div class="step"><div class="step-n">2</div><div class="step-text"><strong>Trova la sezione "5 per mille"</strong><span>Nella casella "Sostegno del volontariato e delle altre organizzazioni"</span></div></div>
+        <div class="step"><div class="step-n">3</div><div class="step-text"><strong>Firma e inserisci il CF</strong><span>Firma nella casella e scrivi il nostro CF: <strong>95254690167</strong></span></div></div>
+        <div class="step"><div class="step-n">4</div><div class="step-text"><strong>Hai fatto la differenza!</strong><span>Gratis per te, prezioso per i bambini che aiutiamo ogni giorno</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section donazioni" id="donazioni">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Supportaci</div>
+      <h2>Fai una donazione</h2>
+      <p class="section-intro">Ogni contributo, piccolo o grande, si trasforma in istruzione, salute e sorrisi per un bambino che ne ha bisogno.</p>
+    </div>
+    <div class="donazioni-grid">
+      <div class="donazione-card paypal reveal">
+        <div class="donazione-icon">🅿️</div>
+        <h3>Dona con PayPal</h3>
+        <p>Veloce, sicuro e immediato. Puoi donare con carta di credito o conto PayPal.</p>
+        <div class="importi">
+          <button class="importo-btn" onclick="setAmount(10)">€10</button>
+          <button class="importo-btn" onclick="setAmount(25)">€25</button>
+          <button class="importo-btn active" onclick="setAmount(50)">€50</button>
+          <button class="importo-btn" onclick="setAmount(100)">€100</button>
+        </div>
+        <div class="custom-amount">
+          <span>€</span>
+          <input type="number" id="paypalAmount" value="50" min="1" placeholder="Altro importo">
+        </div>
+        <a id="paypalBtn" href="https://www.paypal.com/donate/?business=info.balome@gmail.com&currency_code=EUR&amount=50" target="_blank" class="btn-donate paypal-btn">💛 Dona con PayPal</a>
+        <p class="donation-note">Puoi donare anche senza avere un conto PayPal, tramite carta di credito.</p>
+      </div>
+      <div class="donazione-card bonifico reveal delay-1">
+        <div class="donazione-icon">🏦</div>
+        <h3>Bonifico Bancario</h3>
+        <p>Trasferisci direttamente sul nostro conto corrente. Detraibile fiscalmente.</p>
+        <div class="bonifico-details">
+          <div class="bonifico-row"><span class="bonifico-label">Intestato a</span><span class="bonifico-value">Associazione Balomè</span></div>
+          <div class="bonifico-row"><span class="bonifico-label">IBAN</span><span class="bonifico-value iban" id="ibanValue">IT45P0538711109000003727955</span></div>
+          <div class="bonifico-row"><span class="bonifico-label">Banca</span><span class="bonifico-value">BPER – Filiale di Bergamo Loreto</span></div>
+          <div class="bonifico-row"><span class="bonifico-label">Causale</span><span class="bonifico-value">Donazione libera Balomè</span></div>
+          <div class="bonifico-row"><span class="bonifico-label">C.F.</span><span class="bonifico-value">95254690167</span></div>
+        </div>
+        <div class="detraibile-badge">✅ Detraibile al 26% dall'IRPEF (persone fisiche)</div>
+        <button class="btn-donate bonifico-btn" onclick="copyIBAN()" style="border:none;cursor:pointer;">📋 Copia IBAN</button>
+        <p class="donation-note">Per ricevuta fiscale scrivici a <a href="mailto:info@balome.org">info@balome.org</a></p>
+      </div>
+      <div class="donazione-card impatto reveal delay-2">
+        <div class="donazione-icon">💡</div>
+        <h3>Con la tua donazione puoi...</h3>
+        <div class="impatto-list">
+          <div class="impatto-item"><span class="impatto-euro">€10</span><span>Materiale scolastico per un mese</span></div>
+          <div class="impatto-item"><span class="impatto-euro">€25</span><span>Pasti per una settimana</span></div>
+          <div class="impatto-item"><span class="impatto-euro">€50</span><span>Visita medica + farmaci</span></div>
+          <div class="impatto-item"><span class="impatto-euro">€100</span><span>Un mese di scuola per un bambino</span></div>
+          <div class="impatto-item"><span class="impatto-euro">€500</span><span>Borsa di studio semestrale</span></div>
+        </div>
+        <a href="mailto:info@balome.org" class="btn-secondary-sm">Hai domande? Scrivici</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section news-social" id="news">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Resta aggiornato</div>
+      <h2>Le nostre ultime notizie</h2>
+      <p class="section-intro">Seguici su Facebook per restare aggiornato su tutte le nostre attività, eventi e storie dei bambini che aiutiamo.</p>
+    </div>
+    <div class="news-layout">
+      <div class="fb-feed-container reveal">
+        <div class="fb-feed-header">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="#1877F2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          <span>Balomè su Facebook</span>
+          <a href="https://www.facebook.com/info.balome/" target="_blank" class="fb-follow-btn">Seguici →</a>
+        </div>
+        <div class="fb-page-wrapper">
+          <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Finfo.balome%2F&tabs=timeline&width=500&height=600&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="500" height="600" style="border:none;overflow:hidden;max-width:100%;" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" title="Facebook Balomè"></iframe>
+        </div>
+        <div class="fb-fallback"><p>Non riesci a vedere il feed? <a href="https://www.facebook.com/info.balome/" target="_blank">Visita la nostra pagina Facebook</a></p></div>
+      </div>
+      <div >
+        <!-- NEWS:START -->
+       
+        
+    <?php
+/**
+ * notizie.php — Balomè
+ * Ad ogni visita rigenera articoli.json e mostra le card degli articoli.
+ * Nessun intervento manuale necessario dopo aver caricato un HTML.
+ */
+
+// Rigenera il JSON automaticamente
+$articoli = [];
+require_once __DIR__ . '/genera-json.php';
+// $articoli è già ordinato per data decrescente
+
+// Formattazione data in italiano
+function dataItaliana(string $iso): string {
+  $mesi = ['','Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno',
+           'Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+  [$y, $m, $d] = explode('-', $iso);
+  return (int)$d . ' ' . $mesi[(int)$m] . ' ' . $y;
+}
+
+function meseAnno(string $iso): string {
+  $mesi = ['','Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno',
+           'Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+  [$y, $m] = explode('-', $iso);
+  return $mesi[(int)$m] . ' ' . $y;
+}
+
+// Filtro attivo da querystring
+$filtCat  = $_GET['categoria'] ?? '';
+$filtAnno = $_GET['anno'] ?? '';
+$filtMese = $_GET['mese'] ?? '';
+$search   = trim($_GET['q'] ?? '');
+
+// Costruisci elenco categorie e archivio mesi
+$categorie = [];
+$archivio  = []; // ['2024-12' => ['label'=>'Dicembre 2024', 'count'=>3]]
+
+foreach ($articoli as $a) {
+  $cat = $a['categoria'] ?? 'Notizie';
+  $categorie[$cat] = ($categorie[$cat] ?? 0) + 1;
+
+  $ym = substr($a['data'], 0, 7); // YYYY-MM
+  if (!isset($archivio[$ym])) {
+    $archivio[$ym] = ['label' => meseAnno($a['data'] . '-01'), 'count' => 0];
+  }
+  $archivio[$ym]['count']++;
+}
+arsort($categorie);
+
+// Applica filtri
+$articoliFiltrati = array_filter($articoli, function($a) use ($filtCat, $filtAnno, $filtMese, $search) {
+  if ($filtCat && ($a['categoria'] ?? '') !== $filtCat) return false;
+  if ($filtAnno && substr($a['data'], 0, 4) !== $filtAnno) return false;
+  if ($filtMese && substr($a['data'], 5, 2) !== $filtMese) return false;
+  if ($search) {
+    $hay = strtolower($a['titolo'] . ' ' . $a['estratto']);
+    if (strpos($hay, strtolower($search)) === false) return false;
+  }
+  return true;
+});
+$articoliFiltrati = array_values($articoliFiltrati);
+
+// Label filtro attivo
+$filtroLabel = '';
+if ($filtCat)  $filtroLabel = $filtCat;
+if ($filtAnno && !$filtMese) $filtroLabel = $filtAnno;
+if ($filtMese && $filtAnno)  $filtroLabel = $archivio["$filtAnno-$filtMese"]['label'] ?? '';
+
+// URL builder per sidebar links
+function buildUrl(array $params): string {
+  $base = array_filter($params, fn($v) => $v !== '');
+  return 'blog.php' . ($base ? '?' . http_build_query($base) : '');
+}
+?>
+
+  
+  <style>
+    /* ── HERO ── */
+    .blog-hero {
+      background: linear-gradient(135deg, #1a1a2e 0%, #2d1b69 100%);
+      padding: 120px clamp(1rem,5vw,3rem) 60px;
+      text-align: center;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .blog-hero::before {
+      content:'';
+      position:absolute;inset:0;
+      background-image:radial-gradient(circle,rgba(245,146,30,.08) 1px,transparent 1px);
+      background-size:28px 28px;
+      pointer-events:none;
+    }
+    .blog-hero .tag {
+      display:inline-block;
+      background:var(--orange,#F5921E);color:#fff;
+      font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+      padding:.3em 1em;border-radius:100px;margin-bottom:1.25rem;
+      position:relative;z-index:1;
+    }
+    .blog-hero h1 {
+      font-size:clamp(2rem,5vw,3.5rem);font-weight:900;
+      margin:0 0 1rem;line-height:1.15;position:relative;z-index:1;
+    }
+    .blog-hero p { font-size:1.05rem;opacity:.75;max-width:560px;margin:0 auto;position:relative;z-index:1; }
+
+    /* ── SEARCH BAR ── */
+    .blog-search-wrap {
+      background:#fff;
+      border-bottom:1px solid #eee;
+      padding:16px clamp(1rem,5vw,3rem);
+      position:sticky;top:72px;z-index:100;
+      box-shadow:0 2px 12px rgba(0,0,0,.05);
+    }
+    .blog-search-form {
+      max-width:600px;margin:0 auto;
+      display:flex;gap:8px;
+    }
+    .blog-search-form input {
+      flex:1;padding:10px 18px;
+      border:2px solid #e0e8f0;border-radius:50px;
+      font-family:inherit;font-size:.95rem;outline:none;
+      transition:border-color .2s;
+    }
+    .blog-search-form input:focus { border-color:var(--orange,#F5921E); }
+    .blog-search-form button {
+      background:var(--orange,#F5921E);color:#fff;border:none;
+      padding:10px 22px;border-radius:50px;
+      font-family:inherit;font-weight:700;font-size:.9rem;cursor:pointer;
+      transition:background .2s;
+    }
+    .blog-search-form button:hover { background:#d97f10; }
+    .blog-search-form a.reset {
+      display:flex;align-items:center;padding:10px 16px;
+      color:#888;font-size:.85rem;text-decoration:none;border-radius:50px;
+      border:2px solid #e0e8f0;transition:all .2s;white-space:nowrap;
+    }
+    .blog-search-form a.reset:hover { border-color:var(--orange,#F5921E);color:var(--orange,#F5921E); }
+
+    /* ── LAYOUT ── */
+    .blog-wrap {
+      max-width:1200px;
+      margin:0 auto;
+      padding:clamp(2rem,5vw,4rem) clamp(1rem,5vw,2rem);
+      display:grid;
+      grid-template-columns:1fr 300px;
+      gap:3rem;
+      align-items:start;
+    }
+    @media(max-width:900px){
+      .blog-wrap { grid-template-columns:1fr; }
+      .blog-sidebar { order:-1; }
+    }
+
+    /* ── FILTRO ATTIVO ── */
+    .filtro-attivo {
+      display:inline-flex;align-items:center;gap:8px;
+      background:#fff8ec;border:1.5px solid #fdd;
+      border-color:rgba(245,146,30,.3);
+      color:var(--orange,#F5921E);
+      font-size:.85rem;font-weight:600;
+      padding:8px 16px;border-radius:50px;
+      margin-bottom:1.5rem;
+    }
+    .filtro-attivo a { color:inherit;margin-left:4px;text-decoration:none;font-size:1rem; }
+    .filtro-attivo a:hover { color:#c0392b; }
+
+    .results-count {
+      font-size:.85rem;color:#888;margin-bottom:1.5rem;
+    }
+
+    /* ── CARD LIST ── */
+    .blog-list { display:flex;flex-direction:column;gap:1.75rem; }
+
+    .blog-card {
+      background:#fff;border-radius:20px;overflow:hidden;
+      box-shadow:0 4px 24px rgba(0,0,0,.07);
+      display:grid;grid-template-columns:220px 1fr;
+      transition:transform .25s,box-shadow .25s;
+      text-decoration:none;color:inherit;
+    }
+    .blog-card:hover { transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.13); }
+    @media(max-width:600px){ .blog-card { grid-template-columns:1fr; } }
+
+    .blog-card-img {
+      width:100%;height:100%;min-height:160px;
+      object-fit:cover;display:block;background:#f3f4f6;
+    }
+    .blog-card-img-ph {
+      width:100%;min-height:160px;
+      background:linear-gradient(135deg,#fff8ec,#fef3c7);
+      display:flex;align-items:center;justify-content:center;
+      font-size:2.5rem;
+    }
+    .blog-card-body {
+      padding:1.5rem;display:flex;flex-direction:column;justify-content:space-between;
+    }
+    .blog-card-meta { display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:.6rem; }
+    .blog-card-data { font-size:.78rem;color:#999;font-weight:500; }
+    .blog-card-tag {
+      font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+      color:var(--orange,#F5921E);background:#fff8ec;
+      padding:.2em .7em;border-radius:100px;
+      text-decoration:none;transition:background .15s;
+    }
+    .blog-card-tag:hover { background:#fde68a; }
+    .blog-card-body h3 {
+      font-size:1.1rem;font-weight:700;line-height:1.35;
+      margin:0 0 .6rem;color:#1a1a2e;
+    }
+    .blog-card-body p { font-size:.9rem;line-height:1.65;color:#666;flex:1;margin:0 0 1rem; }
+    .blog-card-link {
+      font-size:.88rem;font-weight:600;color:var(--orange,#F5921E);
+      display:inline-flex;align-items:center;gap:.35rem;transition:gap .2s;
+    }
+    .blog-card:hover .blog-card-link { gap:.6rem; }
+
+    /* ── EMPTY ── */
+    .blog-empty {
+      text-align:center;padding:4rem 2rem;color:#aaa;
+      background:#fff;border-radius:20px;
+      box-shadow:0 4px 24px rgba(0,0,0,.05);
+    }
+    .blog-empty .emoji { font-size:3rem;display:block;margin-bottom:1rem; }
+
+    /* ── SIDEBAR ── */
+    .blog-sidebar { position:sticky;top:140px; }
+
+    .sidebar-widget {
+      background:#fff;border-radius:18px;
+      box-shadow:0 4px 24px rgba(0,0,0,.07);
+      padding:1.5rem;margin-bottom:1.5rem;overflow:hidden;
+    }
+    .sidebar-widget h4 {
+      font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+      color:var(--orange,#F5921E);margin:0 0 1rem;
+      padding-bottom:.75rem;border-bottom:2px solid #fff8ec;
+    }
+
+    /* Categorie */
+    .cat-list { list-style:none;padding:0;margin:0; }
+    .cat-list li { margin-bottom:.35rem; }
+    .cat-list a {
+      display:flex;justify-content:space-between;align-items:center;
+      padding:.45rem .75rem;border-radius:10px;
+      font-size:.9rem;color:#444;text-decoration:none;
+      transition:background .15s,color .15s;
+    }
+    .cat-list a:hover,
+    .cat-list a.active {
+      background:var(--orange,#F5921E);color:#fff;
+    }
+    .cat-list a.active { font-weight:700; }
+    .cat-count {
+      font-size:.75rem;font-weight:700;
+      background:#f3f4f6;color:#888;
+      padding:2px 8px;border-radius:50px;
+      transition:background .15s,color .15s;
+    }
+    .cat-list a:hover .cat-count,
+    .cat-list a.active .cat-count {
+      background:rgba(255,255,255,.25);color:#fff;
+    }
+
+    /* Archivio */
+    .archivio-list { list-style:none;padding:0;margin:0; }
+    .archivio-anno { font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#bbb;margin:1rem 0 .4rem; }
+    .archivio-anno:first-child { margin-top:0; }
+    .archivio-list a {
+      display:flex;justify-content:space-between;align-items:center;
+      padding:.4rem .75rem;border-radius:10px;
+      font-size:.88rem;color:#444;text-decoration:none;
+      transition:background .15s,color .15s;
+    }
+    .archivio-list a:hover,
+    .archivio-list a.active {
+      background:var(--orange,#F5921E);color:#fff;
+    }
+    .archivio-count {
+      font-size:.72rem;font-weight:700;
+      background:#f3f4f6;color:#888;
+      padding:2px 7px;border-radius:50px;
+      transition:background .15s,color .15s;
+    }
+    .archivio-list a:hover .archivio-count,
+    .archivio-list a.active .archivio-count { background:rgba(255,255,255,.25);color:#fff; }
+
+    /* CTA sidebar */
+    .sidebar-cta {
+      background:linear-gradient(135deg,var(--dark,#148708),#0a5e04);
+      border-radius:18px;padding:1.5rem;text-align:center;color:#fff;
+    }
+    .sidebar-cta h4 { color:rgba(255,255,255,.7);border-bottom-color:rgba(255,255,255,.15); }
+    .sidebar-cta p { font-size:.88rem;line-height:1.55;margin:0 0 1rem;opacity:.85; }
+    .sidebar-cta a {
+      display:inline-block;background:#fff;color:var(--dark,#148708);
+      font-weight:700;font-size:.9rem;padding:.65rem 1.5rem;
+      border-radius:50px;text-decoration:none;transition:transform .2s,box-shadow .2s;
+    }
+    .sidebar-cta a:hover { transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.2); }
+  </style>
+
+
+
+
+  
+
+  
+  <!-- MAIN -->
+  <div class="blog-wrap">
+
+    <!-- ── ARTICOLI ── -->
+    <main>
+      <?php if ($filtroLabel || $search): ?>
+        <div class="filtro-attivo">
+          <?= $search ? "🔍 \"".htmlspecialchars($search)."\"" : "🏷 ".htmlspecialchars($filtroLabel) ?>
+          <a href="blog.php" title="Rimuovi filtro">✕</a>
+        </div>
+      <?php endif; ?>
+
+      <p class="results-count">
+        <?= count($articoliFiltrati) ?> articol<?= count($articoliFiltrati) === 1 ? 'o' : 'i' ?>
+        <?= (count($articoliFiltrati) < count($articoli)) ? ' (su ' . count($articoli) . ' totali)' : '' ?>
+      </p>
+
+      <?php if (empty($articoliFiltrati)): ?>
+        <div class="blog-empty">
+          <span class="emoji">📭</span>
+          <p><?= $search ? 'Nessun articolo trovato per <strong>'.htmlspecialchars($search).'</strong>.' : 'Nessun articolo in questa categoria.' ?></p>
+          <a href="blog.php" style="display:inline-block;margin-top:1rem;color:var(--orange,#F5921E);font-weight:600">← Vedi tutti</a>
+        </div>
+
+      <?php else: ?>
+        <div class="blog-list">
+          <?php foreach ($articoliFiltrati as $a):
+            $target  = !empty($a['esterno']) ? ' target="_blank" rel="noopener"' : '';
+            $dataStr = dataItaliana($a['data']);
+            $catUrl  = buildUrl(['categoria' => $a['categoria'] ?? '']);
+            [$anno, $mese] = explode('-', $a['data']);
+          ?>
+            <a class="blog-card" href="<?= htmlspecialchars($a['link']) ?>"<?= $target ?>>
+
+              <?php if (!empty($a['immagine'])): ?>
+                <img class="blog-card-img"
+                     src="<?= htmlspecialchars($a['immagine']) ?>"
+                     alt="<?= htmlspecialchars($a['titolo']) ?>"
+                     loading="lazy"
+                     onerror="this.outerHTML='<div class=\'blog-card-img-ph\'>📰</div>'">
+              <?php else: ?>
+                <div class="blog-card-img-ph">📰</div>
+              <?php endif; ?>
+
+              <div class="blog-card-body">
+                <div>
+                  <div class="blog-card-meta">
+                    <span class="blog-card-data">🗓 <?= $dataStr ?></span>
+                    <?php if (!empty($a['categoria'])): ?>
+                      <span class="blog-card-tag"><?= htmlspecialchars($a['categoria']) ?></span>
+                    <?php endif; ?>
+                  </div>
+                  <h3><?= htmlspecialchars($a['titolo']) ?></h3>
+                  <p><?= htmlspecialchars($a['estratto']) ?></p>
+                </div>
+                <span class="blog-card-link">Leggi l'articolo →</span>
+              </div>
+            </a>
+          <?php endforeach; ?>
+        </div>
+      <?php endif; ?>
+    </main>
+
+   
+
+
+
+     
+    
+
+
+  
+ 
+
+  
+    
+    
+    
+    
+    
+    
+      
+
+     
+
+    
+
+      <!-- NEWS:END -->
+      </div>   
+        
+        
+    </div>
+  </div>
+</section>
+
+<section class="section contatti" id="contatti">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Parliamo</div>
+      <h2>Contattaci</h2>
+      <p class="section-intro">Vuoi saperne di più, diventare volontario o semplicemente mandarci un messaggio di supporto? Siamo qui per te!</p>
+    </div>
+    <div class="contatti-grid">
+      <div class="contatti-info reveal">
+        <div class="contact-block"><div class="contact-icon">📧</div><div><strong>Email</strong><a href="mailto:info@balome.org">info@balome.org</a></div></div>
+        <div class="contact-block"><div class="contact-icon">📱</div><div><strong>Cellulare / WhatsApp</strong><a href="tel:+393930181276">+39 393 018 1276</a></div></div>
+        <div class="contact-block"><div class="contact-icon">📍</div><div><strong>Sede</strong><span>P.le Risorgimento n. 14<br>24128 Bergamo (BG)</span></div></div>
+        <div class="contact-block"><div class="contact-icon">👍</div><div><strong>Seguici su Facebook</strong><a href="https://www.facebook.com/info.balome/" target="_blank">facebook.com/info.balome</a></div></div>
+        <div class="contact-block"><div class="contact-icon">🏛</div><div><strong>Codice Fiscale</strong><span>95254690167</span></div></div>
+        <div class="volunteer-box"><h4>Vuoi diventare volontario?</h4><p>Cerchiamo persone di buona volontà che vogliano donare il loro tempo per i bambini. Scrivici e ti raccontiamo come partecipare!</p><a href="mailto:info@balome.org?subject=Voglio diventare volontario Balomè" class="btn-volunteer">✋ Mi offro volontario</a></div>
+      </div>
+      <div class="contatti-form reveal delay-1">
+        <form class="contact-form" id="contactForm" onsubmit="handleFormSubmit(event)">
+          <div class="form-group"><label for="nome">Nome e Cognome *</label><input type="text" id="nome" name="nome" required placeholder="Mario Rossi"></div>
+          <div class="form-group"><label for="email">Email *</label><input type="email" id="email" name="email" required placeholder="mario@email.com"></div>
+          <div class="form-group"><label for="telefono">Telefono</label><input type="tel" id="telefono" name="telefono" placeholder="+39 333 123 4567"></div>
+          <div class="form-group"><label for="oggetto">Oggetto *</label><select id="oggetto" name="oggetto" required><option value="">Seleziona...</option><option value="info-5permille">Informazioni 5 per mille</option><option value="donazione">Voglio fare una donazione</option><option value="volontario">Voglio fare il volontario</option><option value="progetti">Informazioni sui progetti</option><option value="altro">Altro</option></select></div>
+          <div class="form-group"><label for="messaggio">Messaggio *</label><textarea id="messaggio" name="messaggio" required rows="5" placeholder="Scrivi il tuo messaggio..."></textarea></div>
+          <div class="form-privacy"><input type="checkbox" id="privacy" name="privacy" required><label for="privacy">Ho letto e accetto la <a href="mailto:info@balome.org">privacy policy</a></label></div>
+          <button type="submit" class="btn-submit"><span class="btn-text">Invia il messaggio ✉</span></button>
+          <div class="form-success" id="formSuccess" style="display:none">🎉 Grazie! Il tuo messaggio è stato inviato. Ti risponderemo presto!</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-main">
+    <div class="footer-brand">
+      <div class="footer-logo"><img src="logo.png" alt="Balomè" style="width:50px;height:50px;object-fit:contain;filter:brightness(0) invert(1);"><span>Balomè</span></div>
+      <p>Tutti i bimbi sono bravi e i grandi lo devono sapere!</p>
+      <div class="footer-social"><a href="https://www.facebook.com/info.balome/" target="_blank"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a></div>
+    </div>
+    <div class="footer-links"><h4>Navigazione</h4><a href="#chi-siamo">Chi siamo</a><a href="#missione">Missione</a><a href="#progetti">Progetti</a><a href="#cinque-per-mille">5 per mille</a><a href="#donazioni">Donazioni</a><a href="notizie.php">News</a><a href="#contatti">Contatti</a></div>
+    <div class="footer-links"><h4>Come aiutare</h4><a href="#cinque-per-mille">Dona il 5 × mille</a><a href="#donazioni">Dona con PayPal</a><a href="#donazioni">Bonifico bancario</a><a href="mailto:info@balome.org?subject=Voglio diventare volontario">Diventa volontario</a></div>
+    <div class="footer-links"><h4>Trasparenza</h4><a href="docs/statuto.pdf" target="_blank"> Statuto</a><a href="docs/bilancio.pdf" target="_blank"> Bilancio</a></div>
+    <div class="footer-contacts"><h4>Contatti</h4><a href="mailto:info@balome.org">info@balome.org</a><a href="tel:+393930181276">+39 393 018 1276</a><p style="font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.6;margin-top:4px;">P.le Risorgimento n. 14<br>24128 Bergamo (BG)</p><p class="footer-cf">C.F. 95254690167</p><p class="footer-cf">IBAN: IT45P0538711109000003727955<br>BPER – Filiale di Bergamo Loreto</p></div>
+  </div>
+  <div class="footer-bottom">
+    <p>© <script>document.write(new Date().getFullYear())</script> Associazione Balomè · C.F. 95254690167 · P.le Risorgimento n. 14, 24128 Bergamo · <a href="mailto:info@balome.org">info@balome.org</a></p>
+    <p>Associazione di Volontariato senza scopo di lucro</p>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scrollTop" onclick="scrollToTop()" aria-label="Torna su">↑</button>
+<div class="toast" id="toast"></div>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Visualizzatore immagini">
+  <div class="lb-backdrop" onclick="closeLightbox()"></div>
+  <button class="lb-close" onclick="closeLightbox()" aria-label="Chiudi">✕</button>
+  <button class="lb-arrow lb-prev" id="lbPrev" onclick="lbNavigate(-1)" aria-label="Precedente">‹</button>
+  <button class="lb-arrow lb-next" id="lbNext" onclick="lbNavigate(1)" aria-label="Successiva">›</button>
+  <div class="lb-content">
+    <div class="lb-img-wrap">
+      <img id="lbImg" src="" alt="" style="display:none">
+      <div class="lb-empty-state" id="lbEmpty">
+        <span class="lb-empty-icon">📷</span>
+        <strong id="lbFilename"></strong>
+        <span>Carica questa immagine nella cartella <code>/img/</code></span>
+      </div>
+    </div>
+    <div class="lb-footer">
+      <span class="lb-counter" id="lbCounter"></span>
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script src="js/articoli-loader.js"></script>
+
+<!-- ═══════════════════════════════════════════════════════
+     MAPPA INDIA — script eseguito dopo main.js
+═══════════════════════════════════════════════════════ -->
+<script>
+/* Dati progetti — testo in variabili JS senza apostrofi problematici */
+var BM_DATA = {
+  deepashram: {
+    lat: 28.47, lng: 77.03, emoji: '🏠',
+    city: 'Gurgaon \u2013 Delhi NCR',
+    title: 'Progetto Deepashram',
+    tags: ['Ragazzi orfani', 'Disabilit\u00e0', 'Fisioterapia', 'Istruzione'],
+    text: 'A Rajiv Nagar Gurgaon, a pochi km da Delhi, nella casa dei Missionari della Carit\u00e0 fondata da Madre Teresa, vivono 39 ragazzi orfani con diverse patologie. Balom\u00e8 garantisce fisioterapia e istruzione quotidiana.',
+    stats: [{n:'39', l:'Ragazzi accolti'}, {n:'2', l:'Servizi garantiti'}],
+    anchor: 'progetti'
+  },
+  calcutta: {
+    lat: 22.57, lng: 88.36, emoji: '🌸',
+    city: 'Calcutta, Bengala Occidentale',
+    title: 'Progetto Calcutta',
+    tags: ['Orfanotrofio', 'Shishu Bhavan', 'Missionarie della Carit\u00e0'],
+    text: 'A Shishu Bhavan, orfanotrofio delle Missionarie della Carit\u00e0 di Madre Teresa a Calcutta, ha preso forma la storia di Balom\u00e8. Da l\u00ec nasce la promessa: non dimenticare mai i bambini lasciati soli.',
+    stats: [{n:'🙏', l:'Origine di Balom\u00e8'}, {n:'\u221e', l:'Bambini nel cuore'}],
+    anchor: 'progetti'
+  },
+  karunanjali: {
+    lat: 18.62, lng: 73.85, emoji: '📚',
+    city: 'Talagaon Dabhade, Maharashtra',
+    title: 'Karunanjali School',
+    tags: ['Scuola residenziale', 'Disabilit\u00e0 mentale', 'Suore di Sant\u2019Anna'],
+    text: 'Le Suore di Sant\u2019Anna portano istruzione ai bambini con disabilit\u00e0 mentale nei villaggi rurali del Maharashtra. Con Balom\u00e8: 33 residenziali + 13 al centro diurno.',
+    stats: [{n:'33', l:'Residenziali'}, {n:'13', l:'Centro diurno'}],
+    anchor: 'progetti'
+  },
+  anandasharam: {
+    lat: 10.85, lng: 76.27, emoji: '🌱',
+    city: 'India meridionale, Kerala',
+    title: 'Progetto Anandasharam',
+    tags: ['Scuole rurali', 'Salute', 'Nutrizione', 'Formazione'],
+    text: 'I volontari Balom\u00e8 costruiscono scuole rurali, gestiscono programmi nutrizionali e sanitari, e formano insegnanti locali per garantire un futuro ai bambini pi\u00f9 vulnerabili.',
+    stats: [{n:'4', l:'Aree di intervento'}, {n:'\u2665', l:'Bambini sostenuti'}],
+    anchor: 'progetti'
+  }
+};
+
+var bmActivePin = null;
+
+function bmInitMap() {
+  if (typeof d3 === 'undefined' || typeof topojson === 'undefined') {
+    setTimeout(bmInitMap, 100);
+    return;
+  }
+
+  var W = 820, H = 560;
+
+  var svg = d3.select('#bm-map-svg')
+    .attr('viewBox', '0 0 ' + W + ' ' + H)
+    .attr('preserveAspectRatio', 'xMidYMid meet');
+
+  var defs = svg.append('defs');
+
+  /* Gradiente pin — usa #F5921E (--orange del sito) */
+  var rg = defs.append('radialGradient')
+    .attr('id', 'bm-pg').attr('cx', '35%').attr('cy', '30%').attr('r', '68%');
+  rg.append('stop').attr('offset', '0%').attr('stop-color', '#FFD080');
+  rg.append('stop').attr('offset', '55%').attr('stop-color', '#F5921E');
+  rg.append('stop').attr('offset', '100%').attr('stop-color', '#B06010');
+
+  /* Gradiente hover pin */
+  var rgh = defs.append('radialGradient')
+    .attr('id', 'bm-pgh').attr('cx', '35%').attr('cy', '30%').attr('r', '68%');
+  rgh.append('stop').attr('offset', '0%').attr('stop-color', '#FFE090');
+  rgh.append('stop').attr('offset', '55%').attr('stop-color', '#FF9F30');
+  rgh.append('stop').attr('offset', '100%').attr('stop-color', '#A85208');
+
+  /* Drop shadow filter */
+  var flt = defs.append('filter')
+    .attr('id', 'bm-ps')
+    .attr('x', '-50%').attr('y', '-50%')
+    .attr('width', '200%').attr('height', '200%');
+  flt.append('feDropShadow')
+    .attr('dx', 0).attr('dy', 3).attr('stdDeviation', 2.5)
+    .attr('flood-color', 'rgba(26,32,64,0.28)');
+
+  /* Proiezione: scala 900 = zoom su subcontinente indiano + soli paesi confinanti */
+  var projection = d3.geoMercator()
+    .center([82, 21])
+    .scale(900)
+    .translate([W / 2, H / 2]);
+
+  var path = d3.geoPath().projection(projection);
+
+  /* Mare — usa colore coerente con la palette */
+  svg.append('rect').attr('width', W).attr('height', H).attr('class', 'bm-sea');
+
+  /* Graticole 10° */
+  var grat = d3.geoGraticule().step([10, 10]);
+  svg.append('path').datum(grat()).attr('class', 'bm-grat').attr('d', path);
+
+  var INDIA = 356;
+  var NBRS = {
+    586: 'Pakistan', 50: 'Bangladesh', 524: 'Nepal',
+    64: 'Bhutan', 144: 'Sri Lanka', 104: 'Myanmar',
+    156: 'Cina', 4: 'Afghanistan'
+  };
+
+  fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+    .then(function(r) { return r.json(); })
+    .then(function(world) {
+      var countries = topojson.feature(world, world.objects.countries);
+
+      /* Tutti gli altri paesi */
+      svg.append('g').selectAll('path')
+        .data(countries.features.filter(function(d) {
+          return +d.id !== INDIA && !NBRS[+d.id];
+        }))
+        .join('path').attr('class', 'bm-land-bg').attr('d', path);
+
+      /* Paesi vicini */
+      var nbFeats = countries.features.filter(function(d) { return NBRS[+d.id]; });
+      svg.append('g').selectAll('path')
+        .data(nbFeats).join('path').attr('class', 'bm-neighbor').attr('d', path);
+
+      /* Etichette vicini */
+      svg.append('g').selectAll('text')
+        .data(nbFeats).join('text')
+        .attr('transform', function(d) {
+          var c = path.centroid(d);
+          return isFinite(c[0]) ? 'translate(' + c + ')' : 'translate(-999,-999)';
+        })
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'central')
+        .attr('fill', '#6A5830')
+        .attr('font-family', "'Poppins', sans-serif")
+        .attr('font-size', 7)
+        .attr('font-weight', 600)
+        .text(function(d) { return NBRS[+d.id]; });
+
+      /* India — evidenziata */
+      svg.append('g').selectAll('path')
+        .data(countries.features.filter(function(d) { return +d.id === INDIA; }))
+        .join('path').attr('class', 'bm-india').attr('d', path);
+
+      /* Confini internazionali */
+      svg.append('path')
+        .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
+        .attr('class', 'bm-borders').attr('d', path);
+
+      /* Label "India" centrata */
+      var indFeat = countries.features.find(function(d) { return +d.id === INDIA; });
+      if (indFeat) {
+        var c = path.centroid(indFeat);
+        svg.append('text')
+          .attr('x', c[0]).attr('y', c[1])
+          .attr('text-anchor', 'middle').attr('dominant-baseline', 'central')
+          .attr('fill', '#148708').attr('fill-opacity', 0.6)
+          .attr('font-family', "'Poppins', sans-serif")
+          .attr('font-size', 11).attr('font-weight', 900)
+          .text('India');
+      }
+
+      /* Etichette oceani — usa --text-light #4A5580 */
+      [
+        {t: 'Mar Arabico',       lon: 58, lat: 18},
+        {t: 'Golfo del Bengala', lon: 90, lat: 10},
+        {t: 'Oceano Indiano',    lon: 73, lat:  1}
+      ].forEach(function(s) {
+        var pos = projection([s.lon, s.lat]);
+        if (pos && isFinite(pos[0]) && pos[0] > 8 && pos[0] < W-8 && pos[1] > 8 && pos[1] < H-8) {
+          svg.append('text')
+            .attr('x', pos[0]).attr('y', pos[1])
+            .attr('text-anchor', 'middle')
+            .attr('fill', '#4A5580')
+            .attr('font-style', 'italic')
+            .attr('font-family', "'Poppins', sans-serif")
+            .attr('font-size', 8).attr('opacity', 0.72)
+            .text(s.t);
+        }
+      });
+
+      /* ═══ PIN ═══
+         Punta a (0,0) — testa centrata a (0,-18).
+         Il gruppo .bm-pin-inner scala intorno a (0,0) via
+         d3 transition su attr('transform') — nessun drift spaziale.   */
+      Object.entries(BM_DATA).forEach(function(entry, i) {
+        var id = entry[0];
+        var d  = entry[1];
+
+        var pos = projection([d.lng, d.lat]);
+        if (!pos || !isFinite(pos[0])) return;
+
+        var outer = svg.append('g')
+          .attr('id', 'bm-pin-' + id)
+          .attr('transform', 'translate(' + pos[0] + ',' + pos[1] + ')')
+          .attr('role', 'button')
+          .attr('tabindex', '0')
+          .attr('aria-label', d.title)
+          .style('cursor', 'pointer')
+          .on('click', function() { bmOp(id); })
+          .on('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); bmOp(id); }
+          });
+
+        /* Doppio anello pulsante sfalsato */
+        [0, 1.1].forEach(function(rd) {
+          outer.append('circle')
+            .attr('class', 'bm-pulse')
+            .attr('cx', 0).attr('cy', -18).attr('r', 5)
+            .attr('fill', 'none')
+            .attr('stroke', '#F5921E')
+            .attr('stroke-width', 1.8)
+            .attr('opacity', 0.8)
+            .style('animation-delay', (rd + i * 0.38) + 's');
+        });
+
+        /* Gruppo scalabile — pivot a punta (0,0) */
+        var inner = outer.append('g')
+          .attr('class', 'bm-pin-inner')
+          .attr('transform', 'scale(1)');
+
+        /* Animazione entry: bounce drop-in con SVG translate corretto.
+           translateY() non funziona in attr SVG — usiamo translate(0,Y).
+           Il pin parte da -55px sopra la punta e rimbalza fino a 0.
+           Delay progressivo: 400ms base + 350ms per ogni pin. */
+        (function(innerEl, pinDelay) {
+          innerEl.attr('transform', 'translate(0,-55) scale(1)').style('opacity', 0);
+          innerEl
+            .transition()
+              .delay(pinDelay)
+              .duration(0)
+              .style('opacity', 1)
+            .transition()
+              .duration(900)
+              .ease(d3.easeBounceOut)
+              .attrTween('transform', function() {
+                return function(t) {
+                  var y = (1 - t) * -55;
+                  return 'translate(0,' + y + ') scale(1)';
+                };
+              });
+        })(inner, 400 + i * 350);
+
+        /* Ombra a terra */
+        inner.append('ellipse')
+          .attr('cx', 0).attr('cy', 1.5)
+          .attr('rx', 6).attr('ry', 2.5)
+          .attr('fill', 'rgba(26,32,64,0.16)');
+
+        /* Gambo: punta verso il basso a (0,0) */
+        inner.append('polygon')
+          .attr('points', '0,0 -6,-12 6,-12')
+          .attr('fill', '#A05808');
+
+        /* Testa: cerchio con gradiente --orange */
+        inner.append('circle')
+          .attr('cx', 0).attr('cy', -18).attr('r', 12)
+          .attr('fill', 'url(#bm-pg)')
+          .attr('stroke', '#ffffff')
+          .attr('stroke-width', 2)
+          .attr('filter', 'url(#bm-ps)');
+
+        /* Highlight interno */
+        inner.append('circle')
+          .attr('cx', -3.5).attr('cy', -22).attr('r', 3)
+          .attr('fill', 'rgba(255,255,255,0.28)');
+
+        /* Emoji */
+        inner.append('text')
+          .attr('x', 0).attr('y', -18)
+          .attr('text-anchor', 'middle')
+          .attr('dominant-baseline', 'central')
+          .attr('font-size', 10)
+          .attr('pointer-events', 'none')
+          .text(d.emoji);
+
+        /* Pill etichetta città */
+        var lbl = d.city.split(',')[0].split('\u2013')[0].trim();
+        var lW  = Math.max(44, lbl.length * 5.2 + 12);
+        var lg  = inner.append('g').attr('transform', 'translate(0,6)');
+        lg.append('rect')
+          .attr('x', -lW / 2).attr('y', 0)
+          .attr('width', lW).attr('height', 12).attr('rx', 4)
+          .attr('fill', 'rgba(26,32,64,0.82)');
+        lg.append('text')
+          .attr('x', 0).attr('y', 6)
+          .attr('text-anchor', 'middle')
+          .attr('dominant-baseline', 'central')
+          .attr('fill', '#ffffff')
+          .attr('font-family', "'Poppins', sans-serif")
+          .attr('font-size', 6.5).attr('font-weight', 700)
+          .attr('pointer-events', 'none')
+          .text(lbl);
+
+        /* Hover — d3 transition su attr (non style) → pivot corretto */
+        outer
+          .on('mouseenter', function() {
+            if (bmActivePin === id) return;
+            d3.select(this).select('.bm-pin-inner')
+              .interrupt()
+              .transition().duration(160).ease(d3.easeCubicOut)
+              .attr('transform', 'translate(0,0) scale(1.35)');
+            d3.select(this).select('circle[r="12"]')
+              .attr('fill', 'url(#bm-pgh)');
+            bmHighlightLeg(id);
+          })
+          .on('mouseleave', function() {
+            if (bmActivePin === id) return;
+            d3.select(this).select('.bm-pin-inner')
+              .interrupt()
+              .transition().duration(360).ease(d3.easeBounceOut)
+              .attr('transform', 'translate(0,0) scale(1)');
+            d3.select(this).select('circle[r="12"]')
+              .attr('fill', 'url(#bm-pg)');
+            if (bmActivePin === null) bmHighlightLeg(null);
+          });
+      });
+
+      /* Rosa dei venti — usa colori del sito */
+      var cr = svg.append('g')
+        .attr('transform', 'translate(' + (W - 42) + ',38)');
+      cr.append('circle').attr('r', 18)
+        .attr('fill', 'rgba(255,247,238,0.92)')
+        .attr('stroke', '#E0E8F0').attr('stroke-width', 0.8);
+      cr.append('polygon').attr('points', '0,-14 3.5,0 0,-5 -3.5,0').attr('fill', '#F5921E');
+      cr.append('polygon').attr('points', '0,14 3.5,0 0,5 -3.5,0').attr('fill', '#C8B880');
+      cr.append('polygon').attr('points', '-14,0 0,3.5 -5,0 0,-3.5').attr('fill', '#C8B880').attr('opacity', 0.65);
+      cr.append('polygon').attr('points', '14,0 0,3.5 5,0 0,-3.5').attr('fill', '#C8B880').attr('opacity', 0.65);
+      cr.append('text')
+        .attr('y', -20).attr('text-anchor', 'middle').attr('dominant-baseline', 'central')
+        .attr('font-family', "'Poppins', sans-serif")
+        .attr('font-size', 8).attr('font-weight', 700)
+        .attr('fill', '#148708').text('N');
+
+    })
+    .catch(function() {
+      svg.append('text')
+        .attr('x', W / 2).attr('y', H / 2)
+        .attr('text-anchor', 'middle')
+        .attr('font-family', "'Poppins', sans-serif")
+        .attr('font-size', 13).attr('fill', '#4A5580')
+        .text('Caricamento mappa\u2026');
+    });
+}
+
+/* Evidenzia pulsante legenda */
+function bmHighlightLeg(id) {
+  document.querySelectorAll('.mappa-leg-btn').forEach(function(b) {
+    b.classList.remove('active');
+  });
+  if (id) {
+    var btn = document.querySelector('.mappa-leg-btn[onclick*="' + id + '"]');
+    if (btn) btn.classList.add('active');
+  }
+}
+
+/* Resetta pin a scala 1 */
+function bmResetPin(id) {
+  if (typeof d3 === 'undefined') return;
+  d3.select('#bm-pin-' + id).select('.bm-pin-inner')
+    .interrupt()
+    .transition().duration(420).ease(d3.easeBounceOut)
+    .attr('transform', 'translate(0,0) scale(1)');
+  d3.select('#bm-pin-' + id).select('circle[r="12"]')
+    .attr('fill', 'url(#bm-pg)');
+}
+
+/* Apre popup */
+function bmOp(id) {
+  var d = BM_DATA[id];
+  if (!d) return;
+
+  document.getElementById('bm-cFlag').textContent  = d.emoji;
+  document.getElementById('bm-cCity').textContent  = d.city;
+  document.getElementById('bm-cTitle').textContent = d.title;
+  document.getElementById('bm-cText').textContent  = d.text;
+  document.getElementById('bm-cLink').href         = '#' + d.anchor;
+  document.getElementById('bm-cTags').innerHTML    =
+    d.tags.map(function(t) { return '<span class="bm-tag">' + t + '</span>'; }).join('');
+  document.getElementById('bm-cStats').innerHTML   =
+    d.stats.map(function(s) {
+      return '<div class="bm-stat"><span class="bm-stat-n">' + s.n + '</span>' +
+             '<span class="bm-stat-l">' + s.l + '</span></div>';
+    }).join('');
+
+  /* Resetta pin precedente */
+  if (bmActivePin) bmResetPin(bmActivePin);
+  bmActivePin = id;
+
+  /* Pin attivo rimane scalato */
+  if (typeof d3 !== 'undefined') {
+    d3.select('#bm-pin-' + id).select('.bm-pin-inner')
+      .interrupt()
+      .transition().duration(160)
+      .attr('transform', 'translate(0,0) scale(1.4)');
+    d3.select('#bm-pin-' + id).select('circle[r="12"]')
+      .attr('fill', 'url(#bm-pgh)');
+  }
+
+  bmHighlightLeg(id);
+  document.getElementById('bm-ov').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+/* Chiude popup */
+function bmCl() {
+  document.getElementById('bm-ov').classList.remove('open');
+  document.body.style.overflow = '';
+  if (bmActivePin) { bmResetPin(bmActivePin); bmActivePin = null; }
+  bmHighlightLeg(null);
+}
+
+/* Chiudi cliccando backdrop */
+document.getElementById('bm-ov').addEventListener('click', function(e) {
+  if (e.target === this) bmCl();
+});
+
+/* Chiudi con Escape */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') bmCl();
+});
+
+/* Avvia la mappa quando tutti gli script sono pronti */
+window.addEventListener('load', bmInitMap);
+</script>
+
+</body>
+</html>
