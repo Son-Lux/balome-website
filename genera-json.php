@@ -27,6 +27,7 @@ function estraiMetadati(string $filepath, string $filename): ?array {
     $titolo = trim(strip_tags($m[1]));
   }
   if (!$titolo || $titolo === 'TITOLO_ARTICOLO') return null; // template non compilato
+  if ($estratto === 'DESCRIZIONE_ARTICOLO') return null;       // template non compilato
 
   // Data: <meta name="data-articolo" content="YYYY-MM-DD">
   $data = '';
@@ -97,8 +98,8 @@ $json = json_encode($articoli, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON
 $ok   = file_put_contents(JSON_OUTPUT, $json);
 
 // ── RISPOSTA ────────────────────────────────────────────────────
-// Se chiamato via browser: mostra esito
-if (php_sapi_name() !== 'cli') {
+// Stampa JSON solo se chiamato direttamente via browser (non via require/include)
+if (basename($_SERVER['SCRIPT_FILENAME'] ?? '') === basename(__FILE__)) {
   header('Content-Type: application/json; charset=utf-8');
   echo $ok !== false
     ? json_encode(['ok' => true, 'articoli' => count($articoli), 'file' => JSON_OUTPUT], JSON_PRETTY_PRINT)
