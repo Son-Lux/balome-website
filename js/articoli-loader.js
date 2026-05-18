@@ -91,7 +91,11 @@
     fetch(url)
       .then(res => {
         if (!res.ok) throw new Error('HTTP ' + res.status);
-        return res.json();
+        return res.text(); // leggi prima come testo
+      })
+      .then(text => {
+        if (!text || text.trim() === '') throw new Error('File JSON vuoto');
+        return JSON.parse(text);
       })
       .then(articoli => {
         console.log('[Balomè] Articoli caricati:', articoli.length);
