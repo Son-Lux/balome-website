@@ -15,7 +15,7 @@ define('ALLOWED_IMG',    ['image/jpeg','image/png','image/webp','image/gif']);
 // ────────────────────────────────────────────────────────────────
 
 header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: *');           // restringi al tuo dominio in produzione
+header('Access-Control-Allow-Origin: https://balome.org');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, X-Auth-Token');
 
@@ -57,6 +57,12 @@ switch ($data['action']) {
         $dest = ARTICOLI_DIR . $filename;
         if (file_put_contents($dest, $html) === false) {
             json_error(500, 'Impossibile scrivere il file. Controlla i permessi della cartella articoli/');
+        }
+
+        // Rigenera articoli.json immediatamente dopo la pubblicazione
+        $generaPath = __DIR__ . '/genera-json.php';
+        if (file_exists($generaPath)) {
+            require $generaPath;
         }
 
         json_ok(['message' => "Articolo pubblicato: articoli/$filename", 'path' => "articoli/$filename"]);

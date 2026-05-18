@@ -739,17 +739,8 @@ textarea { min-height: 130px; line-height: 1.65; }
         <input type="date" id="art-date">
       </div>
       <div class="field">
-        <label>Categoria</label>
-        <select id="art-cat">
-          <option value="Notizie">Notizie</option>
-          <option value="India">India</option>
-          <option value="Italia">Italia</option>
-          <option value="Progetti">Progetti</option>
-          <option value="Volontariato">Volontariato</option>
-          <option value="Donazioni">Donazioni</option>
-          <option value="Evento">Evento</option>
-        </select>
-        <p class="field-hint">Appare come badge colorato nella card su notizie.php</p>
+        <label>Meta-descrizione SEO</label>
+        <input type="text" id="art-meta" placeholder="Descrizione breve per Google (max 160 caratteri)" maxlength="160">
       </div>
     </div>
 
@@ -913,13 +904,18 @@ Chiudi con un invito a donare o a seguirvi."></textarea>
       <div class="info-box">
         <span class="ib-icon">ℹ️</span>
         <div>
-          Pubblica direttamente su <strong>balome.org</strong>. L'editor caricherà l'articolo in <code>articoli/</code> e le immagini in <code>img/</code> con un solo click.
+          Carica <code>upload-articolo.php</code> (o avvia <code>upload-articolo.js</code>) nella root del sito. Imposta <code>SECRET_TOKEN</code> nel file, poi inserisci qui URL e chiave. L'editor caricherà HTML e tutte le immagini in un solo click.
         </div>
       </div>
 
       <div class="field">
-        <label>Chiave segreta <span class="req">*</span></label>
-        <input type="password" id="srv-token" placeholder="Inserisci la chiave segreta">
+        <label>URL endpoint <span class="req">*</span></label>
+        <input type="url" id="srv-url" placeholder="https://tuosito.it/upload-articolo.php">
+        <p class="field-hint">Oppure <code>http://localhost:3077</code> per il server Node.js locale.</p>
+      </div>
+      <div class="field">
+        <label>Chiave segreta (SECRET_TOKEN) <span class="req">*</span></label>
+        <input type="password" id="srv-token" placeholder="La stessa chiave configurata nel file server">
       </div>
 
       <div class="toggle-row">
@@ -1069,12 +1065,10 @@ function genHTML() {
   const title  = v('art-title') || 'Articolo';
   const summ   = v('art-summary');
   const body   = document.getElementById('art-body').value;
-  const meta   = `Articolo Balomè: ${title}`;
+  const meta   = v('art-meta') || `Articolo Balomè: ${title}`;
   const heroFn = v('hero-fn') || 'hero.jpg';
   const cap    = v('hero-cap');
-  const rawDate = v('art-date') || new Date().toISOString().split('T')[0];
-  const ds     = fmtDate(rawDate);
-  const cat    = v('art-cat') || 'Notizie';
+  const ds     = fmtDate(v('art-date'));
   const bodyH  = md(body);
 
   const galItems = galImgs.map((img, i) => `
@@ -1095,8 +1089,6 @@ function genHTML() {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="${meta}">
-  <meta name="data-articolo" content="${rawDate}">
-  <meta name="categoria" content="${cat}">
   <title>${title} – Balomè</title>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="icon" href="../favicon.ico">
@@ -1117,7 +1109,7 @@ function genHTML() {
         <li><a class="nav-link" href="../index.html#progetti">Progetti</a></li>
         <li><a class="nav-link" href="../index.html#cinque-per-mille">5 per mille</a></li>
         <li><a class="nav-link" href="../index.html#donazioni">Donazioni</a></li>
-        <li><a class="nav-link" href="../notizie.php">News</a></li>
+        <li><a class="nav-link" href="../index.html#news">News</a></li>
         <li><a class="nav-link" href="../index.html#contatti">Contatti</a></li>
         <li><a class="btn-nav" href="../index.html#donazioni">Dona ora ♥</a></li>
       </ul>
@@ -1132,10 +1124,10 @@ function genHTML() {
         <p class="article-summary">${summ}</p>
       </header>
 
-      <div class="articolo-hero">
+      <figure class="article-hero">
         <img src="../img/${heroFn}" alt="${title}" loading="eager">
         ${cap ? `<figcaption>📷 ${cap}</figcaption>` : ''}
-      </div>
+      </figure>
 
       <div class="article-body">
         ${bodyH}
@@ -1244,17 +1236,16 @@ function buildPreview() {
 }
 
 /* ── SETTINGS ── */
-const SRV_URL = 'https://balome.org/upload-articolo.php';
-
 function loadSettings() {
   try {
     const s = JSON.parse(localStorage.getItem('balome_srv') || '{}');
+    if (s.url)   document.getElementById('srv-url').value   = s.url;
     if (s.token) document.getElementById('srv-token').value = s.token;
   } catch(e) {}
 }
 function saveSettings() {
   if (!document.getElementById('srv-save').checked) return;
-  localStorage.setItem('balome_srv', JSON.stringify({ token: v('srv-token') }));
+  localStorage.setItem('balome_srv', JSON.stringify({ url: v('srv-url'), token: v('srv-token') }));
 }
 
 /* ── LOG ── */
@@ -1274,12 +1265,12 @@ function clearLog() {
 
 /* ── TEST ── */
 async function testConn() {
-  const tok = v('srv-token');
-  if (!tok) { alert('Inserisci la chiave segreta.'); return; }
+  const url = v('srv-url'), tok = v('srv-token');
+  if (!url || !tok) { alert('Inserisci URL e chiave segreta.'); return; }
   clearLog();
-  log(`Connessione a balome.org…`, 'inf');
+  log(`Connessione a ${url}…`, 'inf');
   try {
-    const r = await fetch(SRV_URL, {
+    const r = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-Auth-Token': tok },
       body: JSON.stringify({ action: 'list_articles' })
@@ -1292,8 +1283,8 @@ async function testConn() {
 
 /* ── PUBLISH ── */
 async function publish() {
-  const tok = v('srv-token');
-  if (!tok) { alert('Inserisci la chiave segreta.'); return; }
+  const url = v('srv-url'), tok = v('srv-token');
+  if (!url || !tok) { alert('Inserisci URL endpoint e chiave segreta.'); return; }
   saveSettings(); clearLog();
 
   const btn = document.getElementById('pub-txt');
@@ -1302,7 +1293,7 @@ async function publish() {
   btn.innerHTML = '<span class="spin"></span> Pubblicazione…';
 
   const post = async body => {
-    const r = await fetch(SRV_URL, {
+    const r = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-Auth-Token': tok },
       body: JSON.stringify(body)
@@ -1349,8 +1340,7 @@ function dlHTML() {
 /* ── RESET ── */
 function resetAll() {
   if (!confirm('Iniziare un nuovo articolo? I dati correnti verranno persi.')) return;
-  ['art-title','art-summary','art-date','art-body','hero-fn','hero-cap'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('art-cat').value = 'Notizie';
+  ['art-title','art-summary','art-meta','art-date','art-body','hero-fn','hero-cap'].forEach(id => document.getElementById(id).value = '');
   heroData = null; galImgs = [];
   document.getElementById('hero-prev').style.display = 'none';
   document.getElementById('gal-thumbs').innerHTML = '';
