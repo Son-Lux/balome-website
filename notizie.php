@@ -322,7 +322,6 @@ function buildUrl(array $params): string {
     </div>
   </div>
 
-  <!-- HEADER -->
   <header class="header" id="header">
   <div class="nav-inner">
     <a href="#home" class="logo">
