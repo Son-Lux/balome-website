@@ -1,3 +1,5 @@
+document.addEventListener('DOMContentLoaded', function () {
+
 // ===== SCROLL REVEAL =====
 const reveals = document.querySelectorAll('.reveal');
 const observer = new IntersectionObserver((entries) => {
@@ -9,29 +11,36 @@ reveals.forEach(el => observer.observe(el));
 
 // ===== STICKY HEADER =====
 const header = document.getElementById('header');
-window.addEventListener('scroll', () => {
-  header.classList.toggle('scrolled', window.scrollY > 40);
-  document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 400);
-});
+if (header) {
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 40);
+    const scrollTopBtn = document.getElementById('scrollTop');
+    if (scrollTopBtn) scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
+  });
+}
 
 // ===== HAMBURGER =====
 const hamburger = document.getElementById('hamburger');
 const nav = document.getElementById('nav');
-hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('active');
-  nav.classList.toggle('open');
-});
-nav.querySelectorAll('a').forEach(a => {
-  a.addEventListener('click', () => {
-    hamburger.classList.remove('active');
-    nav.classList.remove('open');
+if (hamburger && nav) {
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    nav.classList.toggle('open');
   });
-});
+  nav.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('active');
+      nav.classList.remove('open');
+    });
+  });
+}
 
 // ===== SMOOTH SCROLL =====
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
-    const target = document.querySelector(a.getAttribute('href'));
+    const href = a.getAttribute('href');
+    if (href === '#') return;
+    const target = document.querySelector(href);
     if (target) {
       e.preventDefault();
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -63,80 +72,31 @@ const counterObs = new IntersectionObserver((entries) => {
 }, { threshold: 0.5 });
 document.querySelectorAll('.stat-number').forEach(el => counterObs.observe(el));
 
-// ===== SCROLL TO TOP =====
-function scrollToTop() {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// ===== TOAST =====
-function showToast(msg) {
-  const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 3000);
-}
-
-// ===== COPY CF =====
-function copyCF() {
-  navigator.clipboard.writeText('95254690167').then(() => showToast('✅ Codice Fiscale copiato!'));
-}
-
-// ===== COPY IBAN =====
-function copyIBAN() {
-  const iban = document.getElementById('ibanValue').textContent;
-  if (iban && !iban.includes('Contattaci')) {
-    navigator.clipboard.writeText(iban.replace(/\s/g,'')).then(() => showToast('✅ IBAN copiato!'));
-  } else {
-    showToast('Per l\'IBAN scrivici a info@balome.org');
-  }
-}
-
 // ===== PAYPAL AMOUNT =====
-function setAmount(amount) {
-  document.getElementById('paypalAmount').value = amount;
-  document.querySelectorAll('.importo-btn').forEach(btn => btn.classList.remove('active'));
-  event.target.classList.add('active');
-  updatePayPalLink();
-}
-function updatePayPalLink() {
-  const amount = document.getElementById('paypalAmount').value || 50;
-  const btn = document.getElementById('paypalBtn');
-  btn.href = `https://www.paypal.com/donate/?business=info.balome@gmail.com&currency_code=EUR&amount=${amount}`;
-}
-document.getElementById('paypalAmount').addEventListener('input', () => {
-  document.querySelectorAll('.importo-btn').forEach(btn => btn.classList.remove('active'));
-  updatePayPalLink();
-});
-
-// ===== CONTACT FORM =====
-function handleFormSubmit(e) {
-  e.preventDefault();
-  const form = e.target;
-  const nome = form.nome.value;
-  const email = form.email.value;
-  const oggetto = form.oggetto.value;
-  const messaggio = form.messaggio.value;
-  const mailtoLink = `mailto:info@balome.org?subject=${encodeURIComponent('[Balomè] ' + oggetto + ' - ' + nome)}&body=${encodeURIComponent('Nome: ' + nome + '\nEmail: ' + email + '\n\nMessaggio:\n' + messaggio)}`;
-  window.location.href = mailtoLink;
-  document.getElementById('formSuccess').style.display = 'block';
-  form.reset();
-  setTimeout(() => { document.getElementById('formSuccess').style.display = 'none'; }, 5000);
+const paypalAmount = document.getElementById('paypalAmount');
+if (paypalAmount) {
+  paypalAmount.addEventListener('input', () => {
+    document.querySelectorAll('.importo-btn').forEach(btn => btn.classList.remove('active'));
+    updatePayPalLink();
+  });
 }
 
 // ===== ACTIVE NAV ON SCROLL =====
 const sections = document.querySelectorAll('section[id]');
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(sec => {
-    if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
+if (sections.length) {
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
+    });
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.style.color = '';
+      if (link.getAttribute('href') === '#' + current) {
+        link.style.color = 'var(--orange)';
+      }
+    });
   });
-  document.querySelectorAll('.nav-link').forEach(link => {
-    link.style.color = '';
-    if (link.getAttribute('href') === '#' + current) {
-      link.style.color = 'var(--orange)';
-    }
-  });
-});
+}
 
 // ===================================================
 // HERO GALLERY SLIDER
@@ -151,19 +111,18 @@ window.addEventListener('scroll', () => {
   let current = 0;
   let autoTimer;
 
-  // Build dots
   slides.forEach((_, i) => {
     const dot = document.createElement('button');
     dot.className = 'hg-dot' + (i === 0 ? ' active' : '');
     dot.setAttribute('aria-label', 'Foto ' + (i + 1));
     dot.addEventListener('click', () => goTo(i));
-    dotsContainer.appendChild(dot);
+    if (dotsContainer) dotsContainer.appendChild(dot);
   });
 
   function goTo(idx) {
     current = (idx + total) % total;
     track.style.transform = `translateX(-${current * 100}%)`;
-    dotsContainer.querySelectorAll('.hg-dot').forEach((d, i) => d.classList.toggle('active', i === current));
+    if (dotsContainer) dotsContainer.querySelectorAll('.hg-dot').forEach((d, i) => d.classList.toggle('active', i === current));
   }
 
   function startAuto() {
@@ -171,10 +130,11 @@ window.addEventListener('scroll', () => {
     autoTimer = setInterval(() => goTo(current + 1), 4000);
   }
 
-  document.getElementById('heroPrev').addEventListener('click', () => { goTo(current - 1); startAuto(); });
-  document.getElementById('heroNext').addEventListener('click', () => { goTo(current + 1); startAuto(); });
+  const heroPrev = document.getElementById('heroPrev');
+  const heroNext = document.getElementById('heroNext');
+  if (heroPrev) heroPrev.addEventListener('click', () => { goTo(current - 1); startAuto(); });
+  if (heroNext) heroNext.addEventListener('click', () => { goTo(current + 1); startAuto(); });
 
-  // Touch/swipe
   let touchStartX = 0;
   track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
   track.addEventListener('touchend', e => {
@@ -184,13 +144,6 @@ window.addEventListener('scroll', () => {
 
   startAuto();
 })();
-
-// ===================================================
-// GALLERY IMAGE REGISTRY
-// Each key maps to an array of {src, alt, filename} objects.
-// Galleries: 'hero', 'deepashram', 'karunanjali', 'anandasharam', 'calcutta'
-// ===================================================
-const GALLERIES = {};
 
 // ===================================================
 // CHI SIAMO GALLERY SLIDER
@@ -205,19 +158,18 @@ const GALLERIES = {};
   let current = 0;
   let autoTimer;
 
-  // Build dots
   slides.forEach((_, i) => {
     const dot = document.createElement('button');
     dot.className = 'hg-dot' + (i === 0 ? ' active' : '');
     dot.setAttribute('aria-label', 'Foto ' + (i + 1));
     dot.addEventListener('click', () => goTo(i));
-    dotsContainer.appendChild(dot);
+    if (dotsContainer) dotsContainer.appendChild(dot);
   });
 
   function goTo(idx) {
     current = (idx + total) % total;
     track.style.transform = `translateX(-${current * 100}%)`;
-    dotsContainer.querySelectorAll('.hg-dot').forEach((d, i) =>
+    if (dotsContainer) dotsContainer.querySelectorAll('.hg-dot').forEach((d, i) =>
       d.classList.toggle('active', i === current));
   }
 
@@ -226,10 +178,11 @@ const GALLERIES = {};
     autoTimer = setInterval(() => goTo(current + 1), 4000);
   }
 
-  document.getElementById('chiSiamoPrev').addEventListener('click', () => { goTo(current - 1); startAuto(); });
-  document.getElementById('chiSiamoNext').addEventListener('click', () => { goTo(current + 1); startAuto(); });
+  const csPrev = document.getElementById('chiSiamoPrev');
+  const csNext = document.getElementById('chiSiamoNext');
+  if (csPrev) csPrev.addEventListener('click', () => { goTo(current - 1); startAuto(); });
+  if (csNext) csNext.addEventListener('click', () => { goTo(current + 1); startAuto(); });
 
-  // Touch/swipe
   let touchStartX = 0;
   track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
   track.addEventListener('touchend', e => {
@@ -240,23 +193,24 @@ const GALLERIES = {};
   startAuto();
 })();
 
+// ===================================================
+// GALLERY IMAGE REGISTRY + LIGHTBOX
+// ===================================================
+const GALLERIES = {};
+
 function buildGalleryFromDOM() {
-  // Hero gallery
   const heroSlides = document.querySelectorAll('#heroTrack .hg-slide img');
-  GALLERIES['hero'] = Array.from(heroSlides).map((img, i) => ({
-    src: img.src,
-    alt: img.alt,
-    filename: img.getAttribute('src')
+  GALLERIES['hero'] = Array.from(heroSlides).map(img => ({
+    src: img.src, alt: img.alt, filename: img.getAttribute('src')
   }));
-    
-    // Chi siamo gallery
+
   const csSlides = document.querySelectorAll('#chiSiamoTrack .hg-slide img');
   if (csSlides.length) {
     GALLERIES['chisiamo'] = Array.from(csSlides).map(img => ({
       src: img.src, alt: img.alt, filename: img.getAttribute('src')
     }));
   }
-    // AUTOMATICO — trova tutti i track con data-gallery sulla pagina
+
   document.querySelectorAll('[data-gallery]').forEach(track => {
     const key = track.getAttribute('data-gallery');
     const imgs = track.querySelectorAll('img');
@@ -265,44 +219,38 @@ function buildGalleryFromDOM() {
     }));
   });
 
-  // Project galleries — scan data-gallery attributes
   document.querySelectorAll('.progetto-gallery[data-gallery]').forEach(container => {
     const key = container.getAttribute('data-gallery');
     const imgs = container.querySelectorAll('img');
     GALLERIES[key] = Array.from(imgs).map(img => ({
-      src: img.src,
-      alt: img.alt,
-      filename: img.getAttribute('src')
+      src: img.src, alt: img.alt, filename: img.getAttribute('src')
     }));
   });
 }
 
-// ===================================================
-// LIGHTBOX
-// ===================================================
 let lbGallery = [];
 let lbIndex = 0;
 
-function openLightbox(galleryKey, startIndex) {
+window.openLightbox = function(galleryKey, startIndex) {
   if (!Object.keys(GALLERIES).length) buildGalleryFromDOM();
   lbGallery = GALLERIES[galleryKey] || [];
   lbIndex = startIndex || 0;
   renderLightbox();
-  document.getElementById('lightbox').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  const lb = document.getElementById('lightbox');
+  if (lb) { lb.classList.add('open'); document.body.style.overflow = 'hidden'; }
   document.addEventListener('keydown', lbKeyHandler);
-}
+};
 
-function closeLightbox() {
-  document.getElementById('lightbox').classList.remove('open');
-  document.body.style.overflow = '';
+window.closeLightbox = function() {
+  const lb = document.getElementById('lightbox');
+  if (lb) { lb.classList.remove('open'); document.body.style.overflow = ''; }
   document.removeEventListener('keydown', lbKeyHandler);
-}
+};
 
-function lbNavigate(dir) {
+window.lbNavigate = function(dir) {
   lbIndex = (lbIndex + dir + lbGallery.length) % lbGallery.length;
   renderLightbox();
-}
+};
 
 function renderLightbox() {
   const item = lbGallery[lbIndex];
@@ -311,49 +259,41 @@ function renderLightbox() {
   const filename = document.getElementById('lbFilename');
   const counter = document.getElementById('lbCounter');
 
-  counter.textContent = (lbIndex + 1) + ' / ' + lbGallery.length;
-
+  if (counter) counter.textContent = (lbIndex + 1) + ' / ' + lbGallery.length;
   if (!item) return;
-  filename.textContent = item.filename;
+  if (filename) filename.textContent = item.filename;
 
-  // Try loading — show empty state if image fails
-  img.style.display = 'none';
-  empty.style.display = 'flex';
-  filename.textContent = item.filename;
+  if (img) img.style.display = 'none';
+  if (empty) empty.style.display = 'flex';
 
   const tester = new Image();
   tester.onload = () => {
-    img.src = item.src;
-    img.alt = item.alt;
-    img.style.display = 'block';
-    empty.style.display = 'none';
+    if (img) { img.src = item.src; img.alt = item.alt; img.style.display = 'block'; }
+    if (empty) empty.style.display = 'none';
   };
   tester.onerror = () => {
-    img.style.display = 'none';
-    empty.style.display = 'flex';
-    filename.textContent = item.filename;
+    if (img) img.style.display = 'none';
+    if (empty) empty.style.display = 'flex';
   };
   tester.src = item.src;
 
-  // Arrows visibility
-  document.getElementById('lbPrev').style.visibility = lbGallery.length > 1 ? 'visible' : 'hidden';
-  document.getElementById('lbNext').style.visibility = lbGallery.length > 1 ? 'visible' : 'hidden';
+  const lbPrev = document.getElementById('lbPrev');
+  const lbNext = document.getElementById('lbNext');
+  if (lbPrev) lbPrev.style.visibility = lbGallery.length > 1 ? 'visible' : 'hidden';
+  if (lbNext) lbNext.style.visibility = lbGallery.length > 1 ? 'visible' : 'hidden';
 }
 
 function lbKeyHandler(e) {
-  if (e.key === 'Escape') closeLightbox();
-  if (e.key === 'ArrowLeft') lbNavigate(-1);
-  if (e.key === 'ArrowRight') lbNavigate(1);
+  if (e.key === 'Escape') window.closeLightbox();
+  if (e.key === 'ArrowLeft') window.lbNavigate(-1);
+  if (e.key === 'ArrowRight') window.lbNavigate(1);
 }
 
-// Build gallery index on load
-window.addEventListener('DOMContentLoaded', buildGalleryFromDOM);
 // ===================================================
 // INIT AUTOMATICO — tutti gli slider con data-gallery
 // ===================================================
 function initAllSliders() {
   document.querySelectorAll('[data-gallery]').forEach(track => {
-    const key = track.getAttribute('data-gallery');
     const slides = track.querySelectorAll('.hg-slide');
     if (!slides.length) return;
 
@@ -361,14 +301,12 @@ function initAllSliders() {
     let current = 0;
     let autoTimer;
 
-    // Cerca i controlli nel contenitore padre
     const wrapper = track.closest('.hero-gallery, .cs-gallery, .articolo-gallery');
     if (!wrapper) return;
     const dotsContainer = wrapper.querySelector('.hg-dots');
     const prevBtn = wrapper.querySelector('.hg-prev');
     const nextBtn = wrapper.querySelector('.hg-next');
 
-    // Build dots
     if (dotsContainer) {
       slides.forEach((_, i) => {
         const dot = document.createElement('button');
@@ -396,7 +334,6 @@ function initAllSliders() {
     if (prevBtn) prevBtn.addEventListener('click', () => { goTo(current - 1); startAuto(); });
     if (nextBtn) nextBtn.addEventListener('click', () => { goTo(current + 1); startAuto(); });
 
-    // Touch/swipe
     let touchStartX = 0;
     track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
     track.addEventListener('touchend', e => {
@@ -408,7 +345,69 @@ function initAllSliders() {
   });
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  buildGalleryFromDOM();
-  initAllSliders();
-});
+buildGalleryFromDOM();
+initAllSliders();
+
+}); // fine DOMContentLoaded
+
+// ===== SCROLL TO TOP =====
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  if (!toast) return;
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// ===== COPY CF =====
+function copyCF() {
+  navigator.clipboard.writeText('95254690167').then(() => showToast('✅ Codice Fiscale copiato!'));
+}
+
+// ===== COPY IBAN =====
+function copyIBAN() {
+  const ibanEl = document.getElementById('ibanValue');
+  if (ibanEl && !ibanEl.textContent.includes('Contattaci')) {
+    navigator.clipboard.writeText(ibanEl.textContent.replace(/\s/g, '')).then(() => showToast('✅ IBAN copiato!'));
+  } else {
+    showToast('Per l\'IBAN scrivici a info@balome.org');
+  }
+}
+
+// ===== PAYPAL AMOUNT =====
+function setAmount(amount) {
+  const paypalAmount = document.getElementById('paypalAmount');
+  if (paypalAmount) paypalAmount.value = amount;
+  document.querySelectorAll('.importo-btn').forEach(btn => btn.classList.remove('active'));
+  if (event && event.target) event.target.classList.add('active');
+  updatePayPalLink();
+}
+
+function updatePayPalLink() {
+  const paypalAmount = document.getElementById('paypalAmount');
+  const btn = document.getElementById('paypalBtn');
+  if (!paypalAmount || !btn) return;
+  const amount = paypalAmount.value || 50;
+  btn.href = `https://www.paypal.com/donate/?business=info.balome@gmail.com&currency_code=EUR&amount=${amount}`;
+}
+
+// ===== CONTACT FORM =====
+function handleFormSubmit(e) {
+  e.preventDefault();
+  const form = e.target;
+  const nome = form.nome.value;
+  const email = form.email.value;
+  const oggetto = form.oggetto.value;
+  const messaggio = form.messaggio.value;
+  const mailtoLink = `mailto:info@balome.org?subject=${encodeURIComponent('[Balomè] ' + oggetto + ' - ' + nome)}&body=${encodeURIComponent('Nome: ' + nome + '\nEmail: ' + email + '\n\nMessaggio:\n' + messaggio)}`;
+  window.location.href = mailtoLink;
+  const formSuccess = document.getElementById('formSuccess');
+  if (formSuccess) formSuccess.style.display = 'block';
+  form.reset();
+  setTimeout(() => { if (formSuccess) formSuccess.style.display = 'none'; }, 5000);
+}

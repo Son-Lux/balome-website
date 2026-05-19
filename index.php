@@ -1,3 +1,31 @@
+<?php
+/**
+ * index.php — Balomè
+ * Legge articoli/articoli.json (già aggiornato da upload-articolo.php)
+ * e inietta le ultime 3 card nella sezione news. Zero riscansione.
+ */
+
+$ultimeNotizie = [];
+$jsonPath = __DIR__ . '/articoli/articoli.json';
+
+if (file_exists($jsonPath)) {
+    $json = file_get_contents($jsonPath);
+    if ($json) {
+        $articoli = json_decode($json, true);
+        if (is_array($articoli)) {
+            $ultimeNotizie = array_slice($articoli, 0, 3);
+        }
+    }
+}
+
+$mesi = ['','Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno',
+         'Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+
+function dataItaliana(string $iso, array $mesi): string {
+    [$y, $m, $d] = explode('-', $iso);
+    return (int)$d . ' ' . $mesi[(int)$m] . ' ' . $y;
+}
+?>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -293,7 +321,7 @@
       <a href="#progetti" class="nav-link">Progetti</a>
       <a href="#cinque-per-mille" class="nav-link">5 per mille</a>
       <a href="#donazioni" class="nav-link">Donazioni</a>
-      <a href="#news" class="nav-link">News</a>
+      <a href="notizie.php" class="nav-link">News</a>
       <a href="#contatti" class="nav-link">Contatti</a>
       <a href="#donazioni" class="btn-nav">Dona ora ♥</a>
     </nav>
@@ -774,409 +802,36 @@ Ispirati dal messaggio di Madre Teresa, crediamo che anche il più piccolo gesto
         </div>
         <div class="fb-fallback"><p>Non riesci a vedere il feed? <a href="https://www.facebook.com/info.balome/" target="_blank">Visita la nostra pagina Facebook</a></p></div>
       </div>
-      <div >
-        <!-- NEWS:START -->
-       
-        
-    <?php
-/**
- * notizie.php — Balomè
- * Ad ogni visita rigenera articoli.json e mostra le card degli articoli.
- * Nessun intervento manuale necessario dopo aver caricato un HTML.
- */
-
-// Rigenera il JSON automaticamente
-$articoli = [];
-require_once __DIR__ . '/genera-json.php';
-// $articoli è già ordinato per data decrescente
-
-// Formattazione data in italiano
-function dataItaliana(string $iso): string {
-  $mesi = ['','Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno',
-           'Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
-  [$y, $m, $d] = explode('-', $iso);
-  return (int)$d . ' ' . $mesi[(int)$m] . ' ' . $y;
-}
-
-function meseAnno(string $iso): string {
-  $mesi = ['','Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno',
-           'Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
-  [$y, $m] = explode('-', $iso);
-  return $mesi[(int)$m] . ' ' . $y;
-}
-
-// Filtro attivo da querystring
-$filtCat  = $_GET['categoria'] ?? '';
-$filtAnno = $_GET['anno'] ?? '';
-$filtMese = $_GET['mese'] ?? '';
-$search   = trim($_GET['q'] ?? '');
-
-// Costruisci elenco categorie e archivio mesi
-$categorie = [];
-$archivio  = []; // ['2024-12' => ['label'=>'Dicembre 2024', 'count'=>3]]
-
-foreach ($articoli as $a) {
-  $cat = $a['categoria'] ?? 'Notizie';
-  $categorie[$cat] = ($categorie[$cat] ?? 0) + 1;
-
-  $ym = substr($a['data'], 0, 7); // YYYY-MM
-  if (!isset($archivio[$ym])) {
-    $archivio[$ym] = ['label' => meseAnno($a['data'] . '-01'), 'count' => 0];
-  }
-  $archivio[$ym]['count']++;
-}
-arsort($categorie);
-
-// Applica filtri
-$articoliFiltrati = array_filter($articoli, function($a) use ($filtCat, $filtAnno, $filtMese, $search) {
-  if ($filtCat && ($a['categoria'] ?? '') !== $filtCat) return false;
-  if ($filtAnno && substr($a['data'], 0, 4) !== $filtAnno) return false;
-  if ($filtMese && substr($a['data'], 5, 2) !== $filtMese) return false;
-  if ($search) {
-    $hay = strtolower($a['titolo'] . ' ' . $a['estratto']);
-    if (strpos($hay, strtolower($search)) === false) return false;
-  }
-  return true;
-});
-$articoliFiltrati = array_values($articoliFiltrati);
-
-// Label filtro attivo
-$filtroLabel = '';
-if ($filtCat)  $filtroLabel = $filtCat;
-if ($filtAnno && !$filtMese) $filtroLabel = $filtAnno;
-if ($filtMese && $filtAnno)  $filtroLabel = $archivio["$filtAnno-$filtMese"]['label'] ?? '';
-
-// URL builder per sidebar links
-function buildUrl(array $params): string {
-  $base = array_filter($params, fn($v) => $v !== '');
-  return 'blog.php' . ($base ? '?' . http_build_query($base) : '');
-}
-?>
-
-  
-  <style>
-    /* ── HERO ── */
-    .blog-hero {
-      background: linear-gradient(135deg, #1a1a2e 0%, #2d1b69 100%);
-      padding: 120px clamp(1rem,5vw,3rem) 60px;
-      text-align: center;
-      color: #fff;
-      position: relative;
-      overflow: hidden;
-    }
-    .blog-hero::before {
-      content:'';
-      position:absolute;inset:0;
-      background-image:radial-gradient(circle,rgba(245,146,30,.08) 1px,transparent 1px);
-      background-size:28px 28px;
-      pointer-events:none;
-    }
-    .blog-hero .tag {
-      display:inline-block;
-      background:var(--orange,#F5921E);color:#fff;
-      font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-      padding:.3em 1em;border-radius:100px;margin-bottom:1.25rem;
-      position:relative;z-index:1;
-    }
-    .blog-hero h1 {
-      font-size:clamp(2rem,5vw,3.5rem);font-weight:900;
-      margin:0 0 1rem;line-height:1.15;position:relative;z-index:1;
-    }
-    .blog-hero p { font-size:1.05rem;opacity:.75;max-width:560px;margin:0 auto;position:relative;z-index:1; }
-
-    /* ── SEARCH BAR ── */
-    .blog-search-wrap {
-      background:#fff;
-      border-bottom:1px solid #eee;
-      padding:16px clamp(1rem,5vw,3rem);
-      position:sticky;top:72px;z-index:100;
-      box-shadow:0 2px 12px rgba(0,0,0,.05);
-    }
-    .blog-search-form {
-      max-width:600px;margin:0 auto;
-      display:flex;gap:8px;
-    }
-    .blog-search-form input {
-      flex:1;padding:10px 18px;
-      border:2px solid #e0e8f0;border-radius:50px;
-      font-family:inherit;font-size:.95rem;outline:none;
-      transition:border-color .2s;
-    }
-    .blog-search-form input:focus { border-color:var(--orange,#F5921E); }
-    .blog-search-form button {
-      background:var(--orange,#F5921E);color:#fff;border:none;
-      padding:10px 22px;border-radius:50px;
-      font-family:inherit;font-weight:700;font-size:.9rem;cursor:pointer;
-      transition:background .2s;
-    }
-    .blog-search-form button:hover { background:#d97f10; }
-    .blog-search-form a.reset {
-      display:flex;align-items:center;padding:10px 16px;
-      color:#888;font-size:.85rem;text-decoration:none;border-radius:50px;
-      border:2px solid #e0e8f0;transition:all .2s;white-space:nowrap;
-    }
-    .blog-search-form a.reset:hover { border-color:var(--orange,#F5921E);color:var(--orange,#F5921E); }
-
-    /* ── LAYOUT ── */
-    .blog-wrap {
-      max-width:1200px;
-      margin:0 auto;
-      padding:clamp(2rem,5vw,4rem) clamp(1rem,5vw,2rem);
-      display:grid;
-      grid-template-columns:1fr 300px;
-      gap:3rem;
-      align-items:start;
-    }
-    @media(max-width:900px){
-      .blog-wrap { grid-template-columns:1fr; }
-      .blog-sidebar { order:-1; }
-    }
-
-    /* ── FILTRO ATTIVO ── */
-    .filtro-attivo {
-      display:inline-flex;align-items:center;gap:8px;
-      background:#fff8ec;border:1.5px solid #fdd;
-      border-color:rgba(245,146,30,.3);
-      color:var(--orange,#F5921E);
-      font-size:.85rem;font-weight:600;
-      padding:8px 16px;border-radius:50px;
-      margin-bottom:1.5rem;
-    }
-    .filtro-attivo a { color:inherit;margin-left:4px;text-decoration:none;font-size:1rem; }
-    .filtro-attivo a:hover { color:#c0392b; }
-
-    .results-count {
-      font-size:.85rem;color:#888;margin-bottom:1.5rem;
-    }
-
-    /* ── CARD LIST ── */
-    .blog-list { display:flex;flex-direction:column;gap:1.75rem; }
-
-    .blog-card {
-      background:#fff;border-radius:20px;overflow:hidden;
-      box-shadow:0 4px 24px rgba(0,0,0,.07);
-      display:grid;grid-template-columns:220px 1fr;
-      transition:transform .25s,box-shadow .25s;
-      text-decoration:none;color:inherit;
-    }
-    .blog-card:hover { transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.13); }
-    @media(max-width:600px){ .blog-card { grid-template-columns:1fr; } }
-
-    .blog-card-img {
-      width:100%;height:100%;min-height:160px;
-      object-fit:cover;display:block;background:#f3f4f6;
-    }
-    .blog-card-img-ph {
-      width:100%;min-height:160px;
-      background:linear-gradient(135deg,#fff8ec,#fef3c7);
-      display:flex;align-items:center;justify-content:center;
-      font-size:2.5rem;
-    }
-    .blog-card-body {
-      padding:1.5rem;display:flex;flex-direction:column;justify-content:space-between;
-    }
-    .blog-card-meta { display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:.6rem; }
-    .blog-card-data { font-size:.78rem;color:#999;font-weight:500; }
-    .blog-card-tag {
-      font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-      color:var(--orange,#F5921E);background:#fff8ec;
-      padding:.2em .7em;border-radius:100px;
-      text-decoration:none;transition:background .15s;
-    }
-    .blog-card-tag:hover { background:#fde68a; }
-    .blog-card-body h3 {
-      font-size:1.1rem;font-weight:700;line-height:1.35;
-      margin:0 0 .6rem;color:#1a1a2e;
-    }
-    .blog-card-body p { font-size:.9rem;line-height:1.65;color:#666;flex:1;margin:0 0 1rem; }
-    .blog-card-link {
-      font-size:.88rem;font-weight:600;color:var(--orange,#F5921E);
-      display:inline-flex;align-items:center;gap:.35rem;transition:gap .2s;
-    }
-    .blog-card:hover .blog-card-link { gap:.6rem; }
-
-    /* ── EMPTY ── */
-    .blog-empty {
-      text-align:center;padding:4rem 2rem;color:#aaa;
-      background:#fff;border-radius:20px;
-      box-shadow:0 4px 24px rgba(0,0,0,.05);
-    }
-    .blog-empty .emoji { font-size:3rem;display:block;margin-bottom:1rem; }
-
-    /* ── SIDEBAR ── */
-    .blog-sidebar { position:sticky;top:140px; }
-
-    .sidebar-widget {
-      background:#fff;border-radius:18px;
-      box-shadow:0 4px 24px rgba(0,0,0,.07);
-      padding:1.5rem;margin-bottom:1.5rem;overflow:hidden;
-    }
-    .sidebar-widget h4 {
-      font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-      color:var(--orange,#F5921E);margin:0 0 1rem;
-      padding-bottom:.75rem;border-bottom:2px solid #fff8ec;
-    }
-
-    /* Categorie */
-    .cat-list { list-style:none;padding:0;margin:0; }
-    .cat-list li { margin-bottom:.35rem; }
-    .cat-list a {
-      display:flex;justify-content:space-between;align-items:center;
-      padding:.45rem .75rem;border-radius:10px;
-      font-size:.9rem;color:#444;text-decoration:none;
-      transition:background .15s,color .15s;
-    }
-    .cat-list a:hover,
-    .cat-list a.active {
-      background:var(--orange,#F5921E);color:#fff;
-    }
-    .cat-list a.active { font-weight:700; }
-    .cat-count {
-      font-size:.75rem;font-weight:700;
-      background:#f3f4f6;color:#888;
-      padding:2px 8px;border-radius:50px;
-      transition:background .15s,color .15s;
-    }
-    .cat-list a:hover .cat-count,
-    .cat-list a.active .cat-count {
-      background:rgba(255,255,255,.25);color:#fff;
-    }
-
-    /* Archivio */
-    .archivio-list { list-style:none;padding:0;margin:0; }
-    .archivio-anno { font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#bbb;margin:1rem 0 .4rem; }
-    .archivio-anno:first-child { margin-top:0; }
-    .archivio-list a {
-      display:flex;justify-content:space-between;align-items:center;
-      padding:.4rem .75rem;border-radius:10px;
-      font-size:.88rem;color:#444;text-decoration:none;
-      transition:background .15s,color .15s;
-    }
-    .archivio-list a:hover,
-    .archivio-list a.active {
-      background:var(--orange,#F5921E);color:#fff;
-    }
-    .archivio-count {
-      font-size:.72rem;font-weight:700;
-      background:#f3f4f6;color:#888;
-      padding:2px 7px;border-radius:50px;
-      transition:background .15s,color .15s;
-    }
-    .archivio-list a:hover .archivio-count,
-    .archivio-list a.active .archivio-count { background:rgba(255,255,255,.25);color:#fff; }
-
-    /* CTA sidebar */
-    .sidebar-cta {
-      background:linear-gradient(135deg,var(--dark,#148708),#0a5e04);
-      border-radius:18px;padding:1.5rem;text-align:center;color:#fff;
-    }
-    .sidebar-cta h4 { color:rgba(255,255,255,.7);border-bottom-color:rgba(255,255,255,.15); }
-    .sidebar-cta p { font-size:.88rem;line-height:1.55;margin:0 0 1rem;opacity:.85; }
-    .sidebar-cta a {
-      display:inline-block;background:#fff;color:var(--dark,#148708);
-      font-weight:700;font-size:.9rem;padding:.65rem 1.5rem;
-      border-radius:50px;text-decoration:none;transition:transform .2s,box-shadow .2s;
-    }
-    .sidebar-cta a:hover { transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.2); }
-  </style>
-
-
-
-
-  
-
-  
-  <!-- MAIN -->
-  <div class="blog-wrap">
-
-    <!-- ── ARTICOLI ── -->
-    <main>
-      <?php if ($filtroLabel || $search): ?>
-        <div class="filtro-attivo">
-          <?= $search ? "🔍 \"".htmlspecialchars($search)."\"" : "🏷 ".htmlspecialchars($filtroLabel) ?>
-          <a href="blog.php" title="Rimuovi filtro">✕</a>
-        </div>
-      <?php endif; ?>
-
-      <p class="results-count">
-        <?= count($articoliFiltrati) ?> articol<?= count($articoliFiltrati) === 1 ? 'o' : 'i' ?>
-        <?= (count($articoliFiltrati) < count($articoli)) ? ' (su ' . count($articoli) . ' totali)' : '' ?>
-      </p>
-
-      <?php if (empty($articoliFiltrati)): ?>
-        <div class="blog-empty">
-          <span class="emoji">📭</span>
-          <p><?= $search ? 'Nessun articolo trovato per <strong>'.htmlspecialchars($search).'</strong>.' : 'Nessun articolo in questa categoria.' ?></p>
-          <a href="blog.php" style="display:inline-block;margin-top:1rem;color:var(--orange,#F5921E);font-weight:600">← Vedi tutti</a>
-        </div>
-
-      <?php else: ?>
-        <div class="blog-list">
-          <?php foreach ($articoliFiltrati as $a):
+      <div class="news-cards reveal delay-1">
+        <?php if (empty($ultimeNotizie)): ?>
+          <div class="news-card" style="text-align:center;padding:2rem;color:#aaa">
+            <div style="font-size:2rem;margin-bottom:.75rem">📭</div>
+            <p style="font-size:.9rem">Nessun articolo pubblicato ancora.</p>
+          </div>
+        <?php else: ?>
+          <?php foreach ($ultimeNotizie as $a):
+            $dataStr = !empty($a['data']) ? dataItaliana($a['data'], $mesi) : '';
+            $titolo  = htmlspecialchars($a['titolo'] ?? '', ENT_QUOTES);
+            $estratto = htmlspecialchars($a['estratto'] ?? '', ENT_QUOTES);
+            if (mb_strlen($estratto) > 160) $estratto = mb_substr($estratto, 0, 160) . '…';
+            $link    = htmlspecialchars($a['link'] ?? '#', ENT_QUOTES);
             $target  = !empty($a['esterno']) ? ' target="_blank" rel="noopener"' : '';
-            $dataStr = dataItaliana($a['data']);
-            $catUrl  = buildUrl(['categoria' => $a['categoria'] ?? '']);
-            [$anno, $mese] = explode('-', $a['data']);
           ?>
-            <a class="blog-card" href="<?= htmlspecialchars($a['link']) ?>"<?= $target ?>>
-
-              <?php if (!empty($a['immagine'])): ?>
-                <img class="blog-card-img"
-                     src="<?= htmlspecialchars($a['immagine']) ?>"
-                     alt="<?= htmlspecialchars($a['titolo']) ?>"
-                     loading="lazy"
-                     onerror="this.outerHTML='<div class=\'blog-card-img-ph\'>📰</div>'">
-              <?php else: ?>
-                <div class="blog-card-img-ph">📰</div>
-              <?php endif; ?>
-
-              <div class="blog-card-body">
-                <div>
-                  <div class="blog-card-meta">
-                    <span class="blog-card-data">🗓 <?= $dataStr ?></span>
-                    <?php if (!empty($a['categoria'])): ?>
-                      <span class="blog-card-tag"><?= htmlspecialchars($a['categoria']) ?></span>
-                    <?php endif; ?>
-                  </div>
-                  <h3><?= htmlspecialchars($a['titolo']) ?></h3>
-                  <p><?= htmlspecialchars($a['estratto']) ?></p>
-                </div>
-                <span class="blog-card-link">Leggi l'articolo →</span>
-              </div>
-            </a>
+            <div class="news-card reveal">
+              <div class="news-date">🗓 <?= $dataStr ?></div>
+              <h4><?= $titolo ?></h4>
+              <p><?= $estratto ?></p>
+              <a href="<?= $link ?>" class="read-more"<?= $target ?>>Leggi di più →</a>
+            </div>
           <?php endforeach; ?>
+        <?php endif; ?>
+
+        <div style="text-align:center;margin-top:1.5rem;grid-column:1/-1">
+          <a href="notizie.php" class="btn-primary" style="display:inline-block;padding:.8rem 2rem;border-radius:50px;font-weight:700;text-decoration:none">
+            📰 Tutte le notizie →
+          </a>
         </div>
-      <?php endif; ?>
-    </main>
-
-   
-
-
-
-     
-    
-
-
-  
- 
-
-  
-    
-    
-    
-    
-    
-    
-      
-
-     
-
-    
-
-      <!-- NEWS:END -->
-      </div>   
-        
-        
+      </div>
     </div>
   </div>
 </section>

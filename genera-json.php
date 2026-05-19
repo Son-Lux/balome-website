@@ -27,7 +27,6 @@ function estraiMetadati(string $filepath, string $filename): ?array {
     $titolo = trim(strip_tags($m[1]));
   }
   if (!$titolo || $titolo === 'TITOLO_ARTICOLO') return null; // template non compilato
-  if ($estratto === 'DESCRIZIONE_ARTICOLO') return null;       // template non compilato
 
   // Data: <meta name="data-articolo" content="YYYY-MM-DD">
   $data = '';
@@ -40,22 +39,40 @@ function estraiMetadati(string $filepath, string $filename): ?array {
   }
   if (!$data) $data = date('Y-m-d', filemtime($filepath)); // usa data modifica file
 
-  // Descrizione/estratto: <meta name="description" content="...">
+  // Descrizione/estratto — cerca prima nel testo dell'articolo, poi nei meta
   $estratto = '';
-  if (preg_match('/<meta\s+name=["\']description["\']\s+content=["\'](.*?)["\']/i', $html, $m)) {
-    $estratto = trim($m[1]);
+
+  // 1. <p class="art-sommario"> (nuovo template dall'editor)
+  if (preg_match('/<p[^>]*art-sommario[^>]*>(.*?)<\/p>/is', $html, $m)) {
+    $estratto = trim(strip_tags($m[1]));
   }
-  if (!$estratto || $estratto === 'DESCRIZIONE_ARTICOLO') {
-    // Fallback: primo <p class="articolo-sommario">
-    if (preg_match('/<p[^>]*articolo-sommario[^>]*>(.*?)<\/p>/is', $html, $m)) {
-      $estratto = trim(strip_tags($m[1]));
+  // 2. <p class="article-summary"> (vecchio formato)
+  if (!$estratto && preg_match('/<p[^>]*article-summary[^>]*>(.*?)<\/p>/is', $html, $m)) {
+    $estratto = trim(strip_tags($m[1]));
+  }
+  // 3. <p class="articolo-sommario"> (formato precedente)
+  if (!$estratto && preg_match('/<p[^>]*articolo-sommario[^>]*>(.*?)<\/p>/is', $html, $m)) {
+    $estratto = trim(strip_tags($m[1]));
+  }
+  // 4. <meta name="description"> — solo se non è il testo generico dell'editor
+  if (!$estratto) {
+    if (preg_match('/<meta\s+name=["\']description["\']\s+content=["\'](.*?)["\']/i', $html, $m)) {
+      $desc = trim($m[1]);
+      // Salta la descrizione generica prodotta dall'editor
+      if ($desc && $desc !== 'DESCRIZIONE_ARTICOLO' && strpos($desc, 'Articolo Balomè:') !== 0) {
+        $estratto = $desc;
+      }
     }
   }
 
-  // Immagine hero: <img class="..." src="../img/...">  nella sezione .articolo-hero
+  // Immagine hero — cerca sia .art-foto (nuovo) che .articolo-hero (vecchio)
   $immagine = '';
-  if (preg_match('/<div[^>]*articolo-hero[^>]*>.*?<img[^>]+src=["\'](.*?)["\']/is', $html, $m)) {
-    // Normalizza percorso: ../img/foto.jpg → img/foto.jpg
+  // Nuovo template: <img class="art-foto" src="../img/...">
+  if (preg_match('/<img[^>]*class=["\'][^"\']*art-foto[^"\']*["\'][^>]*src=["\'](.*?)["\']/is', $html, $m)) {
+    $immagine = preg_replace('#^\.\./+#', '', trim($m[1]));
+  }
+  // Vecchio formato: <div class="articolo-hero">...<img src="...">
+  if (!$immagine && preg_match('/<div[^>]*articolo-hero[^>]*>.*?<img[^>]+src=["\'](.*?)["\']/is', $html, $m)) {
     $immagine = preg_replace('#^\.\./+#', '', trim($m[1]));
   }
 
@@ -98,12 +115,13 @@ $json = json_encode($articoli, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON
 $ok   = file_put_contents(JSON_OUTPUT, $json);
 
 // ── RISPOSTA ────────────────────────────────────────────────────
-// Stampa JSON solo se chiamato direttamente via browser (non via require/include)
+// Stampa solo se chiamato direttamente via browser (non via require/include)
 if (basename($_SERVER['SCRIPT_FILENAME'] ?? '') === basename(__FILE__)) {
   header('Content-Type: application/json; charset=utf-8');
   echo $ok !== false
-    ? json_encode(['ok' => true, 'articoli' => count($articoli), 'file' => JSON_OUTPUT], JSON_PRETTY_PRINT)
+    ? json_encode(['ok' => true, 'articoli' => count($articoli)], JSON_PRETTY_PRINT)
     : json_encode(['ok' => false, 'errore' => 'Impossibile scrivere ' . JSON_OUTPUT]);
+  exit;
 }
 
 return $articoli; // usabile con include
